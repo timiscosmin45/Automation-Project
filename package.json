@@ -1,0 +1,35 @@
+{
+  "name": "lor-automation-tests",
+  "version": "1.0.0",
+  "description": "Automation tests for LOR project.",
+  "main": "index.js",
+  "scripts": {
+    "e2e-test": "cucumber-js --require-module @babel/register --require ./conf/cucumber.conf.js --require step_definitions --format json:reports/cucumber_report.json --format node_modules/cucumber-pretty --tags @TEST",
+    "e2e-regression": "cucumber-js --require-module @babel/register --require ./conf/cucumber.conf.js --require step_definitions --format json:reports/cucumber_report.json --format node_modules/cucumber-pretty --tags @REGRESSION",
+    "generate-report": "node reports/generateReport.js ./reports/cucumber_report.html.json",
+    "lint": "eslint . --ext .js"
+  },
+  "keywords": [
+    "LOR"
+  ],
+  "author": "Valentin Cosmin Timis",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
+    "@babel/register": "^7.8.3",
+    "chai": "^4.2.0",
+    "chromedriver": "84.0.0",
+    "cucumber": "^6.0.5",
+    "cucumber-html-reporter": "^5.1.0",
+    "cucumber-pretty": "^6.0.0",
+    "dotenv": "^8.2.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "geckodriver": "^1.16.2",
+    "nightwatch": "^1.4.2",
+    "nightwatch-api": "^3.0.1",
+    "prettier": "^1.19.1"
+  }
+}
