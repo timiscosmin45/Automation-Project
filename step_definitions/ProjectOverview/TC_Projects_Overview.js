@@ -34,7 +34,7 @@ Then(/^user sees "([^"]*)" as the screen title$/, async (title) => {
     case 'Project overview':
       selector = getSelector.projectOverview.title();
       break;
-    case 'Project DetailS':
+    case 'Project Details':
       selector = getSelector.projectDetails.title();
       break;
     case 'Unnasigned People':
