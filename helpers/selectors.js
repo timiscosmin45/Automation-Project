@@ -5,20 +5,20 @@ const selectors = {
   child: (childNumber) => {
     return `:nth-child(${childNumber})`;
   },
-  landingPage: () => {
-    // cssSelector
+  landingPage: {
+    title: () => selectors.testId(''),
   },
-  projectOverview: () => {
-    // cssSelector
+  projectOverview: {
+    title: () => selectors.testId(''),
   },
-  projectDetails: () => {
-    // cssSelector
+  projectDetails: {
+    title: () => selectors.testId(''),
   },
-  FindCandidates: () => {
-    // cssSelector
+  FindCandidates: {
+    title: () => selectors.testId(''),
   },
-  unassignedPeople: () => {
-    // cssSelector
+  unassignedPeople: {
+    title: () => selectors.testId(''),
   },
 };
 
