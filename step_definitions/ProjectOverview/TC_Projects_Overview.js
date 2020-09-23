@@ -20,6 +20,12 @@ Then(/^user sees "([^"]*)" screen$/, async (screen) => {
     case 'Project overview':
       expectedEndpoint = '/projectsOverview';
       break;
+    case 'Unassigned People':
+      expectedEndpoint = ''; //to be filled later with the expected endpoint
+      break;
+    case 'Unassigned Roles':
+      expectedEndpoint = ''; //to be filled later with the expected endpoint
+      break;
     default:
       throw new Error('Incorrect case inputted!');
   }
