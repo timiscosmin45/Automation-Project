@@ -3,10 +3,8 @@ const { Then, Given } = require('cucumber');
 const { constants, getSelector } = require('../../helpers');
 
 Given(/^user opens LOR RSAR application$/, async () => {
-  const url = '';
-
   await client.deleteCookies();
-  await client.init(url);
+  await client.init(constants.URL);
   await client.maximizeWindow();
   await client.waitForElementPresent('title', constants.MEDIUM_TIMEOUT);
   await client.assert.title('');
