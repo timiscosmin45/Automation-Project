@@ -23,7 +23,7 @@ Then(/^user sees "([^"]*)" screen$/, async (screen) => {
     case 'Unassigned People':
       expectedEndpoint = ''; //to be filled later with the expected endpoint
       break;
-    case 'Unassigned Roles' :
+    case 'Unassigned Roles':
       expectedEndpoint = ''; //to be filled later with the expected endpoint
       break;
     default:
