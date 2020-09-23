@@ -20,6 +20,12 @@ const selectors = {
   unassignedPeople: {
     title: () => selectors.testId(''),
   },
+  sideMenu: {
+    projectOverviewOption: () => selectors.testId(''),
+    uassignedPeopleOption: () => selectors.testId(''),
+    unassignedRolesOption: () => selectors.testId(''),
+    sideMenuBar: () => selectors.testId(''),
+  },
 };
 
 module.exports = selectors;
