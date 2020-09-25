@@ -10,6 +10,15 @@ const selectors = {
   },
   projectOverview: {
     title: () => selectors.testId(''),
+    mapBtn: () => selectors.testId(''),
+    timelineBtn: () => selectors.testId(''),
+    timelineView: {
+      projects: () => selectors.testId(''),
+      projectName: () => selectors.testId(''),
+      clientName: () => selectors.testId(''),
+      projectValue: () => selectors.testId(''),
+      sectorIcon: () => selectors.testId(''),
+    },
   },
   projectDetails: {
     title: () => selectors.testId(''),
