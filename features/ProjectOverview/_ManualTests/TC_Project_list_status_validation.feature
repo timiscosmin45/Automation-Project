@@ -1,3 +1,4 @@
+@Manual
 Feature: Validate Project List status
 
   The purpose of this test is the validation of project list status
