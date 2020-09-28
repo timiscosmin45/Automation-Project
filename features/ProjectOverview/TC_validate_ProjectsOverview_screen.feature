@@ -12,11 +12,11 @@ Feature: Validate Projects overview screen
     And user sees a list of LOR Projects on the Project Overview screen
     And user sees a legend with <status>, its respective icon and the number of projects
     Examples:
-        | title              |
-        | "Early Engagement" |
-        | "Bid"              |
-        | "PCSA"             |
-        | "Live Projects"    |
+      | status             |
+      | "Early Engagement" |
+      | "Bid"              |
+      | "PCSA"             |
+      | "Live Projects"    |
 
   Scenario Outline: Validate projects list from Projects Overview timeline screen
     Then user sees <projectData> for each project on Projects Overview timeline screen
