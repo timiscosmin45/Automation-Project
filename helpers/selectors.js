@@ -18,6 +18,10 @@ const selectors = {
       clientName: () => selectors.testId(''),
       projectValue: () => selectors.testId(''),
       sectorIcon: () => selectors.testId(''),
+      projectTimeline: () => selectors.testId(''),
+      monthLabel: () => selectors.testId(''),
+      startYearLabel: () => selectors.testId(''),
+      endYearLabel: () => selectors.testId(''),
     },
   },
   projectDetails: {

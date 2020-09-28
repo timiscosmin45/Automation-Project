@@ -1,7 +1,8 @@
 const { client } = require('nightwatch-api');
 const { Given, When, Then } = require('cucumber');
-const { constants, getSelector, getDomData } = require('../../helpers');
+const { constants, getSelector, getDomData, getDate } = require('../../helpers');
 const { expect, assert } = require('chai');
+const moment = require('moment');
 
 Given(/^user opens LOR RSAR application$/, async () => {
   await client.deleteCookies();
@@ -107,4 +108,27 @@ Then(/^user sees "([^"]*)" for each project on Projects Overview timeline screen
       expect(value).to.not.equal(undefined);
     });
   }
+});
+
+Then(/^user sees the timeline for each project on timeline section$/, async () => {
+  const { projects, projectTimeline } = getSelector.projectOverview.timelineView;
+  const founProjects = await getDomData.idsFromElements(projects());
+  const founTimelines = await getDomData.idsFromElements(projectTimeline());
+  expect(founProjects.length).to.equal(founTimelines.length);
+});
+
+Then(/^user sees all the months displayed on timeline section$/, async () => {
+  const selector = getSelector.projectOverview.timelineView.monthLabel();
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  const foundElements = await getDomData.textFromElements(selector);
+  const months = moment.monthsShort();
+  expect(foundElements).to.have.ordered.members(months.concat(months));
+});
+
+Then(/^user sees "(start|end)" date as "([^"]*)" displayed on timeline section$/, async (year, yearText) => {
+  const { startYearLabel, endYearLabel } = getSelector.projectOverview.timelineView;
+  const selector = year === 'start' ? startYearLabel() : endYearLabel();
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  const expectedYear = getDate.getYear(yearText);
+  await client.assert.value(selector, expectedYear);
 });
