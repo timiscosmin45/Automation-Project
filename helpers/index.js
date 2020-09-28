@@ -9,5 +9,5 @@ module.exports = {
   getDomData,
   constants,
   styleCheck,
-  getDate
+  getDate,
 };
