@@ -108,3 +108,42 @@ Then(/^user sees "([^"]*)" for each project on Projects Overview timeline screen
     });
   }
 });
+
+Then(
+  /^user sees a legend with status "(Early Engagement|Bid|PCSA|Live Projects)" and its respective icon$/,
+  async (status) => {
+    let icon;
+    let statusName;
+    let projectsNumber;
+    switch (status) {
+      case 'Early Engagement':
+        icon = getSelector.projectOverview.timelineLegend.earlyEngagementIcon();
+        statusName = getSelector.projectOverview.timelineLegend.earlyEngagementTitle();
+        projectsNumber = getSelector.projectOverview.timelineLegend.earlyEngagementProjectsNumber();
+        break;
+      case 'Bid':
+        icon = getSelector.projectOverview.timelineLegend.bidIcon();
+        statusName = getSelector.projectOverview.timelineLegend.bidTitle();
+        projectsNumber = getSelector.projectOverview.timelineLegend.bidProjectsNumber();
+        break;
+      case 'PCSA':
+        icon = getSelector.projectOverview.timelineLegend.pcsaIcon();
+        statusName = getSelector.projectOverview.timelineLegend.pcsaTitle();
+        projectsNumber = getSelector.projectOverview.timelineLegend.pcsaProjectsNumber();
+        break;
+      case 'Live Projects':
+        icon = getSelector.projectOverview.timelineLegend.liveProjectsIcon();
+        statusName = getSelector.projectOverview.timelineLegend.liveProjectsTitle();
+        projectsNumber = getSelector.projectOverview.timelineLegend.liveProjectsNumber();
+        break;
+      default:
+        throw new Error('Incorrect case inputted!');
+    }
+    await client
+      .waitForElementVisible(icon, constants.MEDIUM_TIMEOUT)
+      .waitForElementVisible(statusName, constants.MEDIUM_TIMEOUT)
+      .assert.value(statusName, status)
+      .waitForElementPresent(projectsNumber, constants.MEDIUM_TIMEOUT)
+      .assert.value(projectsNumber, ''); //value should be added later
+  },
+);
