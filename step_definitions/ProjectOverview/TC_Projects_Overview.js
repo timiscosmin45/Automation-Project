@@ -141,7 +141,7 @@ Given(/^user sees the timeline section on Projects Overview timeline screen$/, a
 });
 
 Then(
-  /^user sees a legend with status "(Early Engagement|Bid|PCSA|Live Projects)" and its respective icon$/,
+  /^user sees a legend with "(Early Engagement|Bid|PCSA|Live Projects)" status, its respective icon and the number of projects$/,
   async (status) => {
     let icon;
     let statusName;
@@ -178,3 +178,9 @@ Then(
       .assert.value(projectsNumber, ''); //value should be added later
   },
 );
+
+When(/^user clicks on the "(left|right)" navigation arrow on timeline section$/, async (arrow) => {
+  const { leftNavidationArrow, rightNavigationArrow } = getSelector.projectOverview.timelineView;
+  const selector = arrow === 'left' ? leftNavidationArrow() : rightNavigationArrow();
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
+});

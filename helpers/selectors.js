@@ -23,6 +23,8 @@ const selectors = {
       monthLabel: () => selectors.testId(''),
       startYearLabel: () => selectors.testId(''),
       endYearLabel: () => selectors.testId(''),
+      leftNavidationArrow: () => selectors.testId(''),
+      rightNavigationArrow: () => () => selectors.testId(''),
     },
     timelineLegend: {
       legendList: () => selectors.testId(''),
