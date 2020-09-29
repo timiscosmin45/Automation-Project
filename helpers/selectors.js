@@ -13,11 +13,16 @@ const selectors = {
     mapBtn: () => selectors.testId(''),
     timelineBtn: () => selectors.testId(''),
     timelineView: {
+      timelineSection: () => selectors.testId(''),
       projects: () => selectors.testId(''),
       projectName: () => selectors.testId(''),
       clientName: () => selectors.testId(''),
       projectValue: () => selectors.testId(''),
       sectorIcon: () => selectors.testId(''),
+      projectTimeline: () => selectors.testId(''),
+      monthLabel: () => selectors.testId(''),
+      startYearLabel: () => selectors.testId(''),
+      endYearLabel: () => selectors.testId(''),
     },
     timelineLegend: {
       legendList: () => selectors.testId(''),
