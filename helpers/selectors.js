@@ -13,6 +13,7 @@ const selectors = {
     mapBtn: () => selectors.testId(''),
     timelineBtn: () => selectors.testId(''),
     timelineView: {
+      timelineSection: () => selectors.testId(''),
       projects: () => selectors.testId(''),
       projectName: () => selectors.testId(''),
       clientName: () => selectors.testId(''),

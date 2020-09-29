@@ -24,6 +24,7 @@ Feature: Validate Projects overview screen
       | "sector icon"   |
 
   Scenario: Validate projects timeline section from Projects Overview timeline screen
+    Given user sees the timeline section on Projects Overview timeline screen
     Then user sees the timeline for each project on timeline section
     And user sees all the months displayed on timeline section
     And user sees "start" date as "current year" displayed on timeline section

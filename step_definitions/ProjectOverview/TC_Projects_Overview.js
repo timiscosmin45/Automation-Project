@@ -112,9 +112,9 @@ Then(/^user sees "([^"]*)" for each project on Projects Overview timeline screen
 
 Then(/^user sees the timeline for each project on timeline section$/, async () => {
   const { projects, projectTimeline } = getSelector.projectOverview.timelineView;
-  const founProjects = await getDomData.idsFromElements(projects());
-  const founTimelines = await getDomData.idsFromElements(projectTimeline());
-  expect(founProjects.length).to.equal(founTimelines.length);
+  const foundProjects = await getDomData.idsFromElements(projects());
+  const foundTimelines = await getDomData.idsFromElements(projectTimeline());
+  expect(foundProjects.length).to.equal(foundTimelines.length);
 });
 
 Then(/^user sees all the months displayed on timeline section$/, async () => {
@@ -131,4 +131,11 @@ Then(/^user sees "(start|end)" date as "([^"]*)" displayed on timeline section$/
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
   const expectedYear = getDate.getYear(yearText);
   await client.assert.value(selector, expectedYear);
+});
+
+Given(/^user sees the timeline section on Projects Overview timeline screen$/, async () => {
+  await client.waitForElementVisible(
+    getSelector.projectOverview.timelineView.timelineSection(),
+    constants.MEDIUM_TIMEOUT,
+  );
 });
