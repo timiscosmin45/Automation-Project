@@ -12,6 +12,21 @@ Given(/^user opens LOR RSAR application$/, async () => {
   await client.assert.title('');
 });
 
+Given(/^user is on the "([^"]*)" screen/, async (screen) => {
+  let selector;
+  switch (screen) {
+    case 'Projects Overview timeline':
+      selector = getSelector.projectOverview.timelineView.projects();
+      break;
+    case 'Projects Overview map':
+      selector; // to be filled in;
+      break;
+    default:
+      throw new Error('Incorrect case inputted!');
+  }
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+});
+
 Then(/^user sees "([^"]*)" as the webpage title$/, async (title) => {
   await client.waitForElementPresent('title', constants.MEDIUM_TIMEOUT).assert.title(title);
 });
@@ -55,23 +70,29 @@ Then(/^user sees "([^"]*)" as the screen title$/, async (title) => {
   await client.waitForElementPresent(selector, constants.SHORT_TIMEOUT).assert.value(selector, title);
 });
 
-When(/^user "(sees|clicks)" "(Timeline|Map)" button on the Project Overview screen$/, async (button, action) => {
-  let selector;
-  switch (button) {
-    case 'Map':
-      selector = getSelector.projectOverview.mapBtn();
-      break;
-    case 'Timeline':
-      selector = getSelector.projectOverview.mapBtn();
-      break;
-    default:
-      throw new Error('Incorrect case inputted!');
-  }
-  if (action === 'sees') await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
-  else await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
-});
+When(
+  /^user "(sees|clicks)" "(Timeline|Map)" button on the Project Overview timeline screen$/,
+  async (action, button) => {
+    let selector;
+    switch (button) {
+      case 'Map':
+        selector = getSelector.projectOverview.mapBtn();
+        break;
+      case 'Timeline':
+        selector = getSelector.projectOverview.mapBtn();
+        break;
+      default:
+        throw new Error('Incorrect case inputted!');
+    }
+    if (action === 'sees') {
+      await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).assert.containsText(selector, button);
+    } else {
+      await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
+    }
+  },
+);
 
-Then(/^user sees a list of LOR Projects on the Project Overview screen$/, async () => {
+Then(/^user sees a list of LOR Projects on the Project Overview timeline screen$/, async () => {
   const selector = getSelector.projectOverview.timelineView.projects();
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
   const foundElements = await getDomData.idsFromElements(selector);
