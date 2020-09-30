@@ -25,6 +25,11 @@ const selectors = {
       endYearLabel: () => selectors.testId(''),
       leftNavidationArrow: () => selectors.testId(''),
       rightNavigationArrow: () => () => selectors.testId(''),
+      calendar: () => selectors.testId(''),
+    },
+    mapView: {
+      map: () => selectors.testId(''),
+      mapLegend: () => selectors.testId(''),
     },
     timelineLegend: {
       legendList: () => selectors.testId(''),

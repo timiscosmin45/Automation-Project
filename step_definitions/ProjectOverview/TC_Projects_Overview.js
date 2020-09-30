@@ -179,6 +179,36 @@ Then(
   },
 );
 
+Then(/^user sees Project Overview - "(Timeline|Map)"$/, async (screen) => {
+  if (screen === 'Timeline') {
+    await client
+      .waitForElementVisible(getSelector.projectOverview.timelineView.calendar(), constants.MEDIUM_TIMEOUT)
+      .waitForElementVisible(getSelector.projectOverview.timelineLegend.legendList(), constants.MEDIUM_TIMEOUT);
+  } else {
+    await client
+      .waitForElementVisible(getSelector.projectOverview.mapView.map(), constants.MEDIUM_TIMEOUT)
+      .waitForElementVisible(getSelector.projectOverview.mapView.mapLegend(), constants.MEDIUM_TIMEOUT);
+  }
+});
+
+Then(/^user sees toggle showing the "(Timeline|Map)" option highlighted$/, async (screen) => {
+  const mapButton = getSelector.projectOverview.mapBtn();
+  const timelineButton = getSelector.projectOverview.timelineBtn();
+  if (screen === 'Timeline') {
+    await client
+      .waitForElementVisible(mapButton, constants.MEDIUM_TIMEOUT)
+      .waitForElementVisible(timelineButton, constants.MEDIUM_TIMEOUT)
+      .assert.cssProperty(mapButton, 'background-color', constants.DESIGN_COLORS.MAP_TIMELINE_BTN)
+      .assert.cssProperty(timelineButton, 'background-color', constants.DESIGN_COLORS.HIGHLIGHTED_MAP_TIMELINE_BTN);
+  } else {
+    await client
+      .waitForElementVisible(mapButton, constants.MEDIUM_TIMEOUT)
+      .waitForElementVisible(timelineButton, constants.MEDIUM_TIMEOUT)
+      .assert.cssProperty(mapButton, 'background-color', constants.DESIGN_COLORS.HIGHLIGHTED_MAP_TIMELINE_BTN)
+      .assert.cssProperty(timelineButton, 'background-color', constants.DESIGN_COLORS.MAP_TIMELINE_BTN);
+  }
+});
+
 When(/^user clicks on the "(left|right)" navigation arrow on timeline section$/, async (arrow) => {
   const { leftNavidationArrow, rightNavigationArrow } = getSelector.projectOverview.timelineView;
   const selector = arrow === 'left' ? leftNavidationArrow() : rightNavigationArrow();
