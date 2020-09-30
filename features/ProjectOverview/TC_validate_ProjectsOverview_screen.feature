@@ -13,7 +13,7 @@ Feature: Validate Projects overview screen
     When user "clicks" "Timeline" button on the Project Overview screen
     Then user sees "PROJECTS OVERVIEW" as the screen title
     And user sees a list of LOR Projects on the Project Overview screen
-    And user sees a legend with <status>, its respective icon and the number of projects
+    And user sees a legend with <status> status, its respective icon and the number of projects
     Examples:
       | status             |
       | "Early Engagement" |
@@ -37,3 +37,12 @@ Feature: Validate Projects overview screen
     And user sees "start" date as "current year" displayed on timeline section
     And user sees "end" date as "1 year later" displayed on timeline section
 
+  Scenario Outline: Validate the change of years on Projects Overview timeline screen
+    When user clicks on the <arrow> navigation arrow on timeline section
+    Then user sees "start" date as <startDate> displayed on timeline section
+    And user sees "end" date as <endDate> displayed on timeline section
+    Examples:
+      | arrow   | startDate        | endDate         |
+      | "left"  | "1 year eralyer" | "current year"  |
+      | "right" | "current year"   | "1 year later"  |
+      | "right" | "1 year later"   | "2 years later" |
