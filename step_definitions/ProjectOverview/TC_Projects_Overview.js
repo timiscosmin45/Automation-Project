@@ -19,7 +19,7 @@ Given(/^user is on the "([^"]*)" screen/, async (screen) => {
       selector = getSelector.projectOverview.timelineView.projects();
       break;
     case 'Projects Overview map':
-      selector; // to be filled in;
+      selector = getSelector.projectOverview.mapView.projects();
       break;
     default:
       throw new Error('Incorrect case inputted!');
@@ -71,7 +71,7 @@ Then(/^user sees "([^"]*)" as the screen title$/, async (title) => {
 });
 
 When(
-  /^user "(sees|clicks)" "(Timeline|Map)" button on the Project Overview timeline screen$/,
+  /^user "(sees|clicks)" "(Timeline|Map)" button on the Project Overview screen$/,
   async (action, button) => {
     let selector;
     switch (button) {
@@ -92,8 +92,12 @@ When(
   },
 );
 
-Then(/^user sees a list of LOR Projects on the Project Overview timeline screen$/, async () => {
-  const selector = getSelector.projectOverview.timelineView.projects();
+Then(/^user sees a list of LOR Projects on the Project Overview "(timeline|map)" screen$/, async (screen) => {
+  const selector =
+    screen === 'map'
+      ? getSelector.projectOverview.mapView.projects()
+      : getSelector.projectOverview.timelineView.projects();
+
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
   const foundElements = await getDomData.idsFromElements(selector);
   for (const element of foundElements) {
@@ -119,6 +123,37 @@ Then(/^user sees "([^"]*)" for each project on Projects Overview timeline screen
       break;
     case 'sector icon':
       elementSelector = getSelector.projectOverview.timelineView.projectName();
+      break;
+    default:
+      throw new Error('Incorrect case inputted!');
+  }
+  const founElements = await getDomData.idsFromElements(selector);
+  for (const element of founElements) {
+    await client.elementIdElement(element, 'css selector', elementSelector, ({ value }) => {
+      expect(value).to.not.equal(undefined);
+    });
+  }
+});
+
+Then(/^user sees "([^"]*)" for each project on Projects Overview map screen$/, async (projectData) => {
+  const selector = getSelector.projectOverview.timelineView.projects();
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  let elementSelector;
+  switch (projectData) {
+    case 'project name':
+      elementSelector = getSelector.projectOverview.mapView.projectName();
+      break;
+    case 'project value':
+      elementSelector = getSelector.projectOverview.mapView.projectValue();
+      break;
+    case 'client name':
+      elementSelector = getSelector.projectOverview.mapView.clientName();
+      break;
+    case 'date label':
+      elementSelector = getSelector.projectOverview.mapView.projectLocation();
+      break;
+    case 'project location':
+      elementSelector = getSelector.projectOverview.mapView.dateLabel();
       break;
     default:
       throw new Error('Incorrect case inputted!');
