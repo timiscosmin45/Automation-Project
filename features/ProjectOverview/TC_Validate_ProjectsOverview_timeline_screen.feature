@@ -6,9 +6,9 @@ Feature: Validate Projects overview timeline screen
     Then user sees "Project Overview" screen
     And user sees "PROJECTS OVERVIEW" as the screen title
     And user sees the side menu bar present
-    And user "sees" "Timeline" button on the Project Overview timeline screen
-    And user "sees" "Map" button on the Project Overview timeline screen
-    And user sees a list of LOR Projects on the Project Overview timeline screen
+    And user "sees" "Timeline" button on the Project Overview screen
+    And user "sees" "Map" button on the Project Overview screen
+    And user sees a list of LOR Projects on the Project Overview "timeline" screen
 
   Scenario: Validate timeline legend from Projects Overview timeline screen
     Given user is on the "Projects Overview timeline" screen

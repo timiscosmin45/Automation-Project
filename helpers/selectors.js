@@ -30,6 +30,12 @@ const selectors = {
     mapView: {
       map: () => selectors.testId(''),
       mapLegend: () => selectors.testId(''),
+      projects: () => selectors.testId(''),
+      projectName: () => selectors.testId(''),
+      clientName: () => selectors.testId(''),
+      projectValue: () => selectors.testId(''),
+      projectLocation: () => selectors.testId(''),
+      dateLabel: () => selectors.testId(''),
     },
     timelineLegend: {
       legendList: () => selectors.testId(''),
