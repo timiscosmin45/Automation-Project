@@ -26,6 +26,7 @@ const selectors = {
       leftNavidationArrow: () => selectors.testId(''),
       rightNavigationArrow: () => () => selectors.testId(''),
       calendar: () => selectors.testId(''),
+      listHeading: () => selectors.testId(''),
     },
     mapView: {
       map: () => selectors.testId(''),
@@ -36,6 +37,7 @@ const selectors = {
       projectValue: () => selectors.testId(''),
       projectLocation: () => selectors.testId(''),
       dateLabel: () => selectors.testId(''),
+      listHeading: () => selectors.testId(''),
     },
     timelineLegend: {
       legendList: () => selectors.testId(''),

@@ -70,27 +70,24 @@ Then(/^user sees "([^"]*)" as the screen title$/, async (title) => {
   await client.waitForElementPresent(selector, constants.SHORT_TIMEOUT).assert.value(selector, title);
 });
 
-When(
-  /^user "(sees|clicks)" "(Timeline|Map)" button on the Project Overview screen$/,
-  async (action, button) => {
-    let selector;
-    switch (button) {
-      case 'Map':
-        selector = getSelector.projectOverview.mapBtn();
-        break;
-      case 'Timeline':
-        selector = getSelector.projectOverview.mapBtn();
-        break;
-      default:
-        throw new Error('Incorrect case inputted!');
-    }
-    if (action === 'sees') {
-      await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).assert.containsText(selector, button);
-    } else {
-      await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
-    }
-  },
-);
+When(/^user "(sees|clicks)" "(Timeline|Map)" button on the Project Overview screen$/, async (action, button) => {
+  let selector;
+  switch (button) {
+    case 'Map':
+      selector = getSelector.projectOverview.mapBtn();
+      break;
+    case 'Timeline':
+      selector = getSelector.projectOverview.timelineBtn();
+      break;
+    default:
+      throw new Error('Incorrect case inputted!');
+  }
+  if (action === 'sees') {
+    await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).assert.containsText(selector, button);
+  } else {
+    await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
+  }
+});
 
 Then(/^user sees a list of LOR Projects on the Project Overview "(timeline|map)" screen$/, async (screen) => {
   const selector =
@@ -270,3 +267,15 @@ When(/^user clicks on the "(left|right)" navigation arrow on timeline section$/,
   const selector = arrow === 'left' ? leftNavidationArrow() : rightNavigationArrow();
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
 });
+
+Then(
+  /^user sees "([^"]*)" text as the list heading on Project Overview "(map|timeline)" screen$/,
+  async (headingText, screen) => {
+    const selector =
+      screen === 'map'
+        ? getSelector.projectOverview.timelineView.listHeading()
+        : getSelector.projectOverview.mapView.listHeading();
+
+    await client.waitForElementVisible(selector).assert.value(selector, headingText);
+  },
+);

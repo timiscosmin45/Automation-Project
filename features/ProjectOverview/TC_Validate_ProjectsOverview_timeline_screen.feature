@@ -9,6 +9,7 @@ Feature: Validate Projects overview timeline screen
     And user "sees" "Timeline" button on the Project Overview screen
     And user "sees" "Map" button on the Project Overview screen
     And user sees a list of LOR Projects on the Project Overview "timeline" screen
+    And user sees "All active projects" text as the list heading on Project Overview "timeline" screen
 
   Scenario: Validate timeline legend from Projects Overview timeline screen
     Given user is on the "Projects Overview timeline" screen
