@@ -8,7 +8,7 @@ module.exports = {
     * getDate.getYear('last year'); --> 2019
     * getDate.getYear('next year'); --> 2021
     * getDate.getYear('3 years later'); --> current year + 3 years (2023)
-    * getDate.getYear('2 years earlyer'); --> current year - 2 years (2018)
+    * getDate.getYear('2 years earlier'); --> current year - 2 years (2018)
 */
     const currentDate = moment();
 
