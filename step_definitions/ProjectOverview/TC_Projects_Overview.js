@@ -9,7 +9,7 @@ Given(/^user opens LOR RSAR application$/, async () => {
   await client.init(constants.URL);
   await client.maximizeWindow();
   await client.waitForElementPresent('title', constants.MEDIUM_TIMEOUT);
-  // await client.assert.title(''); showld we have a page title?
+  // await client.assert.title(''); should we have a page title?
 });
 
 Given(/^user is on the "([^"]*)" screen/, async (screen) => {
@@ -244,7 +244,7 @@ Then(
   /^user sees "([^"]*)" text as the list heading on Project Overview "(map|timeline)" screen$/,
   async (headingText, screen) => {
     const selector =
-      screen === 'map'
+      screen === 'timeline'
         ? getSelector.projectOverview.timelineView.listHeading()
         : getSelector.projectOverview.mapView.listHeading();
 

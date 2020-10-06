@@ -15,10 +15,10 @@ const selectors = {
     timelineView: {
       timelineSection: () => selectors.testId('timeline_body_rightside'),
       projects: () => selectors.testId('timeline_card_wrapper'),
-      projectName: () => '.MuiTypography-root.jss40.MuiTypography-h5',// workaround for missing testId 
-      clientName: () => '.MuiTypography-root.jss43.MuiTypography-h5',// workaround for missing testId 
-      projectValue: () => '.MuiTypography-root.jss45.MuiTypography-h5',// workaround for missing testId 
-      sectorIcon: () => selectors.testId('status-icon'),
+      projectName: () => '.MuiTypography-root.jss46.MuiTypography-h5.MuiTypography-noWrap',// workaround for missing testId 
+      clientName: () => '.MuiTypography-root.jss49.MuiTypography-h5.MuiTypography-noWrap',// workaround for missing testId 
+      projectValue: () => '.MuiTypography-root.jss51.MuiTypography-h5',// workaround for missing testId 
+      sectorIcon: () => '.MuiCardHeader-content svg',
       projectTimeline: () => selectors.testId('timeline_graphic_wrapper'),
       monthLabel: () => selectors.testId('timeline_months'),
       leftYearLabel: () => selectors.testId('timeline_header_left_year'),
@@ -26,7 +26,7 @@ const selectors = {
       leftNavigationArrow: () => selectors.testId('timeline_header_icon_left'),
       rightNavigationArrow: () => selectors.testId('timeline_header_icon_right'),
       calendar: () => selectors.testId(''),
-      listHeading: () => '.MuiTypography-root.MuiTypography-h1',// workaround for missing testId 
+      listHeading: () => '.MuiTypography-root.jss31.MuiTypography-body1',// workaround for missing testId 
     },
     mapView: {
       map: () => selectors.testId(''),
