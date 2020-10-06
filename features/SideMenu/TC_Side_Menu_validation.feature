@@ -3,7 +3,7 @@ Feature: Validate Side Menu
 
   Scenario: Open LOR RSAR application and view side bar
     Given user opens LOR RSAR application
-    Then user sees "Project overview" screen
+    Then user sees "Projects Overview" screen
     And user sees the side menu bar present
     And user sees "Project overview" option marked in yellow
 

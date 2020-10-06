@@ -9,7 +9,7 @@ Given(/^user opens LOR RSAR application$/, async () => {
   await client.init(constants.URL);
   await client.maximizeWindow();
   await client.waitForElementPresent('title', constants.MEDIUM_TIMEOUT);
-  await client.assert.title('');
+  // await client.assert.title(''); showld we have a page title?
 });
 
 Given(/^user is on the "([^"]*)" screen/, async (screen) => {
@@ -34,8 +34,8 @@ Then(/^user sees "([^"]*)" as the webpage title$/, async (title) => {
 Then(/^user sees "([^"]*)" screen$/, async (screen) => {
   let expectedEndpoint;
   switch (screen) {
-    case 'Project overview':
-      expectedEndpoint = '/projectsOverview';
+    case 'Projects Overview':
+      expectedEndpoint = '/';
       break;
     case 'Unassigned People':
       expectedEndpoint = '/unassignedPeople';
@@ -46,13 +46,13 @@ Then(/^user sees "([^"]*)" screen$/, async (screen) => {
     default:
       throw new Error('Incorrect case inputted!');
   }
-  await client.urlContains(expectedEndpoint);
+  await client.assert.urlContains(expectedEndpoint);
 });
 
 Then(/^user sees "([^"]*)" as the screen title$/, async (title) => {
   let selector;
   switch (title) {
-    case 'Project overview':
+    case 'PROJECTS OVERVIEW':
       selector = getSelector.projectOverview.title();
       break;
     case 'Project Details':
@@ -67,7 +67,8 @@ Then(/^user sees "([^"]*)" as the screen title$/, async (title) => {
     default:
       throw new Error('Incorrect case inputted!');
   }
-  await client.waitForElementPresent(selector, constants.SHORT_TIMEOUT).assert.value(selector, title);
+  await client.waitForElementPresent(selector, constants.SHORT_TIMEOUT);
+  await client.getText(selector, ({ value }) => assert.equal(title, value));
 });
 
 When(/^user "(sees|clicks)" "(Timeline|Map)" button on the Project Overview screen$/, async (action, button) => {
@@ -82,11 +83,10 @@ When(/^user "(sees|clicks)" "(Timeline|Map)" button on the Project Overview scre
     default:
       throw new Error('Incorrect case inputted!');
   }
+
   if (action === 'sees') {
-    await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).assert.containsText(selector, button);
-  } else {
-    await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
-  }
+    await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).getText(selector, ({ value }) => assert.equal(button, value));
+  } else await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
 });
 
 Then(/^user sees a list of LOR Projects on the Project Overview "(timeline|map)" screen$/, async (screen) => {
@@ -127,7 +127,8 @@ Then(/^user sees "([^"]*)" for each project on Projects Overview timeline screen
   const founElements = await getDomData.idsFromElements(selector);
   for (const element of founElements) {
     await client.elementIdElement(element, 'css selector', elementSelector, ({ value }) => {
-      expect(value).to.not.equal(undefined);
+      elementId = value.ELEMENT;
+      assert.isDefined(elementId, `${projectData} not found!`);
     });
   }
 });
@@ -174,63 +175,34 @@ Then(/^user sees all the months displayed on timeline section$/, async () => {
   const selector = getSelector.projectOverview.timelineView.monthLabel();
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
   const foundElements = await getDomData.textFromElements(selector);
+  const formattedElements = foundElements[0].replace(/(\r\n|\n|\r)/gm, ' ').split(' ')
   const months = moment.monthsShort();
-  expect(foundElements).to.have.ordered.members(months.concat(months));
+  expect(formattedElements).to.have.ordered.members(months.concat(months));
 });
 
-Then(/^user sees "(start|end)" date as "([^"]*)" displayed on timeline section$/, async (year, yearText) => {
-  const { startYearLabel, endYearLabel } = getSelector.projectOverview.timelineView;
-  const selector = year === 'start' ? startYearLabel() : endYearLabel();
-  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+Then(/^user sees "(left|right)" label date as "([^"]*)" displayed on timeline section$/, async (label, yearText) => {
+  const { leftYearLabel, rightYearLabel } = getSelector.projectOverview.timelineView;
+  const selector = label === 'left' ? leftYearLabel() : rightYearLabel();
   const expectedYear = getDate.getYear(yearText);
-  await client.assert.value(selector, expectedYear);
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).getText(selector, ({ value }) => assert.equal(value, expectedYear))
 });
 
 Given(/^user sees the timeline section on Projects Overview timeline screen$/, async () => {
-  await client.waitForElementVisible(
-    getSelector.projectOverview.timelineView.timelineSection(),
-    constants.MEDIUM_TIMEOUT,
-  );
+  const selector = getSelector.projectOverview.timelineView.timelineSection()
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
 });
 
-Then(
-  /^user sees a legend with "(Early Engagement|Bid|PCSA|Live Projects)" status, its respective icon and the number of projects$/,
-  async (status) => {
-    let icon;
-    let statusName;
-    let projectsNumber;
-    switch (status) {
-      case 'Early Engagement':
-        icon = getSelector.projectOverview.timelineLegend.earlyEngagementIcon();
-        statusName = getSelector.projectOverview.timelineLegend.earlyEngagementTitle();
-        projectsNumber = getSelector.projectOverview.timelineLegend.earlyEngagementProjectsNumber();
-        break;
-      case 'Bid':
-        icon = getSelector.projectOverview.timelineLegend.bidIcon();
-        statusName = getSelector.projectOverview.timelineLegend.bidTitle();
-        projectsNumber = getSelector.projectOverview.timelineLegend.bidProjectsNumber();
-        break;
-      case 'PCSA':
-        icon = getSelector.projectOverview.timelineLegend.pcsaIcon();
-        statusName = getSelector.projectOverview.timelineLegend.pcsaTitle();
-        projectsNumber = getSelector.projectOverview.timelineLegend.pcsaProjectsNumber();
-        break;
-      case 'Live Projects':
-        icon = getSelector.projectOverview.timelineLegend.liveProjectsIcon();
-        statusName = getSelector.projectOverview.timelineLegend.liveProjectsTitle();
-        projectsNumber = getSelector.projectOverview.timelineLegend.liveProjectsNumber();
-        break;
-      default:
-        throw new Error('Incorrect case inputted!');
-    }
-    await client
-      .waitForElementVisible(icon, constants.MEDIUM_TIMEOUT)
-      .waitForElementVisible(statusName, constants.MEDIUM_TIMEOUT)
-      .assert.value(statusName, status)
-      .waitForElementPresent(projectsNumber, constants.MEDIUM_TIMEOUT)
-      .assert.value(projectsNumber, ''); //value should be added later
-  },
-);
+Then(/^user sees a legend with "([^"]*)" status, its respective icon and the number of projects$/, async (status) => {
+  const { legendIcon, legendTitle, legendNumber } = getSelector.projectOverview.timelineLegend;
+
+  const projectIcon = await getDomData.idsFromElements(legendIcon());
+  const projectTitle = await getDomData.textFromElements(legendTitle());
+  const projectNumber = await getDomData.idsFromElements(legendNumber());
+
+  expect(projectIcon).to.have.length(projectTitle.length);
+  expect(projectNumber).to.have.length(projectTitle.length);
+  expect(projectTitle).to.include(status);
+});
 
 Then(/^user sees Project Overview - "(Timeline|Map)"$/, async (screen) => {
   if (screen === 'Timeline') {
@@ -263,9 +235,9 @@ Then(/^user sees toggle showing the "(Timeline|Map)" option highlighted$/, async
 });
 
 When(/^user clicks on the "(left|right)" navigation arrow on timeline section$/, async (arrow) => {
-  const { leftNavidationArrow, rightNavigationArrow } = getSelector.projectOverview.timelineView;
-  const selector = arrow === 'left' ? leftNavidationArrow() : rightNavigationArrow();
-  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
+  const { leftNavigationArrow, rightNavigationArrow } = getSelector.projectOverview.timelineView;
+  const selector = arrow === 'left' ? leftNavigationArrow() : rightNavigationArrow();
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector)
 });
 
 Then(
@@ -276,6 +248,6 @@ Then(
         ? getSelector.projectOverview.timelineView.listHeading()
         : getSelector.projectOverview.mapView.listHeading();
 
-    await client.waitForElementVisible(selector).assert.value(selector, headingText);
+    await client.waitForElementVisible(selector).getText(selector, ({ value }) => assert.equal(value, headingText));
   },
 );
