@@ -26,6 +26,8 @@ Then(/^user sees the side menu bar present$/, async () => {
 
 Then(/^user sees "([^"]*)" option marked in yellow$/, async (option) => {
   let selector;
+  const { HIGHLIGHTED_TAB_TEXT } = constants.DESIGN_COLORS.SIDEBAR;
+
   switch (option) {
     case 'Project overview':
       selector = getSelector.sideMenu.projectOverviewText();
@@ -39,5 +41,5 @@ Then(/^user sees "([^"]*)" option marked in yellow$/, async (option) => {
     default:
       throw new Error('Incorrect case!');
   }
-  await client.assert.cssProperty(selector, 'color', constants.DESIGN_COLORS.HIGHLIGHTED_MAP_TIMELINE_BTN);
+  await client.assert.cssProperty(selector, 'color', HIGHLIGHTED_TAB_TEXT);
 });

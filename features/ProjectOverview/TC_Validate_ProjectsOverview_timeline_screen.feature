@@ -5,6 +5,7 @@ Feature: Validate Projects overview timeline screen
     Given user opens LOR RSAR application
     Then user sees "Projects Overview" screen
     And user sees "PROJECTS OVERVIEW" as the screen title
+    And user sees Project Overview "Timeline" screen
     And user sees the side menu bar present
     And user "sees" "Timeline" button on the Project Overview screen
     And user "sees" "Map" button on the Project Overview screen
