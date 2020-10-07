@@ -247,3 +247,19 @@ Then(
     await client.waitForElementVisible(selector).getText(selector, ({ value }) => assert.equal(value, headingText));
   },
 );
+
+Then(/^user sees the project location markers represent the projects status$/, async () => {
+  const { locationMarkers, projects } = getSelector.projectOverview.mapView;
+  await clent.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+
+  const projects = await getDomData.idsFromElements(projects());
+  const markers = await getDomData.idsFromElements(locationMarkers());
+  expect(markers.length).to.be.at.most(projects.length);
+});
+
+Then(/^user sees the map of UK on Projects Overview map screen$/, async () => {
+  const selector = getSelector.projectOverview.mapView.map();
+
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  // to be completed when I cand use something to verify that the map is UK's map
+});

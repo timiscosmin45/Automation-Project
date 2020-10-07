@@ -38,6 +38,7 @@ const selectors = {
       projectLocation: () => selectors.testId(''),
       dateLabel: () => selectors.testId(''),
       listHeading: () => selectors.testId(''),
+      locationMarkers: () => selectors.testId(''),
     },
     timelineLegend: {
       legendList: () => selectors.testId(''),

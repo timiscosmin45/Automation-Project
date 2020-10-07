@@ -27,3 +27,7 @@ Feature: Validate Projects overview map screen
       | "project location" |
       | "date label"       |
 
+  Scenario: Validate UK map with locations from Projects Overview map screen
+    Given user is on the "Projects Overview map" screen
+    Then user sees the map of UK on Projects Overview map screen
+    And user sees the project location markers represent the projects status
