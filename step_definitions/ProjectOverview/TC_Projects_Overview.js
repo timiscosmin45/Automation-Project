@@ -16,10 +16,10 @@ Given(/^user is on the "([^"]*)" screen/, async (screen) => {
   let selector;
   switch (screen) {
     case 'Projects Overview timeline':
-      selector = getSelector.projectOverview.timelineView.projects();
+      selector = getSelector.projectOverview.timelineView.timelineSection();
       break;
     case 'Projects Overview map':
-      selector = getSelector.projectOverview.mapView.projects();
+      selector = getSelector.projectOverview.mapView.map();
       break;
     default:
       throw new Error('Incorrect case inputted!');
@@ -85,7 +85,8 @@ When(/^user "(sees|clicks)" "(Timeline|Map)" button on the Project Overview scre
   }
 
   if (action === 'sees') {
-    await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).getText(selector, ({ value }) => assert.equal(button, value));
+    await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+    await client.getText(selector, ({ value }) => assert.equal(button, value));
   } else await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
 });
 
@@ -127,7 +128,7 @@ Then(/^user sees "([^"]*)" for each project on Projects Overview timeline screen
   const founElements = await getDomData.idsFromElements(selector);
   for (const element of founElements) {
     await client.elementIdElement(element, 'css selector', elementSelector, ({ value }) => {
-      elementId = value.ELEMENT;
+      const elementId = value.ELEMENT;
       assert.isDefined(elementId, `${projectData} not found!`);
     });
   }
@@ -175,7 +176,7 @@ Then(/^user sees all the months displayed on timeline section$/, async () => {
   const selector = getSelector.projectOverview.timelineView.monthLabel();
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
   const foundElements = await getDomData.textFromElements(selector);
-  const formattedElements = foundElements[0].replace(/(\r\n|\n|\r)/gm, ' ').split(' ')
+  const formattedElements = foundElements[0].replace(/(\r\n|\n|\r)/gm, ' ').split(' ');
   const months = moment.monthsShort();
   expect(formattedElements).to.have.ordered.members(months.concat(months));
 });
@@ -184,11 +185,12 @@ Then(/^user sees "(left|right)" label date as "([^"]*)" displayed on timeline se
   const { leftYearLabel, rightYearLabel } = getSelector.projectOverview.timelineView;
   const selector = label === 'left' ? leftYearLabel() : rightYearLabel();
   const expectedYear = getDate.getYear(yearText);
-  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).getText(selector, ({ value }) => assert.equal(value, expectedYear))
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  await client.getText(selector, ({ value }) => assert.equal(value, expectedYear));
 });
 
 Given(/^user sees the timeline section on Projects Overview timeline screen$/, async () => {
-  const selector = getSelector.projectOverview.timelineView.timelineSection()
+  const selector = getSelector.projectOverview.timelineView.timelineSection();
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
 });
 
@@ -204,40 +206,34 @@ Then(/^user sees a legend with "([^"]*)" status, its respective icon and the num
   expect(projectTitle).to.include(status);
 });
 
-Then(/^user sees Project Overview - "(Timeline|Map)"$/, async (screen) => {
+Then(/^user sees Project Overview "(Timeline|Map)" screen$/, async (screen) => {
   if (screen === 'Timeline') {
-    await client
-      .waitForElementVisible(getSelector.projectOverview.timelineView.calendar(), constants.MEDIUM_TIMEOUT)
-      .waitForElementVisible(getSelector.projectOverview.timelineLegend.legendList(), constants.MEDIUM_TIMEOUT);
+    const { timelineSection } = getSelector.projectOverview.timelineView;
+    await client.waitForElementVisible(timelineSection(), constants.MEDIUM_TIMEOUT);
   } else {
-    await client
-      .waitForElementVisible(getSelector.projectOverview.mapView.map(), constants.MEDIUM_TIMEOUT)
-      .waitForElementVisible(getSelector.projectOverview.mapView.mapLegend(), constants.MEDIUM_TIMEOUT);
+    const { map } = getSelector.projectOverview.mapView;
+    await client.waitForElementVisible(map(), constants.MEDIUM_TIMEOUT);
   }
 });
 
 Then(/^user sees toggle showing the "(Timeline|Map)" option highlighted$/, async (screen) => {
-  const mapButton = getSelector.projectOverview.mapBtn();
-  const timelineButton = getSelector.projectOverview.timelineBtn();
+  const btnMap = getSelector.projectOverview.mapBtn();
+  const btnTimeline = getSelector.projectOverview.timelineBtn();
+  const { MAP_TIMELINE, HIGHLIGHTED_MAP_TIMELINE } = constants.DESIGN_COLORS.BUTTONS;
+
   if (screen === 'Timeline') {
-    await client
-      .waitForElementVisible(mapButton, constants.MEDIUM_TIMEOUT)
-      .waitForElementVisible(timelineButton, constants.MEDIUM_TIMEOUT)
-      .assert.cssProperty(mapButton, 'background-color', constants.DESIGN_COLORS.MAP_TIMELINE_BTN)
-      .assert.cssProperty(timelineButton, 'background-color', constants.DESIGN_COLORS.HIGHLIGHTED_MAP_TIMELINE_BTN);
+    await client.assert.cssProperty(btnMap, 'background-color', MAP_TIMELINE);
+    await client.assert.cssProperty(btnTimeline, 'background-color', HIGHLIGHTED_MAP_TIMELINE);
   } else {
-    await client
-      .waitForElementVisible(mapButton, constants.MEDIUM_TIMEOUT)
-      .waitForElementVisible(timelineButton, constants.MEDIUM_TIMEOUT)
-      .assert.cssProperty(mapButton, 'background-color', constants.DESIGN_COLORS.HIGHLIGHTED_MAP_TIMELINE_BTN)
-      .assert.cssProperty(timelineButton, 'background-color', constants.DESIGN_COLORS.MAP_TIMELINE_BTN);
+    await client.assert.cssProperty(btnMap, 'background-color', HIGHLIGHTED_MAP_TIMELINE);
+    await client.assert.cssProperty(btnTimeline, 'background-color', MAP_TIMELINE);
   }
 });
 
 When(/^user clicks on the "(left|right)" navigation arrow on timeline section$/, async (arrow) => {
   const { leftNavigationArrow, rightNavigationArrow } = getSelector.projectOverview.timelineView;
   const selector = arrow === 'left' ? leftNavigationArrow() : rightNavigationArrow();
-  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector)
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
 });
 
 Then(

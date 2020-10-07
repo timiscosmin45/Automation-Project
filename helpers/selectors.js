@@ -9,15 +9,15 @@ const selectors = {
     title: () => selectors.testId(''),
   },
   projectOverview: {
-    title: () => '.MuiTypography-root.MuiTypography-h1', // workaround for missing testId 
-    mapBtn: () => '.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedSecondary',// workaround for missing testId 
-    timelineBtn: () => '.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary',// workaround for missing testId 
+    title: () => '.MuiTypography-root.MuiTypography-h1', // workaround for missing testId
+    mapBtn: () => '.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedSecondary', // workaround for missing testId
+    timelineBtn: () => '.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary', // workaround for missing testId
     timelineView: {
       timelineSection: () => selectors.testId('timeline_body_rightside'),
       projects: () => selectors.testId('timeline_card_wrapper'),
-      projectName: () => '.MuiTypography-root.jss46.MuiTypography-h5.MuiTypography-noWrap',// workaround for missing testId 
-      clientName: () => '.MuiTypography-root.jss49.MuiTypography-h5.MuiTypography-noWrap',// workaround for missing testId 
-      projectValue: () => '.MuiTypography-root.jss51.MuiTypography-h5',// workaround for missing testId 
+      projectName: () => '.MuiTypography-root.jss46.MuiTypography-h5.MuiTypography-noWrap', // workaround for missing testId
+      clientName: () => '.MuiTypography-root.jss49.MuiTypography-h5.MuiTypography-noWrap', // workaround for missing testId
+      projectValue: () => '.MuiTypography-root.jss51.MuiTypography-h5', // workaround for missing testId
       sectorIcon: () => '.MuiCardHeader-content svg',
       projectTimeline: () => selectors.testId('timeline_graphic_wrapper'),
       monthLabel: () => selectors.testId('timeline_months'),
@@ -26,7 +26,7 @@ const selectors = {
       leftNavigationArrow: () => selectors.testId('timeline_header_icon_left'),
       rightNavigationArrow: () => selectors.testId('timeline_header_icon_right'),
       calendar: () => selectors.testId(''),
-      listHeading: () => '.MuiTypography-root.jss31.MuiTypography-body1',// workaround for missing testId 
+      listHeading: () => '.MuiTypography-root.jss31.MuiTypography-body1', // workaround for missing testId
     },
     mapView: {
       map: () => selectors.testId(''),
