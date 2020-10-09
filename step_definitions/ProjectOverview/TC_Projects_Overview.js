@@ -252,9 +252,9 @@ Then(/^user sees the project location markers represent the projects status$/, a
   const { locationMarkers, projects } = getSelector.projectOverview.mapView;
   await clent.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
 
-  const projects = await getDomData.idsFromElements(projects());
+  const project = await getDomData.idsFromElements(projects());
   const markers = await getDomData.idsFromElements(locationMarkers());
-  expect(markers.length).to.be.at.most(projects.length);
+  expect(markers.length).to.be.at.most(project.length);
 });
 
 Then(/^user sees the map of UK on Projects Overview map screen$/, async () => {
@@ -262,4 +262,22 @@ Then(/^user sees the map of UK on Projects Overview map screen$/, async () => {
 
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
   // to be completed when I cand use something to verify that the map is UK's map
+});
+
+Then(/^user sees the total number of projects in the middle of the chart$/, async () => {
+  const { pieChart, pieChartTotalNumber } = getSelector.projectOverview.mapView;
+  const { legendNumber } = getSelector.projectOverview.timelineLegend;
+
+  await client.waitForElementVisible(pieChart(), constants.MEDIUM_TIMEOUT);
+  const legendProjects = await getDomData.textFromElements(legendNumber());
+  const noOfProjects = legendProjects.map((element) => parseInt(element.match(/\d{1,2}/)[0]), 10);
+  const legendProjectsTotal = noOfProjects.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+  await client.getText(pieChartTotalNumber(), ({ value }) => expect(legendProjectsTotal).to.equal(parseInt(value), 10));
+});
+
+Then(/^user sees a pie chart with "([^"]*)" text inside$/, async (text) => {
+  const { pieChartTotalText } = getSelector.projectOverview.mapView;
+
+  await client.waitForElementVisible(pieChartTotalText());
+  await client.getText(pieChartTotalText(), ({ value }) => expect(text).to.equal(value));
 });

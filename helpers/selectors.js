@@ -39,6 +39,9 @@ const selectors = {
       dateLabel: () => selectors.testId(''),
       listHeading: () => selectors.testId(''),
       locationMarkers: () => selectors.testId(''),
+      pieChart: () => selectors.testId(''),
+      pieChartTotalNumber: () => selectors.testId(''),
+      pieChartTotalText: () => selectors.testId(''),
     },
     timelineLegend: {
       legendList: () => selectors.testId(''),

@@ -31,3 +31,18 @@ Feature: Validate Projects overview map screen
     Given user is on the "Projects Overview map" screen
     Then user sees the map of UK on Projects Overview map screen
     And user sees the project location markers represent the projects status
+
+  Scenario Outline: Validate map legend from Projects Overview map screen
+    Given user is on the "Projects Overview map" screen
+    Then user sees a legend with <status> status, its respective icon and the number of projects
+    Examples:
+      | status             |
+      | "Early Engagement" |
+      | "Bid"              |
+      | "PCSA"             |
+      | "Live Projects"    |
+
+  Scenario: Validate pie chart from Projects Overview map screen
+    Given user is on the "Projects Overview map" screen
+    Then user sees a pie chart with "Projects in total" text inside
+    And user sees the total number of projects in the middle of the chart
