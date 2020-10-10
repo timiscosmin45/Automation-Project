@@ -3,9 +3,8 @@ Feature: Validate Projects overview timeline screen
 
   Scenario: Validate Projects Overview timeline screen layout
     Given user opens LOR RSAR application
-    Then user sees "Projects Overview" screen
+    Then user sees "Project Overview Timeline" screen
     And user sees "PROJECTS OVERVIEW" as the screen title
-    And user sees Project Overview "Timeline" screen
     And user sees the side menu bar present
     And user "sees" "Timeline" button on the Project Overview screen
     And user "sees" "Map" button on the Project Overview screen
@@ -13,7 +12,7 @@ Feature: Validate Projects overview timeline screen
     And user sees "All active projects" text as the list heading on Project Overview "timeline" screen
 
   Scenario Outline: Validate timeline legend from Projects Overview timeline screen
-    Given user is on the "Projects Overview timeline" screen
+    Given user sees "Project Overview Timeline" screen
     Then user sees a legend with <status> status, its respective icon and the number of projects
     Examples:
       | status             |
@@ -23,7 +22,7 @@ Feature: Validate Projects overview timeline screen
       | "Live Projects"    |
 
   Scenario Outline: Validate projects list from Projects Overview timeline screen
-    Given user is on the "Projects Overview timeline" screen
+    Given user sees "Project Overview Timeline" screen
     Then user sees <projectData> for each project on Projects Overview timeline screen
     Examples:
       | projectData     |

@@ -3,13 +3,12 @@ Feature: Validate Projects overview map screen
 
   Scenario: Validate Projects Overview map screen layout
     Given user opens LOR RSAR application
-    Then user sees "Projects Overview" screen
+    Then user sees "Project Overview Timeline" screen
     And user sees "PROJECTS OVERVIEW" as the screen title
-    And user sees Project Overview "Timeline" screen
     And user sees the side menu bar present
     When user "clicks" "Map" button on the Project Overview screen
     Then user sees "PROJECTS OVERVIEW" as the screen title
-    And user sees Project Overview "Map" screen
+    And user sees "Project Overview Map" screen
     And user sees the side menu bar present
     And user "sees" "Map" button on the Project Overview screen
     And user "sees" "Timeline" button on the Project Overview screen
@@ -17,7 +16,7 @@ Feature: Validate Projects overview map screen
     And user sees "All active projects" text as the list heading on Project Overview "map" screen
 
   Scenario Outline: Validate projects list from Projects Overview map screen
-    Given user is on the "Projects Overview map" screen
+    Given user sees "Project Overview Map" screen
     Then user sees <projectData> for each project on Projects Overview map screen
     Examples:
       | projectData        |
@@ -28,12 +27,12 @@ Feature: Validate Projects overview map screen
       | "date label"       |
 
   Scenario: Validate UK map with locations from Projects Overview map screen
-    Given user is on the "Projects Overview map" screen
-    Then user sees the map of UK on Projects Overview map screen
-    And user sees the project location markers represent the projects status
+    Given user sees "Project Overview Map" screen
+    Then user sees the UK map on Projects Overview map screen
+    And user sees location markers representing the project's status
 
   Scenario Outline: Validate map legend from Projects Overview map screen
-    Given user is on the "Projects Overview map" screen
+    Given user sees "Project Overview Map" screen
     Then user sees a legend with <status> status, its respective icon and the number of projects
     Examples:
       | status             |
@@ -43,6 +42,6 @@ Feature: Validate Projects overview map screen
       | "Live Projects"    |
 
   Scenario: Validate pie chart from Projects Overview map screen
-    Given user is on the "Projects Overview map" screen
+    Given user sees "Project Overview Map" screen
     Then user sees a pie chart with "Projects in total" text inside
     And user sees the total number of projects in the middle of the chart
