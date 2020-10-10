@@ -10,8 +10,8 @@ const selectors = {
   },
   projectOverview: {
     title: () => '.MuiTypography-root.MuiTypography-h1', // workaround for missing testId
-    mapBtn: () => '.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedSecondary', // workaround for missing testId
-    timelineBtn: () => '.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary', // workaround for missing testId
+    mapBtn: () => `[type='button']${selectors.child(2)}`, // workaround for missing testId
+    timelineBtn: () => `[type='button']${selectors.child(1)}`, // workaround for missing testId
     timelineView: {
       timelineSection: () => selectors.testId('timeline_body_rightside'),
       projects: () => selectors.testId('timeline_card_wrapper'),

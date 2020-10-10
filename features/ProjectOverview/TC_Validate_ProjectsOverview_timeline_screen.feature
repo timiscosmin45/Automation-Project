@@ -11,6 +11,18 @@ Feature: Validate Projects overview timeline screen
     And user sees a list of LOR Projects on the Project Overview "timeline" screen
     And user sees "All active projects" text as the list heading on Project Overview "timeline" screen
 
+  Scenario: Validate toggle between Project Overview map and timeline screen
+    When user "clicks" "Map" button on the Project Overview screen
+    Then user sees "Project Overview Map" screen
+    And user sees "PROJECTS OVERVIEW" as the screen title
+    And user sees the side menu bar present
+    And user sees toggle showing the "Map" option highlighted
+    When user "clicks" "Timeline" button on the Project Overview screen
+    Then user sees "Project Overview Timeline" screen
+    And user sees "PROJECTS OVERVIEW" as the screen title
+    And user sees the side menu bar present
+    And user sees toggle showing the "Timeline" option highlighted
+
   Scenario Outline: Validate timeline legend from Projects Overview timeline screen
     Given user sees "Project Overview Timeline" screen
     Then user sees a legend with <status> status, its respective icon and the number of projects
