@@ -57,6 +57,7 @@ Then(/^user sees "([^"]*)" as the screen title$/, async (title) => {
 });
 
 When(/^user "(sees|clicks)" "(Timeline|Map)" button on the Project Overview screen$/, async (action, button) => {
+  const { title } = getSelector.projectOverview;
   let selector;
   switch (button) {
     case 'Map':
@@ -70,9 +71,15 @@ When(/^user "(sees|clicks)" "(Timeline|Map)" button on the Project Overview scre
   }
 
   if (action === 'sees') {
-    await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
-    await client.getText(selector, ({ value }) => assert.equal(button, value));
-  } else await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
+    await client
+      .waitForElementVisible(selector, constants.MEDIUM_TIMEOUT)
+      .getText(selector, ({ value }) => assert.equal(button, value));
+  } else {
+    await client
+      .waitForElementVisible(selector, constants.MEDIUM_TIMEOUT)
+      .click(selector)
+      .moveToElement(title(), 0, 0);
+  }
 });
 
 Then(/^user sees a list of LOR Projects on the Project Overview "(timeline|map)" screen$/, async (screen) => {
