@@ -225,7 +225,7 @@ Then(
 
 Then(/^user sees location markers representing the project's status$/, async () => {
   const { locationMarkers, projects } = getSelector.projectOverview.mapView;
-  await clent.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  await client.waitForElementVisible(locationMarkers(), constants.MEDIUM_TIMEOUT);
   const projectsIds = await getDomData.idsFromElements(projects());
   const markersIds = await getDomData.idsFromElements(locationMarkers());
   expect(projectsIds.length).to.be.at.most(markersIds.length);
