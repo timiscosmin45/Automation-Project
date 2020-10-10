@@ -12,41 +12,26 @@ Given(/^user opens LOR RSAR application$/, async () => {
   // await client.assert.title(''); should we have a page title?
 });
 
-Given(/^user is on the "([^"]*)" screen/, async (screen) => {
+Then(/^user sees "([^"]*)" screen$/, async (screen) => {
   let selector;
+  let expectedEndpoint;
   switch (screen) {
-    case 'Projects Overview timeline':
+    case 'Project Overview Timeline':
       selector = getSelector.projectOverview.timelineView.timelineSection();
+      expectedEndpoint = '/';
       break;
-    case 'Projects Overview map':
+    case 'Project Overview Map':
       selector = getSelector.projectOverview.mapView.map();
+      expectedEndpoint = '/';
       break;
     default:
       throw new Error('Incorrect case inputted!');
   }
-  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).assert.urlContains(expectedEndpoint);
 });
 
 Then(/^user sees "([^"]*)" as the webpage title$/, async (title) => {
   await client.waitForElementPresent('title', constants.MEDIUM_TIMEOUT).assert.title(title);
-});
-
-Then(/^user sees "([^"]*)" screen$/, async (screen) => {
-  let expectedEndpoint;
-  switch (screen) {
-    case 'Projects Overview':
-      expectedEndpoint = '/';
-      break;
-    case 'Unassigned People':
-      expectedEndpoint = '/unassignedPeople';
-      break;
-    case 'Unassigned Roles':
-      expectedEndpoint = '/unassignedRoles';
-      break;
-    default:
-      throw new Error('Incorrect case inputted!');
-  }
-  await client.assert.urlContains(expectedEndpoint);
 });
 
 Then(/^user sees "([^"]*)" as the screen title$/, async (title) => {
@@ -206,16 +191,6 @@ Then(/^user sees a legend with "([^"]*)" status, its respective icon and the num
   expect(projectTitle).to.include(status);
 });
 
-Then(/^user sees Project Overview "(Timeline|Map)" screen$/, async (screen) => {
-  if (screen === 'Timeline') {
-    const { timelineSection } = getSelector.projectOverview.timelineView;
-    await client.waitForElementVisible(timelineSection(), constants.MEDIUM_TIMEOUT);
-  } else {
-    const { map } = getSelector.projectOverview.mapView;
-    await client.waitForElementVisible(map(), constants.MEDIUM_TIMEOUT);
-  }
-});
-
 Then(/^user sees toggle showing the "(Timeline|Map)" option highlighted$/, async (screen) => {
   const btnMap = getSelector.projectOverview.mapBtn();
   const btnTimeline = getSelector.projectOverview.timelineBtn();
@@ -248,18 +223,16 @@ Then(
   },
 );
 
-Then(/^user sees the project location markers represent the projects status$/, async () => {
+Then(/^user sees location markers representing the project's status$/, async () => {
   const { locationMarkers, projects } = getSelector.projectOverview.mapView;
   await clent.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
-
-  const project = await getDomData.idsFromElements(projects());
-  const markers = await getDomData.idsFromElements(locationMarkers());
-  expect(markers.length).to.be.at.most(project.length);
+  const projectsIds = await getDomData.idsFromElements(projects());
+  const markersIds = await getDomData.idsFromElements(locationMarkers());
+  expect(projectsIds.length).to.be.at.most(markersIds.length);
 });
 
-Then(/^user sees the map of UK on Projects Overview map screen$/, async () => {
+Then(/^user sees the UK map on Projects Overview map screen$/, async () => {
   const selector = getSelector.projectOverview.mapView.map();
-
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
   // to be completed when I cand use something to verify that the map is UK's map
 });
@@ -277,7 +250,6 @@ Then(/^user sees the total number of projects in the middle of the chart$/, asyn
 
 Then(/^user sees a pie chart with "([^"]*)" text inside$/, async (text) => {
   const { pieChartTotalText } = getSelector.projectOverview.mapView;
-
   await client.waitForElementVisible(pieChartTotalText());
   await client.getText(pieChartTotalText(), ({ value }) => expect(text).to.equal(value));
 });
