@@ -260,3 +260,54 @@ Then(/^user sees a pie chart with "([^"]*)" text inside$/, async (text) => {
   await client.waitForElementVisible(pieChartTotalText());
   await client.getText(pieChartTotalText(), ({ value }) => expect(text).to.equal(value));
 });
+
+Then(/^user sees a search input with a filter button on Project Overview screen$/, async () => {
+  const { searchInput, filterBtn } = getSelector.projectOverview;
+  await client.waitForElementVisible(searchInput(), constants.MEDIUM_TIMEOUT);
+  await client.waitForElementVisible(filterBtn(), constants.MEDIUM_TIMEOUT);
+});
+
+When(/^user clicks filter button on Project Overview screen$/, async () => {
+  const { filterBtn } = getSelector.projectOverview.filterBtn;
+  await client.waitForElementVisible(filterBtn(), constants.MEDIUM_TIMEOUT).click(filterBtn);
+});
+
+Then(/^user "(sees|does not see)" a filter modal on Project Overview screen$/, async (action) => {
+  const { modal } = getSelector.projectOverview.filterModal;
+  if (action === 'sees') await client.waitForElementVisible(modal(), constants.MEDIUM_TIMEOUT);
+  else await client.waitForElementNotVisible(modal(), constants.MEDIUM_TIMEOUT);
+});
+
+Then(/^user sees "([^"]*)" text as the filter modal title$/, async (text) => {
+  const { title } = getSelector.projectOverview.filterModal;
+  await client.waitForElementVisible(title(), constants.MEDIUM_TIMEOUT);
+  await client.getText(title(), ({ value }) => expect(text).to.equal(value));
+});
+
+Then(/^user "(sees|clicks)" "(Close|Apply|Clear)" button on the filter modal$/, async (action, button) => {
+  const { closeBtn, applyBtn, clearBtn } = getSelector.projectOverview.filterModal;
+  let selector = closeBtn();
+  selector = button === 'apply' ? applyBtn() : clearBtn();
+  if (action === 'sees') await client.waitForElementVisible(selector);
+  else await client.waitForElementVisible(selector).click(selector);
+});
+
+When(/^user clicks "([^"]*)" checkbox on the filter modal$/, async (option) => {
+  // waiting for selectors and DOM structure
+});
+
+Then(/^user sees "([^"]*)" checkbox as "(checked|unchecked)" on the filter modal$/, async (option, state) => {
+  // waiting for selectors and DOM structure
+});
+
+Then(/^user sees only "([^"]*)" projects on Project list$/, async (projectType) => {
+  // waiting for selectors and DOM structure
+});
+
+Then(/^user sees "([^"]*)" status filter on the filter modal$/, async (status) => {
+  // waiting for selectors and DOM structure
+});
+
+And(/^user sees "([^"]*)" projects on Project list$/, async (status) => {
+  // waiting for selectors and DOM structure
+});

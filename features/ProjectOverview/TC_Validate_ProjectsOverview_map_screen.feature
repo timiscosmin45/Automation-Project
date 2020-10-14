@@ -1,5 +1,5 @@
 @REGRESSION
-Feature: Validate Projects overview map screen
+Feature: Validate Projects Overview map screen
 
   Scenario: Validate Projects Overview map screen layout
     Given user opens LOR RSAR application
@@ -12,6 +12,7 @@ Feature: Validate Projects overview map screen
     And user sees the side menu bar present
     And user "sees" "Map" button on the Project Overview screen
     And user "sees" "Timeline" button on the Project Overview screen
+    And user sees a search input with a filter button on Project Overview screen
     And user sees a list of LOR Projects on the Project Overview "map" screen
     And user sees "All active projects" text as the list heading on Project Overview "map" screen
 

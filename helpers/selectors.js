@@ -12,6 +12,8 @@ const selectors = {
     title: () => 'div > h1', // workaround for missing testId
     mapBtn: () => `[type='button']${selectors.child(2)}`, // workaround for missing testId
     timelineBtn: () => `[type='button']${selectors.child(1)}`, // workaround for missing testId
+    filterBtn: () => `${selectors.testId('timeline_body_rightside')} button`,
+    searchInput: () => '[type="text"]', // workaround for missing testId
     timelineView: {
       timelineSection: () => selectors.testId('timeline_body_rightside'),
       projects: () => selectors.testId('timeline_card_wrapper'),
@@ -44,10 +46,16 @@ const selectors = {
       pieChartTotalText: () => selectors.testId(''),
     },
     timelineLegend: {
-      legendList: () => selectors.testId(''),
       legendIcon: () => selectors.testId('status_legend_icon'),
       legendTitle: () => selectors.testId('status_legend_title'),
       legendNumber: () => selectors.testId('status_legend_number'),
+    },
+    filterModal: {
+      modal: () => selectors.testId(''),
+      title: () => selectors.testId(''),
+      closeBtn: () => selectors.testId(''),
+      applyBtn: () => selectors.testId(''),
+      clearBtn: () => selectors.testId(''),
     },
   },
   projectDetails: {
