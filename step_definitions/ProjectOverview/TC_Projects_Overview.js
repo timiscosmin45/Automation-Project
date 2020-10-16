@@ -419,3 +419,19 @@ Then(/^user sees "([^"]*)" field blank on the filter modal$/, async (field) => {
 Then(/^user refreshes the page$/, async () => {
   await client.refresh();
 });
+
+Then(/^user "(sees|does not see)" the filter preview section on Project Overview screen$/, async (action) => {
+  const selector = getSelector.projectOverview.filterPreviewSection.previewSection();
+  if (action === 'sees') await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  else await client.waitForElementNotVisible(selector, constants.MEDIUM_TIMEOUT);
+});
+
+Then(/^user sees "([^"]*)" option displayed on filter preview section$/, async (filter) => {
+  const selector = getSelector.projectOverview.filterPreviewSection.filterOption(filter);
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).assert.containsText(selector, filter);
+});
+
+Then(/^user clicks Remove filter button$/, async () => {
+  const selector = getSelector.projectOverview.filterPreviewSection.removeFilterBtn();
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
+});

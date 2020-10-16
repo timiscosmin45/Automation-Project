@@ -104,8 +104,8 @@ Feature: Validate Projects Overview filter
     And user sees "Maximum Value Range" field blank on the filter modal
     And user "clicks" "Apply" button on the filter modal
     And user "does not see" a filter modal on Project Overview screen
-  
-   Scenario: Validate filters after refreshing the page
+
+  Scenario: Validate filters after refreshing the page
     When user clicks filter button on Project Overview screen
     Then user "sees" a filter modal on Project Overview screen
     And user clicks "Bid" checkbox on the filter modal
@@ -113,3 +113,34 @@ Feature: Validate Projects Overview filter
     When user refreshes the page
     And user clicks filter button on Project Overview screen
     Then user sees "Bid" checkbox as "unchecked" on the filter modal
+
+  Scenario: Validate filter preview section on Timeline view
+    When user clicks filter button on Project Overview screen
+    Then user "sees" a filter modal on Project Overview screen
+    And user clicks "PCSA" checkbox on the filter modal
+    And user sees "Building" as a selected filter option on the filter modal
+    And user sees "Energy" as a selected filter option on the filter modal
+    And user sees "150000" as the "minimum" value range on the filter modal
+    And user sees "300000" as the "maximum" value range on the filter modal
+    When user "clicks" "Apply" button on the filter modal
+    Then user "does not see" a filter modal on Project Overview screen
+    And user "sees" the filter preview section on Project Overview screen
+    And user sees "Building" option displayed on filter preview section
+    And user sees "Energy" option displayed on filter preview section
+    And user sees "150K-300K" option displayed on filter preview section
+
+  Scenario: Validate filter preview section on Map view
+    When user user "clicks" "Map" button on the Project Overview screen
+    Then user sees "Project Overview Map" screen
+    And user "sees" the filter preview section on Project Overview screen
+    And user sees "Building" option displayed on filter preview section
+    And user sees "Energy" option displayed on filter preview section
+    And user sees "150K-300K" option displayed on filter preview section
+
+  Scenario: Validate Remove filter button
+   Given user sees "Project Overview Map" screen
+    When user clicks Remove filter button
+    Then user "does not see" the filter preview section on Project Overview screen
+    When user user "clicks" "Timeline" button on the Project Overview screen
+    Then user sees "Project Overview Timeline" screen
+    And user "does not see" the filter preview section on Project Overview screen
