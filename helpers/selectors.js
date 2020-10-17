@@ -68,6 +68,11 @@ const selectors = {
       minValueInput: () => `${selectors.projectOverview.filterModal.modal()} [name="min"]`,
       maxValueInput: () => `${selectors.projectOverview.filterModal.modal()} [name="max"]`,
     },
+    filterPreviewSection: {
+      previewSection: () => selectors.testId(''),
+      removeFilterBtn: () => selectors.testId(''),
+      filterOption: (option) => selectors.testId(option),
+    },
   },
   projectDetails: {
     title: () => selectors.testId(''),
