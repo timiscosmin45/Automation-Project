@@ -3,6 +3,7 @@ const { Given, When, Then } = require('cucumber');
 const { constants, getSelector, getDomData, getDate } = require('../../helpers');
 const { expect, assert } = require('chai');
 const moment = require('moment');
+const selectors = require('../../helpers/selectors');
 
 Given(/^user opens LOR RSAR application$/, async () => {
   await client.deleteCookies();
@@ -268,14 +269,14 @@ Then(/^user sees a search input with a filter button on Project Overview screen$
 });
 
 When(/^user clicks filter button on Project Overview screen$/, async () => {
-  const { filterBtn } = getSelector.projectOverview.filterBtn;
-  await client.waitForElementVisible(filterBtn(), constants.MEDIUM_TIMEOUT).click(filterBtn);
+  const { filterBtn } = getSelector.projectOverview;
+  await client.waitForElementVisible(filterBtn(), constants.MEDIUM_TIMEOUT).click(filterBtn());
 });
 
 Then(/^user "(sees|does not see)" a filter modal on Project Overview screen$/, async (action) => {
   const { modal } = getSelector.projectOverview.filterModal;
   if (action === 'sees') await client.waitForElementVisible(modal(), constants.MEDIUM_TIMEOUT);
-  else await client.waitForElementNotVisible(modal(), constants.MEDIUM_TIMEOUT);
+  else await client.waitForElementNotPresent(modal(), constants.MEDIUM_TIMEOUT);
 });
 
 Then(/^user sees "([^"]*)" text as the filter modal title$/, async (text) => {
@@ -285,19 +286,66 @@ Then(/^user sees "([^"]*)" text as the filter modal title$/, async (text) => {
 });
 
 Then(/^user "(sees|clicks)" "(Close|Apply|Clear)" button on the filter modal$/, async (action, button) => {
-  const { closeBtn, applyBtn, clearBtn } = getSelector.projectOverview.filterModal;
-  let selector = closeBtn();
-  selector = button === 'apply' ? applyBtn() : clearBtn();
+  let selector;
+  switch (button) {
+    case 'Apply':
+      selector = getSelector.projectOverview.filterModal.applyBtn();
+      break;
+    case 'Close':
+      selector = getSelector.projectOverview.filterModal.closeBtn();
+      break;
+    case 'Clear':
+      selector = getSelector.projectOverview.filterModal.clearBtn();
+      break;
+    default:
+      throw new Error('Incorrect case inputted!');
+  }
   if (action === 'sees') await client.waitForElementVisible(selector);
   else await client.waitForElementVisible(selector).click(selector);
 });
 
-When(/^user clicks "([^"]*)" checkbox on the filter modal$/, async (option) => {
-  // waiting for selectors and DOM structure
+When(/^user clicks "([^"]*)" checkbox on the filter modal$/, async (checkbox) => {
+  let selector;
+  switch (checkbox) {
+    case 'Early Engagement':
+      selector = getSelector.projectOverview.filterModal.earlyEngagement();
+      break;
+    case 'Bid':
+      selector = getSelector.projectOverview.filterModal.bid();
+      break;
+    case 'PCSA':
+      selector = getSelector.projectOverview.filterModal.pcsa();
+      break;
+    case 'Live':
+      selector = getSelector.projectOverview.filterModal.live();
+      break;
+    default:
+      throw new Error('Incorrect case inputted!');
+  }
+  await client.waitForElementPresent(selector, constants.MEDIUM_TIMEOUT).click(selector);
 });
 
-Then(/^user sees "([^"]*)" checkbox as "(checked|unchecked)" on the filter modal$/, async (option, state) => {
-  // waiting for selectors and DOM structure
+Then(/^user sees "([^"]*)" checkbox as "(checked|unchecked)" on the filter modal$/, async (checkbox, state) => {
+  let selector;
+  switch (checkbox) {
+    case 'Early Engagement':
+      selector = getSelector.projectOverview.filterModal.earlyEngagement();
+      break;
+    case 'Bid':
+      selector = getSelector.projectOverview.filterModal.bid();
+      break;
+    case 'PCSA':
+      selector = getSelector.projectOverview.filterModal.pcsa();
+      break;
+    case 'Live':
+      selector = getSelector.projectOverview.filterModal.live();
+      break;
+    default:
+      throw new Error('Incorrect case inputted!');
+  }
+  await client.waitForElementPresent(selector, constants.MEDIUM_TIMEOUT);
+  if (state === 'unchecked') await client.expect.element(selector).to.not.be.selected;
+  else await client.expect.element(selector).to.be.selected;
 });
 
 Then(/^user sees only "([^"]*)" projects on Project list$/, async (projectType) => {
@@ -308,6 +356,6 @@ Then(/^user sees "([^"]*)" status filter on the filter modal$/, async (status) =
   // waiting for selectors and DOM structure
 });
 
-And(/^user sees "([^"]*)" projects on Project list$/, async (status) => {
+Then(/^user sees "([^"]*)" projects on Project list$/, async (status) => {
   // waiting for selectors and DOM structure
 });

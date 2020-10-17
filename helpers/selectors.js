@@ -12,7 +12,7 @@ const selectors = {
     title: () => 'div > h1', // workaround for missing testId
     mapBtn: () => `[type='button']${selectors.child(2)}`, // workaround for missing testId
     timelineBtn: () => `[type='button']${selectors.child(1)}`, // workaround for missing testId
-    filterBtn: () => `${selectors.testId('timeline_body_rightside')} button`,
+    filterBtn: () => `${selectors.testId('timeline_header')} > div${selectors.child(1)} button`,
     searchInput: () => '[type="text"]', // workaround for missing testId
     timelineView: {
       timelineSection: () => selectors.testId('timeline_body_rightside'),
@@ -51,11 +51,15 @@ const selectors = {
       legendNumber: () => selectors.testId('status_legend_number'),
     },
     filterModal: {
-      modal: () => selectors.testId(''),
-      title: () => selectors.testId(''),
-      closeBtn: () => selectors.testId(''),
-      applyBtn: () => selectors.testId(''),
-      clearBtn: () => selectors.testId(''),
+      modal: () => '[role="dialog"]',
+      title: () => `${selectors.projectOverview.filterModal.modal()} > div:first-of-type`,
+      closeBtn: () => `${selectors.projectOverview.filterModal.modal()} button${selectors.child(1)}`,
+      applyBtn: () => `${selectors.projectOverview.filterModal.modal()} > div button${selectors.child(2)}`,
+      clearBtn: () => `${selectors.projectOverview.filterModal.modal()} > div button${selectors.child(1)}`,
+      bid: () => `${selectors.projectOverview.filterModal.modal()} [name="bid"]`,
+      pcsa: () => `${selectors.projectOverview.filterModal.modal()} [name="PCSA"]`,
+      live: () => `${selectors.projectOverview.filterModal.modal()} [name="live"]`,
+      earlyEngagement: () => `${selectors.projectOverview.filterModal.modal()} [name="earlyEngagement"]`,
     },
   },
   projectDetails: {
