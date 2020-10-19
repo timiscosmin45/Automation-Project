@@ -240,8 +240,7 @@ Then(/^user sees location markers representing the project's status$/, async () 
 
 Then(/^user sees the UK map on Projects Overview map screen$/, async () => {
   const selector = getSelector.projectOverview.mapView.map();
-  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
-  // to be completed when I cand use something to verify that the map is UK's map
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);F
 });
 
 Then(/^user sees the total number of projects in the middle of the chart$/, async () => {
