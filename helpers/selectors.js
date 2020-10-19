@@ -9,17 +9,17 @@ const selectors = {
     title: () => selectors.testId(''),
   },
   projectOverview: {
-    title: () => 'div > h1', // workaround for missing testId
-    mapBtn: () => `[type='button']${selectors.child(2)}`, // workaround for missing testId
-    timelineBtn: () => `[type='button']${selectors.child(1)}`, // workaround for missing testId
-    filterBtn: () => `${selectors.testId('timeline_header')} > div${selectors.child(1)} button`,
-    searchInput: () => '[type="text"]', // workaround for missing testId
+    title: () => 'div > h1',
+    mapBtn: () => `[type='button']${selectors.child(2)}`,
+    timelineBtn: () => `[type='button']${selectors.child(1)}`,
+    filterBtn: (screen) => `${selectors.testId(screen)} button`,
+    searchInput: () => '[type="text"]',
     timelineView: {
       timelineSection: () => selectors.testId('timeline_body_rightside'),
       projects: () => selectors.testId('timeline_card_wrapper'),
-      projectName: () => `${selectors.testId('timeline_card_wrapper')} > div > div > div > div > div`, // workaround for missing testId
-      clientName: () => `${selectors.testId('timeline_card_wrapper')} > div > div${selectors.child(2)} h5`, // workaround for missing testId
-      projectValue: () => `${selectors.testId('timeline_card_wrapper')} > div > div${selectors.child(2)} > div h5`, // workaround for missing testId
+      projectName: () => `${selectors.testId('timeline_card_wrapper')} > div > div > div > div > div`,
+      clientName: () => `${selectors.testId('timeline_card_wrapper')} > div > div${selectors.child(2)} h5`,
+      projectValue: () => `${selectors.testId('timeline_card_wrapper')} > div > div${selectors.child(2)} > div h5`,
       sectorIcon: () => `${selectors.testId('timeline_card_wrapper')} > div > div > div > div svg`,
       projectTimeline: () => selectors.testId('timeline_graphic_wrapper'),
       monthLabel: () => selectors.testId('timeline_months'),
@@ -28,22 +28,35 @@ const selectors = {
       leftNavigationArrow: () => selectors.testId('timeline_header_icon_left'),
       rightNavigationArrow: () => selectors.testId('timeline_header_icon_right'),
       calendar: () => selectors.testId(''),
-      listHeading: () => '.MuiTypography-root.jss31.MuiTypography-body1', // workaround for missing testId
+      listHeading: () => `${selectors.testId('timeline_header_leftside')} > p`,
     },
     mapView: {
-      map: () => selectors.testId(''),
-      mapLegend: () => selectors.testId(''),
-      projects: () => selectors.testId(''),
-      projectName: () => selectors.testId(''),
-      clientName: () => selectors.testId(''),
-      projectValue: () => selectors.testId(''),
-      projectLocation: () => selectors.testId(''),
-      dateLabel: () => selectors.testId(''),
-      listHeading: () => selectors.testId(''),
-      locationMarkers: () => selectors.testId(''),
-      pieChart: () => selectors.testId(''),
-      pieChartTotalNumber: () => selectors.testId(''),
-      pieChartTotalText: () => selectors.testId(''),
+      map: () => selectors.testId('mapview_map_chart'),
+      projects: () => selectors.testId('mapview_card_container'),
+      projectName: () => `${selectors.projectOverview.mapView.projects()} > div > div > div > div > div`,
+      clientName: () => {
+        return `${selectors.projectOverview.mapView.projects()} > div > div${selectors.child(2)} h5${selectors.child(
+          1,
+        )}`;
+      },
+      projectValue: () => {
+        return `${selectors.projectOverview.mapView.projects()} > div > div${selectors.child(
+          2,
+        )} > div > div${selectors.child(3)} h5`;
+      },
+      projectLocation: () => {
+        return `${selectors.projectOverview.mapView.projects()} > div > div${selectors.child(
+          2,
+        )} > div > div${selectors.child(2)} h5`;
+      },
+      dateLabel: () => {
+        return `${selectors.projectOverview.mapView.projects()} > div${selectors.child(2)} p${selectors.child(2)}`;
+      },
+      listHeading: () => `${selectors.testId('mapview_leftside_header')} > p`,
+      locationMarkers: () => selectors.testId('mapview_map_pins'),
+      pieChart: () => `${selectors.testId('mapview_piechart_wrapper')} svg`,
+      pieChartTotalNumber: () => `${selectors.testId('mapview_piechart_text')} > div${selectors.child(1)}`,
+      pieChartTotalText: () => `${selectors.testId('mapview_piechart_text')} > div${selectors.child(2)}`,
     },
     timelineLegend: {
       legendIcon: () => selectors.testId('status_legend_icon'),
@@ -60,13 +73,18 @@ const selectors = {
       bidCheckbox: () => `${selectors.projectOverview.filterModal.modal()} [name="bid"]`,
       pcsaCheckbox: () => `${selectors.projectOverview.filterModal.modal()} [name="PCSA"]`,
       liveCheckbox: () => `${selectors.projectOverview.filterModal.modal()} [name="live"]`,
-      listOption: (option) => `${selectors.projectOverview.filterModal.modal()} [data-value=${option}]`,
+      listOption: (option) => `[data-value=${option}]`,
       listOptionValue: (option) => `${selectors.projectOverview.filterModal.modal()} [value=${option}]`,
       businessUnitDropdown: () => `${selectors.projectOverview.filterModal.modal()} [name="businessUnit"]`,
       sectorDropdown: () => `${selectors.projectOverview.filterModal.modal()} [name="sector"]`,
       regionDropdown: () => `${selectors.projectOverview.filterModal.modal()} [name="region"]`,
       minValueInput: () => `${selectors.projectOverview.filterModal.modal()} [name="min"]`,
       maxValueInput: () => `${selectors.projectOverview.filterModal.modal()} [name="max"]`,
+    },
+    filterPreview: {
+      previewSection: () => `${selectors.testId('timeline_header_leftside')} > div${selectors.child(2)}`,
+      removeFilterBtn: () => `${selectors.projectOverview.filterPreview.previewSection()} button`,
+      filterOption: (option) => selectors.testId(option),
     },
   },
   projectDetails: {

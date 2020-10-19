@@ -3,7 +3,6 @@ const { Given, When, Then } = require('cucumber');
 const { constants, getSelector, getDomData, getDate } = require('../../helpers');
 const { expect, assert } = require('chai');
 const moment = require('moment');
-const selectors = require('../../helpers/selectors');
 
 Given(/^user opens LOR RSAR application$/, async () => {
   await client.deleteCookies();
@@ -83,9 +82,9 @@ When(/^user "(sees|clicks)" "(Timeline|Map)" button on the Project Overview scre
   }
 });
 
-Then(/^user sees a list of LOR Projects on the Project Overview "(timeline|map)" screen$/, async (screen) => {
+Then(/^user sees a list of LOR Projects on the Project Overview "(Timeline|Map)" screen$/, async (screen) => {
   const selector =
-    screen === 'map'
+    screen === 'Map'
       ? getSelector.projectOverview.mapView.projects()
       : getSelector.projectOverview.timelineView.projects();
 
@@ -128,7 +127,7 @@ Then(/^user sees "([^"]*)" for each project on Projects Overview timeline screen
 });
 
 Then(/^user sees "([^"]*)" for each project on Projects Overview map screen$/, async (projectData) => {
-  const selector = getSelector.projectOverview.timelineView.projects();
+  const selector = getSelector.projectOverview.mapView.projects();
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
   let elementSelector;
   switch (projectData) {
@@ -141,10 +140,10 @@ Then(/^user sees "([^"]*)" for each project on Projects Overview map screen$/, a
     case 'client name':
       elementSelector = getSelector.projectOverview.mapView.clientName();
       break;
-    case 'date label':
+    case 'project location':
       elementSelector = getSelector.projectOverview.mapView.projectLocation();
       break;
-    case 'project location':
+    case 'date label':
       elementSelector = getSelector.projectOverview.mapView.dateLabel();
       break;
     default:
@@ -220,7 +219,7 @@ When(/^user clicks on the "(left|right)" navigation arrow on timeline section$/,
 });
 
 Then(
-  /^user sees "([^"]*)" text as the list heading on Project Overview "(map|timeline)" screen$/,
+  /^user sees "([^"]*)" text as the list heading on Project Overview "(Map|Timeline)" screen$/,
   async (headingText, screen) => {
     const selector =
       screen === 'timeline'
@@ -262,15 +261,17 @@ Then(/^user sees a pie chart with "([^"]*)" text inside$/, async (text) => {
   await client.getText(pieChartTotalText(), ({ value }) => expect(text).to.equal(value));
 });
 
-Then(/^user sees a search input with a filter button on Project Overview screen$/, async () => {
+Then(/^user sees a search input with a filter button on Project Overview "(Map|Timeline)" screen$/, async (screen) => {
   const { searchInput, filterBtn } = getSelector.projectOverview;
+  const view = screen === 'Timeline' ? 'timeline_header_leftside' : 'mapview_leftside_header';
   await client.waitForElementVisible(searchInput(), constants.MEDIUM_TIMEOUT);
-  await client.waitForElementVisible(filterBtn(), constants.MEDIUM_TIMEOUT);
+  await client.waitForElementVisible(filterBtn(view), constants.MEDIUM_TIMEOUT);
 });
 
-When(/^user clicks filter button on Project Overview screen$/, async () => {
+When(/^user clicks filter button on Project Overview "(Timeline|Map)" screen$/, async (screen) => {
   const { filterBtn } = getSelector.projectOverview;
-  await client.waitForElementVisible(filterBtn(), constants.MEDIUM_TIMEOUT).click(filterBtn());
+  const view = screen === 'Timeline' ? 'timeline_header_leftside' : 'mapview_leftside_header';
+  await client.waitForElementVisible(filterBtn(view), constants.MEDIUM_TIMEOUT).click(filterBtn(view));
 });
 
 Then(/^user "(sees|does not see)" a filter modal on Project Overview screen$/, async (action) => {
@@ -348,87 +349,86 @@ Then(/^user sees "([^"]*)" checkbox as "(checked|unchecked)" on the filter modal
   else await client.expect.element(selector).to.be.selected;
 });
 
-Then(/^user sees only "([^"]*)" projects on Project list$/, async (projectType) => {
-  // waiting for selectors and DOM structure
+Then(/^user sees "([^"]*)" option displayed on filter preview section$/, async (option) => {
+  const selector = getSelector.projectOverview.filterPreview.previewSection();
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).assert.containsText(selector, option);
 });
 
-Then(/^user sees "([^"]*)" status filter on the filter modal$/, async (status) => {
-  // waiting for selectors and DOM structure
-});
-
-Then(/^user sees "([^"]*)" projects on Project list$/, async (status) => {
-  // waiting for selectors and DOM structure
-});
-
-Then(
+When(
   /^user selects "([^"]*)" as an option for "(Business Unit|Sector|UK Region)" on the filter modal$/,
   async (option, filter) => {
-    let filterSelector;
-    const optionSelector = getSelector.projectOverview.filterModal.listOption(option);
+    let selector;
     switch (filter) {
       case 'Business Unit':
-        filterSelector = getSelector.projectOverview.filterModal.businessUnitDropdown();
+        selector = getSelector.projectOverview.filterModal.businessUnitDropdown();
         break;
       case 'Sector':
-        filterSelector = getSelector.projectOverview.filterModal.sectorDropdown();
+        selector = getSelector.projectOverview.filterModal.sectorDropdown();
         break;
       case 'UK Region':
-        filterSelector = getSelector.projectOverview.filterModal.regionDropdown();
+        selector = getSelector.projectOverview.filterModal.regionDropdown();
         break;
       default:
         throw new Error('Incorrect case inputted!');
     }
+    const filterOption = getSelector.projectOverview.filterModal.listOption(option);
     await client
-      .waitForElementVisible(filterSelector)
-      .click(filterSelector)
-      .waitForElementVisible(optionSelector)
-      .click(optionSelector);
+      .moveToElement(selector, 1, 1)
+      .mouseButtonDown(0)
+      .waitForElementVisible(filterOption)
+      .click(filterOption)
+      .pause(1000);
   },
 );
 
-Then(/^user sets "(minimun|maximum)" value range as "([^"]*)"$/, async (type, value) => {
+Then(
+  /^user sees "([^"]*)" as the selected option for "(Business Unit|Sector|UK Region)" on the filter modal$/,
+  async (option, filter) => {
+    let selector;
+    switch (filter) {
+      case 'Business Unit':
+        selector = getSelector.projectOverview.filterModal.businessUnitDropdown();
+        break;
+      case 'Sector':
+        selector = getSelector.projectOverview.filterModal.sectorDropdown();
+        break;
+      case 'UK Region':
+        selector = getSelector.projectOverview.filterModal.regionDropdown();
+        break;
+      default:
+        throw new Error('Incorrect case inputted!');
+    }
+    const optionToCheck = option === 'Blank' ? '' : option;
+    await client.assert.value(selector, optionToCheck);
+  },
+);
+
+Then(/^user sets "(Minimum|Maximum)" value range as "([^"]*)" on the filter modal$/, async (type, value) => {
   let selector;
-  if (type === 'minimum') selector = getSelector.projectOverview.filterModal.minValueInput();
+  if (type === 'Minimum') selector = getSelector.projectOverview.filterModal.minValueInput();
   else selector = getSelector.projectOverview.filterModal.maxValueInput();
   await client.waitForElementVisible(selector).setValue(selector, value);
 });
 
-Then(/^user sees "([^"]*)" as a selected filter option on the filter modal$/, async (option) => {
-  const selector = getSelector.projectOverview.filterModal.listOptionValue(option);
-  await client.waitForElementVisible(selector);
-});
-
-Then(/^user sees "([^"]*)" as the "(minimum|maximum)" value range on the filter modal$/, async (value, type) => {
+Then(/^user sees "([^"]*)" as the "(Minimum|Maximum)" value range on the filter modal$/, async (value, type) => {
   let selector;
-  if (type === 'minimum') selector = getSelector.projectOverview.filterModal.minValueInput();
+  if (type === 'Minimum') selector = getSelector.projectOverview.filterModal.minValueInput();
   else selector = getSelector.projectOverview.filterModal.maxValueInput();
-  await client.waitForElementVisible(selector).assert.value(selector, value);
-});
-
-Then(/^user sees "([^"]*)" field blank on the filter modal$/, async (field) => {
-  let selector;
-  switch (field) {
-    case 'Business Unit':
-      selector = getSelector.projectOverview.filterModal.businessUnitDropdown();
-      break;
-    case 'Sector':
-      selector = getSelector.projectOverview.filterModal.sectorDropdown();
-      break;
-    case 'UK Region':
-      selector = getSelector.projectOverview.filterModal.regionDropdown();
-      break;
-    case 'Minimum Value Range':
-      selector = getSelector.projectOverview.filterModal.minValueInput();
-      break;
-    case 'Maximum Value Range':
-      selector = getSelector.projectOverview.filterModal.maxValueInput();
-      break;
-    default:
-      throw new Error('Incorrect case inputted!');
-  }
-  await client.waitForElementVisible(selector).assert.value(selector, '');
+  const valueToCheck = value === 'Blank' ? '' : value;
+  await client.waitForElementVisible(selector).assert.value(selector, valueToCheck);
 });
 
 Then(/^user refreshes the page$/, async () => {
   await client.refresh();
+});
+
+Then(/^user "(sees|does not see)" the filter preview section on Project Overview screen$/, async (action) => {
+  const selector = getSelector.projectOverview.filterPreview.previewSection();
+  if (action === 'sees') await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  else await client.waitForElementNotVisible(selector, constants.MEDIUM_TIMEOUT);
+});
+
+Then(/^user clicks Remove filter button on filter preview section$/, async () => {
+  const selector = getSelector.projectOverview.filterPreview.removeFilterBtn();
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
 });
