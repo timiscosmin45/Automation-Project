@@ -5,8 +5,7 @@ Feature: Validate Projects Overview filter
     Given user opens LOR RSAR application
     Then user sees "Project Overview Timeline" screen
     And user sees "PROJECTS OVERVIEW" as the screen title
-    When user "clicks" "Timeline" button on the Project Overview screen
-
+ 
   Scenario: Validate Projects Overview filter modal layout
     When user clicks filter button on Project Overview "Timeline" screen
     Then user "sees" a filter modal on Project Overview screen
