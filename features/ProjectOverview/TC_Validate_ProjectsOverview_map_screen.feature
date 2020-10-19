@@ -12,9 +12,9 @@ Feature: Validate Projects Overview map screen
     And user sees the side menu bar present
     And user "sees" "Map" button on the Project Overview screen
     And user "sees" "Timeline" button on the Project Overview screen
-    And user sees a search input with a filter button on Project Overview screen
-    And user sees a list of LOR Projects on the Project Overview "map" screen
-    And user sees "All active projects" text as the list heading on Project Overview "map" screen
+    And user sees a search input with a filter button on Project Overview "Map" screen
+    And user sees a list of LOR Projects on the Project Overview "Map" screen
+    And user sees "All active projects" text as the list heading on Project Overview "Map" screen
 
   Scenario Outline: Validate projects list from Projects Overview map screen
     Given user sees "Project Overview Map" screen

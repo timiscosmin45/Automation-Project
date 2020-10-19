@@ -82,9 +82,9 @@ When(/^user "(sees|clicks)" "(Timeline|Map)" button on the Project Overview scre
   }
 });
 
-Then(/^user sees a list of LOR Projects on the Project Overview "(timeline|map)" screen$/, async (screen) => {
+Then(/^user sees a list of LOR Projects on the Project Overview "(Timeline|Map)" screen$/, async (screen) => {
   const selector =
-    screen === 'map'
+    screen === 'Map'
       ? getSelector.projectOverview.mapView.projects()
       : getSelector.projectOverview.timelineView.projects();
 
@@ -127,7 +127,7 @@ Then(/^user sees "([^"]*)" for each project on Projects Overview timeline screen
 });
 
 Then(/^user sees "([^"]*)" for each project on Projects Overview map screen$/, async (projectData) => {
-  const selector = getSelector.projectOverview.timelineView.projects();
+  const selector = getSelector.projectOverview.mapView.projects();
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
   let elementSelector;
   switch (projectData) {
@@ -140,10 +140,10 @@ Then(/^user sees "([^"]*)" for each project on Projects Overview map screen$/, a
     case 'client name':
       elementSelector = getSelector.projectOverview.mapView.clientName();
       break;
-    case 'date label':
+    case 'project location':
       elementSelector = getSelector.projectOverview.mapView.projectLocation();
       break;
-    case 'project location':
+    case 'date label':
       elementSelector = getSelector.projectOverview.mapView.dateLabel();
       break;
     default:
@@ -219,7 +219,7 @@ When(/^user clicks on the "(left|right)" navigation arrow on timeline section$/,
 });
 
 Then(
-  /^user sees "([^"]*)" text as the list heading on Project Overview "(map|timeline)" screen$/,
+  /^user sees "([^"]*)" text as the list heading on Project Overview "(Map|Timeline)" screen$/,
   async (headingText, screen) => {
     const selector =
       screen === 'timeline'
@@ -241,7 +241,6 @@ Then(/^user sees location markers representing the project's status$/, async () 
 Then(/^user sees the UK map on Projects Overview map screen$/, async () => {
   const selector = getSelector.projectOverview.mapView.map();
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
-  // to be completed when I cand use something to verify that the map is UK's map
 });
 
 Then(/^user sees the total number of projects in the middle of the chart$/, async () => {
@@ -261,21 +260,23 @@ Then(/^user sees a pie chart with "([^"]*)" text inside$/, async (text) => {
   await client.getText(pieChartTotalText(), ({ value }) => expect(text).to.equal(value));
 });
 
-Then(/^user sees a search input with a filter button on Project Overview screen$/, async () => {
+Then(/^user sees a search input with a filter button on Project Overview "(Map|Timeline)" screen$/, async (screen) => {
   const { searchInput, filterBtn } = getSelector.projectOverview;
+  const view = screen === 'Timeline' ? 'timeline_header_leftside' : 'mapview_leftside_header';
   await client.waitForElementVisible(searchInput(), constants.MEDIUM_TIMEOUT);
-  await client.waitForElementVisible(filterBtn(), constants.MEDIUM_TIMEOUT);
+  await client.waitForElementVisible(filterBtn(view), constants.MEDIUM_TIMEOUT);
 });
 
-When(/^user clicks filter button on Project Overview screen$/, async () => {
-  const { filterBtn } = getSelector.projectOverview.filterBtn;
-  await client.waitForElementVisible(filterBtn(), constants.MEDIUM_TIMEOUT).click(filterBtn);
+When(/^user clicks filter button on Project Overview "(Timeline|Map)" screen$/, async (screen) => {
+  const { filterBtn } = getSelector.projectOverview;
+  const view = screen === 'Timeline' ? 'timeline_header_leftside' : 'mapview_leftside_header';
+  await client.waitForElementVisible(filterBtn(view), constants.MEDIUM_TIMEOUT).click(filterBtn(view));
 });
 
 Then(/^user "(sees|does not see)" a filter modal on Project Overview screen$/, async (action) => {
-  const { modal } = getSelector.projectOverview.filterModal;
-  if (action === 'sees') await client.waitForElementVisible(modal(), constants.MEDIUM_TIMEOUT);
-  else await client.waitForElementNotVisible(modal(), constants.MEDIUM_TIMEOUT);
+  const selector = getSelector.projectOverview.filterModal.modal();
+  if (action === 'sees') await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  else await client.waitForElementNotPresent(selector, constants.MEDIUM_TIMEOUT);
 });
 
 Then(/^user sees "([^"]*)" text as the filter modal title$/, async (text) => {
@@ -285,9 +286,20 @@ Then(/^user sees "([^"]*)" text as the filter modal title$/, async (text) => {
 });
 
 Then(/^user "(sees|clicks)" "(Close|Apply|Clear)" button on the filter modal$/, async (action, button) => {
-  const { closeBtn, applyBtn, clearBtn } = getSelector.projectOverview.filterModal;
-  let selector = closeBtn();
-  selector = button === 'apply' ? applyBtn() : clearBtn();
+  let selector;
+  switch (button) {
+    case 'Apply':
+      selector = getSelector.projectOverview.filterModal.applyBtn();
+      break;
+    case 'Close':
+      selector = getSelector.projectOverview.filterModal.closeBtn();
+      break;
+    case 'Clear':
+      selector = getSelector.projectOverview.filterModal.clearBtn();
+      break;
+    default:
+      throw new Error('Incorrect case inputted!');
+  }
   if (action === 'sees') await client.waitForElementVisible(selector);
   else await client.waitForElementVisible(selector).click(selector);
 });
@@ -302,20 +314,20 @@ When(/^user clicks "([^"]*)" checkbox on the filter modal$/, async (option) => {
       selector = getSelector.projectOverview.filterModal.bidCheckbox();
       break;
     case 'PCSA':
-      selector = getSelector.projectOverview.filterModal.pcsaEngCheckbox();
+      selector = getSelector.projectOverview.filterModal.pcsaCheckbox();
       break;
     case 'Live':
-      selector = getSelector.projectOverview.filterModal.liveProjectsCheckbox();
+      selector = getSelector.projectOverview.filterModal.liveCheckbox();
       break;
     default:
       throw new Error('Incorrect case inputted!');
   }
-  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
+  await client.waitForElementPresent(selector, constants.MEDIUM_TIMEOUT).click(selector);
 });
 
-Then(/^user sees "([^"]*)" checkbox as "(checked|unchecked)" on the filter modal$/, async (option, state) => {
+Then(/^user sees "([^"]*)" checkbox as "(checked|unchecked)" on the filter modal$/, async (checkbox, state) => {
   let selector;
-  switch (option) {
+  switch (checkbox) {
     case 'Early Engagement':
       selector = getSelector.projectOverview.filterModal.earlyEngCheckbox();
       break;
@@ -323,97 +335,86 @@ Then(/^user sees "([^"]*)" checkbox as "(checked|unchecked)" on the filter modal
       selector = getSelector.projectOverview.filterModal.bidCheckbox();
       break;
     case 'PCSA':
-      selector = getSelector.projectOverview.filterModal.pcsaEngCheckbox();
+      selector = getSelector.projectOverview.filterModal.pcsaCheckbox();
       break;
     case 'Live':
-      selector = getSelector.projectOverview.filterModal.liveProjectsCheckbox();
+      selector = getSelector.projectOverview.filterModal.liveCheckbox();
       break;
     default:
       throw new Error('Incorrect case inputted!');
   }
-  if (state === 'checked') await client.waitForElementVisible(`${selector}:checked`);
-  else await client.waitForElementVisible(`${selector}:not(:checked)`);
+  await client.waitForElementPresent(selector, constants.MEDIUM_TIMEOUT);
+  if (state === 'unchecked') await client.expect.element(selector).to.not.be.selected;
+  else await client.expect.element(selector).to.be.selected;
 });
 
-Then(/^user sees only "([^"]*)" projects on Project list$/, async (projectType) => {
-  // waiting for selectors and DOM structure
+Then(/^user sees "([^"]*)" option displayed on filter preview section$/, async (option) => {
+  const selector = getSelector.projectOverview.filterPreview.previewSection();
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).assert.containsText(selector, option);
 });
 
-Then(/^user sees "([^"]*)" status filter on the filter modal$/, async (status) => {
-  // waiting for selectors and DOM structure
-});
-
-Then(/^user sees "([^"]*)" projects on Project list$/, async (status) => {
-  // waiting for selectors and DOM structure
-});
-
-Then(
+When(
   /^user selects "([^"]*)" as an option for "(Business Unit|Sector|UK Region)" on the filter modal$/,
   async (option, filter) => {
-    let filterSelector;
-    const optionSelector = getSelector.projectOverview.filterModal.listOption(option);
+    let selector;
     switch (filter) {
       case 'Business Unit':
-        filterSelector = getSelector.projectOverview.filterModal.businessUnitDropdown();
+        selector = getSelector.projectOverview.filterModal.businessUnitDropdown();
         break;
       case 'Sector':
-        filterSelector = getSelector.projectOverview.filterModal.sectorDropdown();
+        selector = getSelector.projectOverview.filterModal.sectorDropdown();
         break;
       case 'UK Region':
-        filterSelector = getSelector.projectOverview.filterModal.regionDropdown();
+        selector = getSelector.projectOverview.filterModal.regionDropdown();
         break;
       default:
         throw new Error('Incorrect case inputted!');
     }
+    const filterOption = getSelector.projectOverview.filterModal.listOption(option);
     await client
-      .waitForElementVisible(filterSelector)
-      .click(filterSelector)
-      .waitForElementVisible(optionSelector)
-      .click(optionSelector);
+      .moveToElement(selector, 1, 1)
+      .mouseButtonDown(0)
+      .waitForElementVisible(filterOption)
+      .click(filterOption)
+      .pause(1000);
   },
 );
 
-Then(/^user sets "(minimun|maximum)" value range as "([^"]*)"$/, async (type, value) => {
+Then(
+  /^user sees "([^"]*)" as the selected option for "(Business Unit|Sector|UK Region)" on the filter modal$/,
+  async (option, filter) => {
+    let selector;
+    switch (filter) {
+      case 'Business Unit':
+        selector = getSelector.projectOverview.filterModal.businessUnitDropdown();
+        break;
+      case 'Sector':
+        selector = getSelector.projectOverview.filterModal.sectorDropdown();
+        break;
+      case 'UK Region':
+        selector = getSelector.projectOverview.filterModal.regionDropdown();
+        break;
+      default:
+        throw new Error('Incorrect case inputted!');
+    }
+    const optionToCheck = option === 'Blank' ? '' : option;
+    await client.assert.value(selector, optionToCheck);
+  },
+);
+
+Then(/^user sets "(Minimum|Maximum)" value range as "([^"]*)" on the filter modal$/, async (type, value) => {
   let selector;
-  if (type === 'minimum') selector = getSelector.projectOverview.filterModal.minValueInput();
+  if (type === 'Minimum') selector = getSelector.projectOverview.filterModal.minValueInput();
   else selector = getSelector.projectOverview.filterModal.maxValueInput();
   await client.waitForElementVisible(selector).setValue(selector, value);
 });
 
-Then(/^user sees "([^"]*)" as a selected filter option on the filter modal$/, async (option) => {
-  const selector = getSelector.projectOverview.filterModal.listOptionValue(option);
-  await client.waitForElementVisible(selector);
-});
-
-Then(/^user sees "([^"]*)" as the "(minimum|maximum)" value range on the filter modal$/, async (value, type) => {
+Then(/^user sees "([^"]*)" as the "(Minimum|Maximum)" value range on the filter modal$/, async (value, type) => {
   let selector;
-  if (type === 'minimum') selector = getSelector.projectOverview.filterModal.minValueInput();
+  if (type === 'Minimum') selector = getSelector.projectOverview.filterModal.minValueInput();
   else selector = getSelector.projectOverview.filterModal.maxValueInput();
-  await client.waitForElementVisible(selector).assert.value(selector, value);
-});
-
-Then(/^user sees "([^"]*)" field blank on the filter modal$/, async (field) => {
-  let selector;
-  switch (field) {
-    case 'Business Unit':
-      selector = getSelector.projectOverview.filterModal.businessUnitDropdown();
-      break;
-    case 'Sector':
-      selector = getSelector.projectOverview.filterModal.sectorDropdown();
-      break;
-    case 'UK Region':
-      selector = getSelector.projectOverview.filterModal.regionDropdown();
-      break;
-    case 'Minimum Value Range':
-      selector = getSelector.projectOverview.filterModal.minValueInput();
-      break;
-    case 'Maximum Value Range':
-      selector = getSelector.projectOverview.filterModal.maxValueInput();
-      break;
-    default:
-      throw new Error('Incorrect case inputted!');
-  }
-  await client.waitForElementVisible(selector).assert.value(selector, '');
+  const valueToCheck = value === 'Blank' ? '' : value;
+  await client.waitForElementVisible(selector).assert.value(selector, valueToCheck);
 });
 
 Then(/^user refreshes the page$/, async () => {
@@ -421,17 +422,12 @@ Then(/^user refreshes the page$/, async () => {
 });
 
 Then(/^user "(sees|does not see)" the filter preview section on Project Overview screen$/, async (action) => {
-  const selector = getSelector.projectOverview.filterPreviewSection.previewSection();
+  const selector = getSelector.projectOverview.filterPreview.previewSection();
   if (action === 'sees') await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
   else await client.waitForElementNotVisible(selector, constants.MEDIUM_TIMEOUT);
 });
 
-Then(/^user sees "([^"]*)" option displayed on filter preview section$/, async (filter) => {
-  const selector = getSelector.projectOverview.filterPreviewSection.filterOption(filter);
-  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).assert.containsText(selector, filter);
-});
-
-Then(/^user clicks Remove filter button$/, async () => {
-  const selector = getSelector.projectOverview.filterPreviewSection.removeFilterBtn();
+Then(/^user clicks Remove filter button on filter preview section$/, async () => {
+  const selector = getSelector.projectOverview.filterPreview.removeFilterBtn();
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
 });
