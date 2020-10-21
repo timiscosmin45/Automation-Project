@@ -3,58 +3,7 @@ const { Given, When, Then } = require('cucumber');
 const { constants, getSelector, getDomData, getDate } = require('../../helpers');
 const { expect, assert } = require('chai');
 const moment = require('moment');
-
-Given(/^user opens LOR RSAR application$/, async () => {
-  await client.deleteCookies();
-  await client.init(constants.URL);
-  await client.maximizeWindow();
-  await client.waitForElementPresent('title', constants.MEDIUM_TIMEOUT);
-  // await client.assert.title(''); should we have a page title?
-});
-
-Then(/^user sees "([^"]*)" screen$/, async (screen) => {
-  let selector;
-  let expectedEndpoint;
-  switch (screen) {
-    case 'Project Overview Timeline':
-      selector = getSelector.projectOverview.timelineView.timelineSection();
-      expectedEndpoint = '/';
-      break;
-    case 'Project Overview Map':
-      selector = getSelector.projectOverview.mapView.map();
-      expectedEndpoint = '/';
-      break;
-    default:
-      throw new Error('Incorrect case inputted!');
-  }
-  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).assert.urlContains(expectedEndpoint);
-});
-
-Then(/^user sees "([^"]*)" as the webpage title$/, async (title) => {
-  await client.waitForElementPresent('title', constants.MEDIUM_TIMEOUT).assert.title(title);
-});
-
-Then(/^user sees "([^"]*)" as the screen title$/, async (title) => {
-  let selector;
-  switch (title) {
-    case 'PROJECTS OVERVIEW':
-      selector = getSelector.projectOverview.title();
-      break;
-    case 'Project Details':
-      selector = getSelector.projectDetails.title();
-      break;
-    case 'Unnasigned People':
-      selector = getSelector.unassignedPeople.title();
-      break;
-    case 'Find Candidates':
-      selector = getSelector.FindCandidates.title();
-      break;
-    default:
-      throw new Error('Incorrect case inputted!');
-  }
-  await client.waitForElementPresent(selector, constants.SHORT_TIMEOUT);
-  await client.getText(selector, ({ value }) => assert.equal(title, value));
-});
+const selectors = require('../../helpers/selectors');
 
 When(/^user "(sees|clicks)" "(Timeline|Map)" button on the Project Overview screen$/, async (action, button) => {
   const { title } = getSelector.projectOverview;
@@ -152,7 +101,8 @@ Then(/^user sees "([^"]*)" for each project on Projects Overview map screen$/, a
   const founElements = await getDomData.idsFromElements(selector);
   for (const element of founElements) {
     await client.elementIdElement(element, 'css selector', elementSelector, ({ value }) => {
-      expect(value).to.not.equal(undefined);
+      const elementId = value.ELEMENT;
+      assert.isDefined(elementId, `${projectData} not found!`);
     });
   }
 });
@@ -221,12 +171,10 @@ When(/^user clicks on the "(left|right)" navigation arrow on timeline section$/,
 Then(
   /^user sees "([^"]*)" text as the list heading on Project Overview "(Map|Timeline)" screen$/,
   async (headingText, screen) => {
-    const selector =
-      screen === 'timeline'
-        ? getSelector.projectOverview.timelineView.listHeading()
-        : getSelector.projectOverview.mapView.listHeading();
-
-    await client.waitForElementVisible(selector).getText(selector, ({ value }) => assert.equal(value, headingText));
+    const view = screen === 'Timeline' ? 'timeline_header_leftside' : 'mapview_leftside_header';
+    const selector = getSelector.projectOverview.listHeading(view);
+    await client.waitForElementVisible(selector);
+    await client.getText(selector, ({ value }) => expect(value).to.contain(headingText));
   },
 );
 
@@ -260,11 +208,54 @@ Then(/^user sees a pie chart with "([^"]*)" text inside$/, async (text) => {
   await client.getText(pieChartTotalText(), ({ value }) => expect(text).to.equal(value));
 });
 
-Then(/^user sees a search input with a filter button on Project Overview "(Map|Timeline)" screen$/, async (screen) => {
-  const { searchInput, filterBtn } = getSelector.projectOverview;
+Then(/^user sees a filter button on Project Overview "(Map|Timeline)" screen$/, async (screen) => {
+  const { filterBtn } = getSelector.projectOverview;
   const view = screen === 'Timeline' ? 'timeline_header_leftside' : 'mapview_leftside_header';
-  await client.waitForElementVisible(searchInput(), constants.MEDIUM_TIMEOUT);
   await client.waitForElementVisible(filterBtn(view), constants.MEDIUM_TIMEOUT);
+});
+
+Then(
+  /^user sees a search input with "([^"]*)" text as placeholder on Project Overview "(Map|Timeline)" screen$/,
+  async (text, screen) => {
+    const view = screen === 'Timeline' ? 'timeline_header_leftside' : 'mapview_leftside_header';
+    const selector = getSelector.projectOverview.searchInput(view);
+    await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+    await client.assert.domPropertyEquals(selector, 'placeholder', text);
+  },
+);
+
+When(/^user types "([^"]*)" in the search input on Project Overview "(Map|Timeline)" screen$/, async (text, screen) => {
+  const view = screen === 'Timeline' ? 'timeline_header_leftside' : 'mapview_leftside_header';
+  const selector = getSelector.projectOverview.searchInput(view);
+  await client
+    .waitForElementVisible(selector, constants.MEDIUM_TIMEOUT)
+    .setValue(selector, ['', [client.Keys.CONTROL, 'a']])
+    .keys(client.Keys.BACK_SPACE)
+    .setValue(selector, text)
+    .keys(client.Keys.ENTER);
+});
+
+Then(
+  /^user sees "([^"]*)" text in the search input on Project Overview "(Map|Timeline)" screen$/,
+  async (text, screen) => {
+    const view = screen === 'Timeline' ? 'timeline_header_leftside' : 'mapview_leftside_header';
+    const selector = getSelector.projectOverview.searchInput(view);
+    await client
+      .waitForElementVisible(selector, constants.MEDIUM_TIMEOUT)
+      .getValue(selector, ({ value }) => expect(text).to.equal(value));
+  },
+);
+
+When(/^user presses "([^"]*)" key$/, async (key) => {
+  await client.keys(client.Keys[key]);
+});
+
+When(/^user clicks Search icon on Project Overview "(Map|Timeline)" screen$/, async (text, screen) => {
+  const view = screen === 'Timeline' ? 'timeline_header_leftside' : 'mapview_leftside_header';
+  const selector = getSelector.projectOverview.searchIcon(view);
+  await client
+    .waitForElementVisible(selector, constants.MEDIUM_TIMEOUT)
+    .getValue(selector, ({ value }) => expect(text).to.equal(value));
 });
 
 When(/^user clicks filter button on Project Overview "(Timeline|Map)" screen$/, async (screen) => {
@@ -431,3 +422,32 @@ Then(/^user clicks Remove filter button on filter preview section$/, async () =>
   const selector = getSelector.projectOverview.filterPreview.removeFilterBtn();
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
 });
+
+Then(
+  /^user sees only projects with "(Project|Client)" name as "([^"]*)" on Project Overview "(Map|Timeline)" screen$/,
+  async (text, cardElement, screen) => {
+    const { projectOverview } = selectors;
+    const mapProjects = projectOverview.mapView.projects();
+    const timelineProjects = projectOverview.timelineView.projects();
+    const selector = screen === 'Map' ? mapProjects : timelineProjects;
+
+    let sElement;
+    if (cardElement === 'Project') {
+      sElement = screen === 'Map' ? projectOverview.mapView.projectName() : projectOverview.timelineView.projectName();
+    } else {
+      sElement = screen === 'Map' ? projectOverview.mapView.clientName() : projectOverview.timelineView.clientName();
+    }
+
+    const founElements = await getDomData.idsFromElements(selector);
+
+    for (const element of founElements) {
+      let elementId;
+      await client.elementIdElement(element, 'css selector', sElement, ({ value }) => {
+        elementId = value.ELEMENT;
+      });
+      await client.elementIdText(elementId, ({ value }) => {
+        expect(text).to.equal(value);
+      });
+    }
+  },
+);

@@ -12,8 +12,11 @@ const selectors = {
     title: () => 'div > h1',
     mapBtn: () => `[type='button']${selectors.child(2)}`,
     timelineBtn: () => `[type='button']${selectors.child(1)}`,
-    filterBtn: (screen) => `${selectors.testId(screen)} button`,
-    searchInput: () => '[type="text"]',
+    leftsideHeader: (screen) => selectors.testId(screen),
+    listHeading: (screen) => `${selectors.projectOverview.leftsideHeader(screen)} > p`,
+    filterBtn: (screen) => `${selectors.projectOverview.leftsideHeader(screen)} button`,
+    searchInput: (screen) => `${selectors.projectOverview.leftsideHeader(screen)} input`,
+    searchIcon: (screen) => `${selectors.projectOverview.leftsideHeader(screen)} div${selectors.child(2)} > svg`,
     timelineView: {
       timelineSection: () => selectors.testId('timeline_body_rightside'),
       projects: () => selectors.testId('timeline_card_wrapper'),
@@ -28,7 +31,6 @@ const selectors = {
       leftNavigationArrow: () => selectors.testId('timeline_header_icon_left'),
       rightNavigationArrow: () => selectors.testId('timeline_header_icon_right'),
       calendar: () => selectors.testId(''),
-      listHeading: () => `${selectors.testId('timeline_header_leftside')} > p`,
     },
     mapView: {
       map: () => selectors.testId('mapview_map_chart'),
@@ -52,7 +54,6 @@ const selectors = {
       dateLabel: () => {
         return `${selectors.projectOverview.mapView.projects()} > div${selectors.child(2)} p${selectors.child(2)}`;
       },
-      listHeading: () => `${selectors.testId('mapview_leftside_header')} > p`,
       locationMarkers: () => selectors.testId('mapview_map_pins'),
       pieChart: () => `${selectors.testId('mapview_piechart_wrapper')} svg`,
       pieChartTotalNumber: () => `${selectors.testId('mapview_piechart_text')} > div${selectors.child(1)}`,
