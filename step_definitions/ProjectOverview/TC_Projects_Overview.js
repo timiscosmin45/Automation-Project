@@ -3,7 +3,6 @@ const { Given, When, Then } = require('cucumber');
 const { constants, getSelector, getDomData, getDate } = require('../../helpers');
 const { expect, assert } = require('chai');
 const moment = require('moment');
-const selectors = require('../../helpers/selectors');
 
 When(/^user "(sees|clicks)" "(Timeline|Map)" button on the Project Overview screen$/, async (action, button) => {
   const { title } = getSelector.projectOverview;
