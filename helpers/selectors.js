@@ -89,6 +89,10 @@ const selectors = {
   },
   projectDetails: {
     title: () => selectors.testId(''),
+    page: () => selectors.testId(''),
+    projectName: () => selectors.testId(''),
+    projectOverviewBreadcrumb: () => selectors.testId(''),
+    projectDetailsBreadcrumb: () => selectors.testId(''),
   },
   FindCandidates: {
     title: () => selectors.testId(''),
