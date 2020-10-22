@@ -91,9 +91,14 @@ const selectors = {
   projectDetails: {
     title: () => selectors.testId(''),
     page: () => selectors.testId(''),
-    projectName: () => selectors.testId(''),
     projectOverviewBreadcrumb: () => selectors.testId(''),
     projectDetailsBreadcrumb: () => selectors.testId(''),
+    projectName: () => selectors.testId(''),
+    clientName: () => selectors.testId(''),
+    status: () => selectors.testId(''),
+    sector: () => selectors.testId(''),
+    value: () => selectors.testId(''),
+    location: () => selectors.testId(''),
   },
   FindCandidates: {
     title: () => selectors.testId(''),

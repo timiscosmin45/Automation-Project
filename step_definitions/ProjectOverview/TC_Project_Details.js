@@ -10,30 +10,27 @@ Then(/^user sees "([^"]*)" as the project name$/, async (projectName) => {
     .getText(selector, ({ value }) => assert.equal(projectName, value));
 });
 
-Then(
-  /^user "(sees|clicks)" "(Project Overview|Project Details)" breadcrumb on the Project Overview screen$/,
-  async (action, button) => {
-    let selector;
-    switch (button) {
-      case 'Project Overview':
-        selector = getSelector.projectDetails.projectOverviewBreadcrumb();
-        break;
-      case 'Project Details':
-        selector = getSelector.projectDetails.projectDetailsBreadcrumb();
-        break;
-      default:
-        throw new Error('Incorrect case inputted!');
-    }
+Then(/^user "(sees|clicks)" "(Project Overview|Project Details)" breadcrumb$/, async (action, button) => {
+  let selector;
+  switch (button) {
+    case 'Project Overview':
+      selector = getSelector.projectDetails.projectOverviewBreadcrumb();
+      break;
+    case 'Project Details':
+      selector = getSelector.projectDetails.projectDetailsBreadcrumb();
+      break;
+    default:
+      throw new Error('Incorrect case inputted!');
+  }
 
-    if (action === 'sees') {
-      await client
-        .waitForElementVisible(selector, constants.MEDIUM_TIMEOUT)
-        .getText(selector, ({ value }) => assert.equal(button, value));
-    } else {
-      await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
-    }
-  },
-);
+  if (action === 'sees') {
+    await client
+      .waitForElementVisible(selector, constants.MEDIUM_TIMEOUT)
+      .getText(selector, ({ value }) => assert.equal(button, value));
+  } else {
+    await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
+  }
+});
 
 Then(/^user sees the Project Details breadcrumb highlighted$/, async () => {
   const breadcrumbSelector = getSelector.projectDetails.projectDetailsBreadcrumb();
@@ -44,4 +41,31 @@ Then(/^user sees the Project Details breadcrumb highlighted$/, async () => {
 
 Then(/^user clicks browser back button$/, async () => {
   await client.back();
+});
+
+Then(/^user sees "([^"]*)" on Projects Details screen$/, async (projectData) => {
+  let selector;
+  switch (projectData) {
+    case 'project name':
+      selector = getSelector.projectDetails.projectName();
+      break;
+    case 'client name':
+      selector = getSelector.projectDetails.clientName();
+      break;
+    case 'status':
+      selector = getSelector.projectDetails.status();
+      break;
+    case 'sector':
+      selector = getSelector.projectDetails.sector();
+      break;
+    case 'value':
+      selector = getSelector.projectDetails.value();
+      break;
+    case 'location':
+      selector = getSelector.projectDetails.location();
+      break;
+    default:
+      throw new Error('Incorrect case inputted!');
+  }
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
 });
