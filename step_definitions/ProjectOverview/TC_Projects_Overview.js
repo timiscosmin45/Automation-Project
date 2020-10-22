@@ -150,13 +150,13 @@ Then(/^user sees a legend with "([^"]*)" status, its respective icon and the num
 Then(/^user sees toggle showing the "(Timeline|Map)" option highlighted$/, async (screen) => {
   const btnMap = getSelector.projectOverview.mapBtn();
   const btnTimeline = getSelector.projectOverview.timelineBtn();
-  const { MAP_TIMELINE, HIGHLIGHTED_MAP_TIMELINE } = constants.DESIGN_COLORS.BUTTONS;
+  const { MAP_TIMELINE, HIGHLIGHTED_BUTTON } = constants.DESIGN_COLORS.BUTTONS;
 
   if (screen === 'Timeline') {
     await client.assert.cssProperty(btnMap, 'background-color', MAP_TIMELINE);
-    await client.assert.cssProperty(btnTimeline, 'background-color', HIGHLIGHTED_MAP_TIMELINE);
+    await client.assert.cssProperty(btnTimeline, 'background-color', HIGHLIGHTED_BUTTON);
   } else {
-    await client.assert.cssProperty(btnMap, 'background-color', HIGHLIGHTED_MAP_TIMELINE);
+    await client.assert.cssProperty(btnMap, 'background-color', HIGHLIGHTED_BUTTON);
     await client.assert.cssProperty(btnTimeline, 'background-color', MAP_TIMELINE);
   }
 });
@@ -425,7 +425,7 @@ Then(/^user clicks Remove filter button on filter preview section$/, async () =>
 Then(
   /^user sees only projects with "(Project|Client)" name as "([^"]*)" on Project Overview "(Map|Timeline)" screen$/,
   async (text, cardElement, screen) => {
-    const { projectOverview } = selectors;
+    const { projectOverview } = getSelector;
     const mapProjects = projectOverview.mapView.projects();
     const timelineProjects = projectOverview.timelineView.projects();
     const selector = screen === 'Map' ? mapProjects : timelineProjects;
@@ -450,3 +450,20 @@ Then(
     }
   },
 );
+
+Then(/^user clicks on the "([^"]*)" project card$/, async (projectName) => {
+  let found = 0;
+  const selector = getSelector.projectOverview.timelineView.projects();
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  const elementSelector = getSelector.projectOverview.timelineView.projectName();
+  const founElements = await getDomData.idsFromElements(selector);
+  for (const element of founElements) {
+    await client.elementIdElement(element, 'css selector', elementSelector, (value) => {
+      const elementId = value.ELEMENT;
+      client.elementIdText(elementId, (text) => {
+        if (text.value === projectName) found = 1;
+      });
+      if (found === 1) client.elementIdClick(elementId);
+    });
+  }
+});

@@ -11,7 +11,7 @@ const CONSTANTS = {
   DESIGN_COLORS: {
     BUTTONS: {
       MAP_TIMELINE: 'rgba(230, 230, 230, 1)',
-      HIGHLIGHTED_MAP_TIMELINE: 'rgba(255, 242, 0, 1)',
+      HIGHLIGHTED_BUTTON: 'rgba(255, 242, 0, 1)',
     },
     SIDEBAR: {
       HIGHLIGHTED_TAB_TEXT: 'rgba(255, 242, 0, 1)',
