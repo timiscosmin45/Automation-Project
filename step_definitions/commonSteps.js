@@ -23,6 +23,10 @@ Then(/^user sees "([^"]*)" screen$/, async (screen) => {
       selector = getSelector.projectOverview.mapView.map();
       expectedEndpoint = '/';
       break;
+    case 'Project Details':
+      //selector = getSelector.projectDetails;
+      //expectedEndpoint = '/';
+      break;
     default:
       throw new Error('Incorrect case inputted!');
   }
@@ -39,7 +43,7 @@ Then(/^user sees "([^"]*)" as the screen title$/, async (title) => {
     case 'PROJECTS OVERVIEW':
       selector = getSelector.projectOverview.title();
       break;
-    case 'Project Details':
+    case 'PROJECT DETAILS':
       selector = getSelector.projectDetails.title();
       break;
     case 'Unnasigned People':

@@ -424,7 +424,7 @@ Then(/^user clicks Remove filter button on filter preview section$/, async () =>
 
 Then(
   /^user sees only projects with "(Project|Client)" name as "([^"]*)" on Project Overview "(Map|Timeline)" screen$/,
-  async (text, cardElement, screen) => {
+  async (cardElement, text, screen) => {
     const { projectOverview } = getSelector;
     const mapProjects = projectOverview.mapView.projects();
     const timelineProjects = projectOverview.timelineView.projects();
@@ -451,19 +451,39 @@ Then(
   },
 );
 
-Then(/^user clicks on the "([^"]*)" project card$/, async (projectName) => {
-  let found = 0;
-  const selector = getSelector.projectOverview.timelineView.projects();
-  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
-  const elementSelector = getSelector.projectOverview.timelineView.projectName();
-  const founElements = await getDomData.idsFromElements(selector);
-  for (const element of founElements) {
-    await client.elementIdElement(element, 'css selector', elementSelector, (value) => {
-      const elementId = value.ELEMENT;
-      client.elementIdText(elementId, (text) => {
-        if (text.value === projectName) found = 1;
+When(
+  /^user clicks project with "(Project|Client)" name as "([^"]*)" on Project Overview "(Map|Timeline)" screen$/,
+  async (cardElement, text, screen) => {
+    const { projectOverview } = getSelector;
+    const mapProjects = projectOverview.mapView.projects();
+    const timelineProjects = projectOverview.timelineView.projects();
+    const selector = screen === 'Map' ? mapProjects : timelineProjects;
+
+    let sElement;
+    if (cardElement === 'Project') {
+      sElement = screen === 'Map' ? projectOverview.mapView.projectName() : projectOverview.timelineView.projectName();
+    } else {
+      sElement = screen === 'Map' ? projectOverview.mapView.clientName() : projectOverview.timelineView.clientName();
+    }
+
+    const founElements = await getDomData.idsFromElements(selector);
+
+    let found;
+    let cardToClick;
+    for (const element of founElements) {
+      let elementId;
+      await client.elementIdElement(element, 'css selector', sElement, ({ value }) => {
+        elementId = value.ELEMENT;
       });
-      if (found === 1) client.elementIdClick(elementId);
-    });
-  }
-});
+      await client.elementIdText(elementId, ({ value }) => {
+        found = value === text;
+      });
+      if (found) {
+        cardToClick = elementId;
+        break;
+      }
+    }
+    if (!found) throw new Error(`${cardElement} with ${text} name cant't be found!`);
+    await client.elementIdClick(cardToClick);
+  },
+);
