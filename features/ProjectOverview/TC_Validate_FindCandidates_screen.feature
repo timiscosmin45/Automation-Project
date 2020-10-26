@@ -1,5 +1,4 @@
 @REGRESSION
-
 Feature: Validate Find Candidates screen
 
   Scenario: Open LOR RSAR application
