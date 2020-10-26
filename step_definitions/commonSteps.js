@@ -24,8 +24,8 @@ Then(/^user sees "([^"]*)" screen$/, async (screen) => {
       expectedEndpoint = '/';
       break;
     case 'Project Details':
-      //selector = getSelector.projectDetails;
-      //expectedEndpoint = '/';
+      selector = getSelector.projectDetails.title();
+      expectedEndpoint = '/projectDetails';
       break;
     default:
       throw new Error('Incorrect case inputted!');

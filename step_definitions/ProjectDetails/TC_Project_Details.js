@@ -1,7 +1,7 @@
 const { client } = require('nightwatch-api');
 const { Then } = require('cucumber');
 const { assert } = require('chai');
-const { constants, getSelector } = require('../../helpers');
+const { constants, getSelector, styleCheck } = require('../../helpers');
 
 Then(/^user sees "([^"]*)" as the project name$/, async (projectName) => {
   const selector = getSelector.projectDetails.projectName();
@@ -68,4 +68,36 @@ Then(/^user sees "([^"]*)" on Projects Details screen$/, async (projectData) => 
       throw new Error('Incorrect case inputted!');
   }
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+});
+
+Then(/^user sees the Project team roles for "([^"]*)" stage$/, async (stage) => {
+  const { firstLayer, secondLayer, thiredLayer, fourthLayer } = getSelector.projectDetails.hierarchy;
+  let teamRoles;
+  switch (stage) {
+    case 'Early Engagement':
+      teamRoles = constants.HIERARCHY.BID_AND_EARLY_ENG;
+      break;
+    case 'Bid':
+      teamRoles = constants.HIERARCHY.BID_AND_EARLY_ENG;
+      break;
+    case 'PCSA':
+      teamRoles = constants.HIERARCHY.PCSA;
+      break;
+    case 'Live Projects':
+      teamRoles = constants.HIERARCHY.LIVE_PROJECTS;
+      break;
+    default:
+      throw new Error('Incorrect case inputted!');
+  }
+
+  const errMsg = `Project team roles for ${stage} stage are not shown correctly!`;
+  const promises = [
+    styleCheck.checkNestedTextMatching(firstLayer(), teamRoles.FIRST_LAYER, errMsg),
+    styleCheck.checkNestedTextMatching(secondLayer(), teamRoles.SECOND_LAYER, errMsg),
+    styleCheck.checkNestedTextMatching(thiredLayer(), teamRoles.THIRD_LAYER, errMsg),
+  ];
+  if (stage === 'Live Projects') {
+    promises.push(styleCheck.checkNestedTextMatching(fourthLayer(), teamRoles.FOURTH_LAYER, errMsg));
+  }
+  await Promise.all(promises);
 });

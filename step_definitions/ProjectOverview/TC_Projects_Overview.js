@@ -487,3 +487,27 @@ When(
     await client.elementIdClick(cardToClick);
   },
 );
+
+When(/^user clicks the first "([^"]*)" stage project card$/, async (stage) => {
+  let selector;
+  switch (stage) {
+    case 'Early Engagement':
+      selector = getSelector.projectOverview.earlyEngStage();
+      break;
+    case 'Bid':
+      selector = getSelector.projectOverview.bidStage();
+      break;
+    case 'PCSA':
+      selector = getSelector.projectOverview.pcsaStage();
+      break;
+    case 'Live Projects':
+      selector = getSelector.projectOverview.liveProjectsStage();
+      break;
+    default:
+      throw new Error('Incorrect case inputted!');
+  }
+  const foundElements = await getDomData.idsFromElements(selector);
+  if (foundElements) {
+    await client.moveTo(foundElements[0], 0, 0).mouseButtonClick('left');
+  } else throw new Error(`${status} projects not found!`);
+});

@@ -60,7 +60,7 @@ Feature: Validate Project Details screen
     And user sees the Project Details breadcrumb highlighted
     And user sees "ET ASPERNATUR CONSECTETUR" as the project name
 
-  Scenario Outline:: Validate Project Details info
+  Scenario Outline: Validate Project Details info
     Given user sees "Project Details" screen
     Then user sees <projectData> on Projects Details screen
     Examples:
@@ -71,3 +71,4 @@ Feature: Validate Project Details screen
       | "sector"       |
       | "value"        |
       | "location"     |
+
