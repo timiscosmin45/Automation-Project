@@ -99,9 +99,18 @@ const selectors = {
     sector: () => selectors.testId(''),
     value: () => selectors.testId(''),
     location: () => selectors.testId(''),
+    findCandidatesBtn: () => selectors.testId(''),
   },
-  FindCandidates: {
+  findCandidates: {
     title: () => selectors.testId(''),
+    candidatesListTitle: () => selectors.testId(''),
+    selectedRoleName: () => selectors.testId(''),
+    candidatesList: () => selectors.testId(''),
+    candidate: () => selectors.testId(''),
+    candidateName: () => selectors.testId(''),
+    candidateJobTitle: () => selectors.testId(''),
+    candidateGrade: () => selectors.testId(''),
+    candidateHomePostcode: () => selectors.testId(''),
   },
   unassignedPeople: {
     title: () => selectors.testId(''),
