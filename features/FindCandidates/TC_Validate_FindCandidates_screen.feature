@@ -7,7 +7,7 @@ Feature: Validate Find Candidates screen
     And user sees "PROJECTS OVERVIEW" as the screen title
 
   Scenario: Validate navigation to Find Candidates screen
-    When user clicks project with "Project" name as "ET ASPERNATUR CONSECTETUR" on Project Overview "Timeline" screen
+    When user selects the first project that has an unassigned role from Timeline view
     Then user sees "Project Details" screen
     And user sees "PROJECTS DETAILS" as the screen title
     When user clicks Find Candidates button on Project Details screen
