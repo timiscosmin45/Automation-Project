@@ -71,3 +71,15 @@ Feature: Validate Project Details screen
       | "sector"       |
       | "value"        |
       | "location"     |
+
+  Scenario Outline: Validate Project Stage key dates
+    Given user sees "Project Details" screen
+    Then user sees Project Stage section title on Project Details screen
+    And user sees "Early Engagement" card highlighted
+    And user sees <projectStage> card containing the status icon, name and key dates
+    Examples:
+      | projectStage       |
+      | "Early Engagement" |
+      | "Bid"              |
+      | "PCSA"             |
+      | "Live"             |
