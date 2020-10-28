@@ -70,6 +70,59 @@ Then(/^user sees "([^"]*)" on Projects Details screen$/, async (projectData) => 
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
 });
 
+Then(/^user clicks Find Candidates button on Project Details screen$/, async () => {
+  const selector = getSelector.projectDetails.findCandidatesBtn();
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
+});
+
+Then(/^user sees Project Stage section title on Project Details screen$/, async () => {
+  const selector = getSelector.projectDetails.projectStageTitle();
+  await client
+    .waitForElementVisible(selector, constants.MEDIUM_TIMEOUT)
+    .getText(selector, ({ value }) => assert.equal(value, 'Project Stage'));
+});
+
+Then(/^user sees "([^"]*)" card containing the status icon, name and key dates$/, async (stage) => {
+  let stageIcon;
+  let stageCard;
+  let stageName;
+  let stageDates;
+  switch (stage) {
+    case 'Early Engagement':
+      stageCard = getSelector.projectDetails.projectStage.earlyEngCard();
+      stageIcon = getSelector.projectDetails.projectStage.earlyEngIcon();
+      stageName = getSelector.projectDetails.projectStage.earlyEngName();
+      stageDates = getSelector.projectDetails.projectStage.earlyEngDates();
+      break;
+    case 'Bid':
+      stageCard = getSelector.projectDetails.projectStage.earlyEngCard();
+      stageIcon = getSelector.projectDetails.projectStage.earlyEngIcon();
+      stageName = getSelector.projectDetails.projectStage.earlyEngName();
+      stageDates = getSelector.projectDetails.projectStage.earlyEngDates();
+      break;
+    case 'PCSA':
+      stageCard = getSelector.projectDetails.projectStage.earlyEngCard();
+      stageIcon = getSelector.projectDetails.projectStage.earlyEngIcon();
+      stageName = getSelector.projectDetails.projectStage.earlyEngName();
+      stageDates = getSelector.projectDetails.projectStage.earlyEngDates();
+      break;
+    case 'Live':
+      stageCard = getSelector.projectDetails.projectStage.earlyEngCard();
+      stageIcon = getSelector.projectDetails.projectStage.earlyEngIcon();
+      stageName = getSelector.projectDetails.projectStage.earlyEngName();
+      stageDates = getSelector.projectDetails.projectStage.earlyEngDates();
+      break;
+    default:
+      throw new Error('Incorrect case inputted!');
+  }
+  await client
+    .waitForElementVisible(stageCard, constants.SHORT_TIMEOUT)
+    .waitForElementVisible(stageIcon, constants.SHORT_TIMEOUT)
+    .waitForElementVisible(stageName, constants.SHORT_TIMEOUT)
+    .getText(stageName, ({ value }) => assert.equal(value, stage))
+    .waitForElementVisible(stageDates, constants.SHORT_TIMEOUT);
+});
+
 Then(/^user sees the Project team roles for "([^"]*)" stage$/, async (stage) => {
   const { firstLayer, secondLayer, thiredLayer, fourthLayer } = getSelector.projectDetails.hierarchy;
   let teamRoles;

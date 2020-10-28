@@ -16,6 +16,9 @@ const CONSTANTS = {
     SIDEBAR: {
       HIGHLIGHTED_TAB_TEXT: 'rgba(255, 242, 0, 1)',
     },
+    CARDS: {
+      HIGHLIGHTED_CARD: 'rgba(255, 242, 0, 1)',
+    },
   },
   HIERARCHY: {
     BID_AND_EARLY_ENG: {

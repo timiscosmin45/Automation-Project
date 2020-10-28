@@ -27,6 +27,9 @@ Then(/^user sees "([^"]*)" screen$/, async (screen) => {
       selector = getSelector.projectDetails.title();
       expectedEndpoint = '/projectDetails';
       break;
+    case 'Find Candidates':
+      // to be added later
+      break;
     default:
       throw new Error('Incorrect case inputted!');
   }
@@ -49,8 +52,8 @@ Then(/^user sees "([^"]*)" as the screen title$/, async (title) => {
     case 'Unnasigned People':
       selector = getSelector.unassignedPeople.title();
       break;
-    case 'Find Candidates':
-      selector = getSelector.FindCandidates.title();
+    case 'FIND CANDIDATES':
+      selector = getSelector.findCandidates.title();
       break;
     default:
       throw new Error('Incorrect case inputted!');
