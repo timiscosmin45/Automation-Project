@@ -70,6 +70,11 @@ Then(/^user sees "([^"]*)" on Projects Details screen$/, async (projectData) => 
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
 });
 
+Then(/^user clicks Find Candidates button on Project Details screen$/, async () => {
+  const selector = getSelector.projectDetails.findCandidatesBtn();
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
+});
+
 Then(/^user sees Project Stage section title on Project Details screen$/, async () => {
   const selector = getSelector.projectDetails.projectStageTitle();
   await client
