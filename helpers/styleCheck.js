@@ -51,12 +51,12 @@ module.exports = {
   },
   // Check that each text of a list is strictly equal to each text of the elements obtained by the css selector
   checkTextMatching: async (selector, textList) => {
-    const actualTextList = await getDomData.textsFromElements(selector);
+    const actualTextList = await getDomData.textFromElements(selector);
     assert.deepEqual(actualTextList, textList);
   },
   // Check that each text of a list is included in each text of the elements obtained by the css selector
   checkNestedTextMatching: async (selector, textList, errMsg) => {
-    const actualTextList = await getDomData.textsFromElements(selector);
+    const actualTextList = await getDomData.textFromElements(selector);
     assert.strictEqual(actualTextList.length, textList.length, errMsg);
     for (const [index, actualText] of actualTextList.entries()) {
       assert.include(actualText, textList[index], errMsg);

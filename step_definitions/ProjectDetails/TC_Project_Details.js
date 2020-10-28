@@ -1,7 +1,7 @@
 const { client } = require('nightwatch-api');
 const { Then } = require('cucumber');
 const { assert } = require('chai');
-const { constants, getSelector } = require('../../helpers');
+const { constants, getSelector, styleCheck } = require('../../helpers');
 
 Then(/^user sees "([^"]*)" as the project name$/, async (projectName) => {
   const selector = getSelector.projectDetails.projectName();
@@ -123,27 +123,34 @@ Then(/^user sees "([^"]*)" card containing the status icon, name and key dates$/
     .waitForElementVisible(stageDates, constants.SHORT_TIMEOUT);
 });
 
-Then(/^user sees "([^"]*)" card highlighted$/, async (stage) => {
-  let stageCard;
-  const { HIGHLIGHTED_CARD } = constants.DESIGN_COLORS.CARDS;
-
+Then(/^user sees the Project team roles for "([^"]*)" stage$/, async (stage) => {
+  const { firstLayer, secondLayer, thiredLayer, fourthLayer } = getSelector.projectDetails.hierarchy;
+  let teamRoles;
   switch (stage) {
     case 'Early Engagement':
-      stageCard = getSelector.projectDetails.projectStage.earlyEngCard();
+      teamRoles = constants.HIERARCHY.BID_AND_EARLY_ENG;
       break;
     case 'Bid':
-      stageCard = getSelector.projectDetails.projectStage.earlyEngCard();
+      teamRoles = constants.HIERARCHY.BID_AND_EARLY_ENG;
       break;
     case 'PCSA':
-      stageCard = getSelector.projectDetails.projectStage.earlyEngCard();
+      teamRoles = constants.HIERARCHY.PCSA;
       break;
-    case 'Live':
-      stageCard = getSelector.projectDetails.projectStage.earlyEngCard();
+    case 'Live Projects':
+      teamRoles = constants.HIERARCHY.LIVE_PROJECTS;
       break;
     default:
       throw new Error('Incorrect case inputted!');
   }
-  await client
-    .waitForElementVisible(stageCard, constants.SHORT_TIMEOUT)
-    .assert.cssProperty(stageCard, 'background-color', HIGHLIGHTED_CARD);
+
+  const errMsg = `Project team roles for ${stage} stage are not shown correctly!`;
+  const promises = [
+    styleCheck.checkNestedTextMatching(firstLayer(), teamRoles.FIRST_LAYER, errMsg),
+    styleCheck.checkNestedTextMatching(secondLayer(), teamRoles.SECOND_LAYER, errMsg),
+    styleCheck.checkNestedTextMatching(thiredLayer(), teamRoles.THIRD_LAYER, errMsg),
+  ];
+  if (stage === 'Live Projects') {
+    promises.push(styleCheck.checkNestedTextMatching(fourthLayer(), teamRoles.FOURTH_LAYER, errMsg));
+  }
+  await Promise.all(promises);
 });

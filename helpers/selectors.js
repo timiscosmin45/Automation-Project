@@ -17,6 +17,11 @@ const selectors = {
     filterBtn: (screen) => `${selectors.projectOverview.leftsideHeader(screen)} button`,
     searchInput: (screen) => `${selectors.projectOverview.leftsideHeader(screen)} input`,
     searchIcon: (screen) => `${selectors.projectOverview.leftsideHeader(screen)} div${selectors.child(2)} > svg`,
+    stageIcons: () => selectors.testId('status-icon'),
+    earlyEngStage: () => `${selectors.projectOverview.stageIcons()} [id="Rectangle"][fill="#6400FE"]`,
+    bidStage: () => `${selectors.projectOverview.stageIcons()} [id="Rectangle"][fill="#FE5000"]`,
+    pcsaStage: () => `${selectors.projectOverview.stageIcons()} circle`,
+    liveProjectsStage: () => `${selectors.projectOverview.stageIcons()} [id="Rectangle"][fill="#FFCD00"]`,
     timelineView: {
       timelineSection: () => selectors.testId('timeline_body_rightside'),
       projects: () => selectors.testId('timeline_card_wrapper'),
@@ -89,7 +94,7 @@ const selectors = {
     },
   },
   projectDetails: {
-    title: () => selectors.testId(''),
+    title: () => 'div > h1',
     page: () => selectors.testId(''),
     projectOverviewBreadcrumb: () => selectors.testId(''),
     projectDetailsBreadcrumb: () => selectors.testId(''),
@@ -99,6 +104,12 @@ const selectors = {
     sector: () => selectors.testId(''),
     value: () => selectors.testId(''),
     location: () => selectors.testId(''),
+    hierarchy: {
+      firstLayer: () => selectors.testId(''),
+      secondLayer: () => selectors.testId(''),
+      thiredLayer: () => selectors.testId(''),
+      fourthLayer: () => selectors.testId(''),
+    },
     projectStage: {
       projectStageTitle: () => selectors.testId(''),
       earlyEngCard: () => selectors.testId(''),

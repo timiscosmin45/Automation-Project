@@ -20,6 +20,43 @@ const CONSTANTS = {
       HIGHLIGHTED_CARD: 'rgba(255, 242, 0, 1)',
     },
   },
+  HIERARCHY: {
+    BID_AND_EARLY_ENG: {
+      FIRST_LAYER: ['Bid Leader', 'Project Leader'],
+      SECOND_LAYER: [
+        'Construction Leader',
+        'Commercial Leader',
+        'Estimating Leader',
+        'Planning Leader',
+        'Technical Leader',
+      ],
+      THIRD_LAYER: ['Structures Leader', 'Legal Leader', 'Procurement Leader', 'Design Leader', 'Engineering Leader'],
+      FOURTH_LAYER: ['MEP Leader', 'Digital Eng Leader'],
+    },
+    PCSA: {
+      FIRST_LAYER: ['Project Leader'],
+      SECOND_LAYER: [
+        'Construction Leader',
+        'Commercial Leader',
+        'Estimating Leader',
+        'Planning Leader',
+        'Technical Leader',
+      ],
+      THIRD_LAYER: ['Structures Leader', 'Legal Leader', 'Procurement Leader', 'Design Leader', 'Engineering Leader'],
+      FOURTH_LAYER: ['MEP Leader', 'Digital Eng Leader'],
+    },
+    LIVE_PROJECTS: {
+      FIRST_LAYER: ['Project Leader'],
+      SECOND_LAYER: [
+        'Construction Leader',
+        'Commercial Leader',
+        'Estimating Leader',
+        'Planning Leader',
+        'Technical Leader',
+      ],
+      THIRD_LAYER: ['Structures Leader', 'MEP Leader', 'Design Leader', 'Engineering Leader'],
+    },
+  },
 };
 
 module.exports = CONSTANTS;
