@@ -83,3 +83,10 @@ Feature: Validate Project Details screen
       | "Bid"              |
       | "PCSA"             |
       | "Live"             |
+
+  Scenario: Validate Project Details ORG Chart legend
+    Given user sees "Project Details" screen
+    Then user sees ORG Chart legend on Project Details screen
+    And user sees "Unassigned" status name on ORG Chart
+    And user sees "Awaiting confirmation" status name on ORG Chart
+    And user sees "Confirmed" status name on ORG Chart
