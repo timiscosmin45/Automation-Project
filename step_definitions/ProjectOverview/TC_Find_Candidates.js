@@ -59,18 +59,23 @@ Then(/^user sees the empty shortlist with 4 slots$/, async () => {
   await client.assert.strictEqual(slotsNumber, 4, '4 empty shortlist slots were not found!');
 });
 
-Then(/^user sees the title "([^"]*)" of the empty shortlist$/, async (title) => {
-  const selector = getSelector.findCandidates.emptyShortlist.title();
-  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
-  await client.getText(selector, ({ value }) =>
-    assert.equal(value, title, `Empty shortilist title is different from ${title}`),
-  );
-});
-
-Then(/^user sees the role needed by date and label as "([^"]*)"$/, async (dateAndLabel) => {
-  const selector = getSelector.findCandidates.emptyShortlist.dateAndLabel();
-  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
-  await client.getText(selector, ({ value }) =>
-    assert.equal(value, dateAndLabel, `Date and label did not match ${dateAndLabel}`),
+Then(/^user sees the "([^"]*)" displayed as "([^"]*)" on Find Candidates screen$/, async (pageElement, data) => {
+  let elementSelector;
+  switch (pageElement) {
+    case 'title':
+      elementSelector = getSelector.findCandidates.emptyShortlist.title();
+      break;
+    case 'date and label':
+      elementSelector = getSelector.findCandidates.emptyShortlist.dateAndLabel();
+      break;
+    case 'explainer text':
+      elementSelector = getSelector.findCandidates.emptyShortlist.explainerText();
+      break;
+    default:
+      throw new Error('Incorrect case inputted!');
+  }
+  await client.waitForElementVisible(elementSelector, constants.MEDIUM_TIMEOUT);
+  await client.getText(elementSelector, ({ value }) =>
+    assert.equal(value, data, `${pageElement} did not match the expected ${data}!`),
   );
 });

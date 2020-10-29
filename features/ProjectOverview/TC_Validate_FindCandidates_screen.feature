@@ -27,9 +27,11 @@ Feature: Validate Find Candidates screen
       | "grade"         |
       | "home postcode" |
 
-  Scenario: Validate empty shortlist
+  Scenario Outline: Validate empty shortlist
     Then user sees the empty shortlist with 4 slots
-    And user sees the Options title of the empty shortlist
-    And user sees the role needed by "date" as "19 September 2019"
-    And user sees the role needed by "label" as "Live Starts"
-    And user sees the explainer text
+    And user sees the <pageElement> displayed as <data> on Find Candidates screen
+    Examples:
+      | pageElement      | data                                                                                              |
+      | "title"          | "Options"                                                                                         |
+      | "date and label" | "Phase starts: 19 September 2019"                                                                 |
+      | "explainer text" | "Add suitable candidates to the option list in order. Place most suitable candidates at the top." |
