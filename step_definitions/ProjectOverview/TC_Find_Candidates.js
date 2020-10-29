@@ -50,3 +50,27 @@ Then(/^user sees candidate's "([^"]*)" for each candidate on Find Candidates scr
     });
   }
 });
+
+Then(/^user sees the empty shortlist with 4 slots$/, async () => {
+  const selector = getSelector.findCandidates.emptyShortlist.slot();
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  const foundElements = await getDomData.idsFromElements(selector);
+  const slotsNumber = foundElements.length;
+  await client.assert.strictEqual(slotsNumber, 4, '4 empty shortlist slots were not found!');
+});
+
+Then(/^user sees the title "([^"]*)" of the empty shortlist$/, async (title) => {
+  const selector = getSelector.findCandidates.emptyShortlist.title();
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  await client.getText(selector, ({ value }) =>
+    assert.equal(value, title, `Empty shortilist title is different from ${title}`),
+  );
+});
+
+Then(/^user sees the role needed by date and label as "([^"]*)"$/, async (dateAndLabel) => {
+  const selector = getSelector.findCandidates.emptyShortlist.dateAndLabel();
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  await client.getText(selector, ({ value }) =>
+    assert.equal(value, dateAndLabel, `Date and label did not match ${dateAndLabel}`),
+  );
+});

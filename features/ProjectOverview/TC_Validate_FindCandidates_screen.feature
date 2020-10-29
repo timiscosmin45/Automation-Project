@@ -26,3 +26,10 @@ Feature: Validate Find Candidates screen
       | "job title"     |
       | "grade"         |
       | "home postcode" |
+
+  Scenario: Validate empty shortlist
+    Then user sees the empty shortlist with 4 slots
+    And user sees the Options title of the empty shortlist
+    And user sees the role needed by "date" as "19 September 2019"
+    And user sees the role needed by "label" as "Live Starts"
+    And user sees the explainer text
