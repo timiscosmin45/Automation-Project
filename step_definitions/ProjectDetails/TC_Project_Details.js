@@ -1,7 +1,7 @@
 const { client } = require('nightwatch-api');
 const { Then } = require('cucumber');
-const { assert } = require('chai');
-const { constants, getSelector, styleCheck } = require('../../helpers');
+const { assert, expect } = require('chai');
+const { constants, getSelector, styleCheck, getDomData } = require('../../helpers');
 
 Then(/^user sees "([^"]*)" as the project name$/, async (projectName) => {
   const selector = getSelector.projectDetails.projectName();
@@ -156,4 +156,39 @@ Then(/^user sees the Project team roles for "([^"]*)" stage$/, async (stage) => 
     promises.push(styleCheck.checkNestedTextMatching(fourthLayer(), teamRoles.FOURTH_LAYER, errMsg));
   }
   await Promise.all(promises);
+});
+
+Then(/^user sees "([^"]*)" card highlighted$/, async (stage) => {
+  let stageCard;
+  const { HIGHLIGHTED_CARD } = constants.DESIGN_COLORS.CARDS;
+  switch (stage) {
+    case 'Early Engagement':
+      stageCard = getSelector.projectDetails.projectStage.earlyEngCard();
+      break;
+    case 'Bid':
+      stageCard = getSelector.projectDetails.projectStage.earlyEngCard();
+      break;
+    case 'PCSA':
+      stageCard = getSelector.projectDetails.projectStage.earlyEngCard();
+      break;
+    case 'Live':
+      stageCard = getSelector.projectDetails.projectStage.earlyEngCard();
+      break;
+    default:
+      throw new Error('Incorrect case inputted!');
+  }
+  await client
+    .waitForElementVisible(stageCard, constants.SHORT_TIMEOUT)
+    .assert.cssProperty(stageCard, 'background-color', HIGHLIGHTED_CARD);
+});
+
+Then(/^user sees ORG Chart legend on Project Details screen$/, async () => {
+  const selector = getSelector.projectDetails.orgChartLegend();
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+});
+
+Then(/^user sees "([^"]*)" status name on ORG Chart$/, async (statusName) => {
+  const selector = getSelector.projectDetails.orgChartLegendStatusName();
+  const foundElements = await getDomData.textFromElements(selector);
+  expect(foundElements).to.include(statusName);
 });

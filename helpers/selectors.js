@@ -104,6 +104,8 @@ const selectors = {
     sector: () => selectors.testId(''),
     value: () => selectors.testId(''),
     location: () => selectors.testId(''),
+    orgChartLegend: () => selectors.testId(''),
+    orgChartLegendStatusName: () => `${selectors.projectDetails.projectDetails.orgChartLegend()} to be completed...`,
     hierarchy: {
       firstLayer: () => selectors.testId(''),
       secondLayer: () => selectors.testId(''),
