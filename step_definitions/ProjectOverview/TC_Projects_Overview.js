@@ -511,3 +511,23 @@ When(/^user clicks the first "([^"]*)" stage project card$/, async (stage) => {
     await client.moveTo(foundElements[0], 0, 0).mouseButtonClick('left');
   } else throw new Error(`${status} projects not found!`);
 });
+
+When(/^user selects the first project that has an unassigned role from Timeline view$/, async () => {
+  const selector = getSelector.projectOverview.timelineView.projects();
+  const findCandidateBtn = getSelector.projectDetails.findCandidatesBtn();
+  const findCandidatePageTitle = getSelector.findCandidates.title();
+  const projectOverviewBreadcrumb = getSelector.projectDetails.projectOverviewBreadcrumb();
+  const foundElements = await getDomData.idsFromElements(selector);
+  let stop = false;
+
+  for (const element of foundElements) {
+    await client
+      .elementIdClick(element.ELEMENT)
+      .waitForElementVisible(findCandidatePageTitle, constants.MEDIUM_TIMEOUT)
+      .isVisible(findCandidateBtn, (res) => {
+        if (res.value === true) stop = true;
+      });
+    if (stop) break;
+    else await client.click(projectOverviewBreadcrumb);
+  }
+});
