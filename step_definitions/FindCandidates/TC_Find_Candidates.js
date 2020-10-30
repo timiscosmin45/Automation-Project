@@ -50,3 +50,32 @@ Then(/^user sees candidate's "([^"]*)" for each candidate on Find Candidates scr
     });
   }
 });
+
+Then(/^user sees the empty shortlist with 4 slots$/, async () => {
+  const selector = getSelector.findCandidates.emptyShortlist.slot();
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  const foundElements = await getDomData.idsFromElements(selector);
+  const slotsNumber = foundElements.length;
+  await client.assert.strictEqual(slotsNumber, 4, '4 empty shortlist slots were not found!');
+});
+
+Then(/^user sees the "([^"]*)" displayed as "([^"]*)" on Find Candidates screen$/, async (pageElement, data) => {
+  let elementSelector;
+  switch (pageElement) {
+    case 'title':
+      elementSelector = getSelector.findCandidates.emptyShortlist.title();
+      break;
+    case 'date and label':
+      elementSelector = getSelector.findCandidates.emptyShortlist.dateAndLabel();
+      break;
+    case 'explainer text':
+      elementSelector = getSelector.findCandidates.emptyShortlist.explainerText();
+      break;
+    default:
+      throw new Error('Incorrect case inputted!');
+  }
+  await client.waitForElementVisible(elementSelector, constants.MEDIUM_TIMEOUT);
+  await client.getText(elementSelector, ({ value }) =>
+    assert.equal(value, data, `${pageElement} did not match the expected ${data}!`),
+  );
+});

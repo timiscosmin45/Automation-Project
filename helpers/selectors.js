@@ -143,6 +143,12 @@ const selectors = {
     candidateJobTitle: () => selectors.testId(''),
     candidateGrade: () => selectors.testId(''),
     candidateHomePostcode: () => selectors.testId(''),
+    emptyShortlist: {
+      slot: () => selectors.testId(''),
+      title: () => selectors.testId(''),
+      labelAndDate: () => selectors.testId(''),
+      explainerText: () => selectors.testId(''),
+    },
   },
   unassignedPeople: {
     title: () => selectors.testId(''),
