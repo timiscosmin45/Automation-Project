@@ -21,7 +21,7 @@ const CONSTANTS = {
     },
   },
   HIERARCHY: {
-    BID_AND_EARLY_ENG: {
+    BID_AND_OPPORTUNITY: {
       FIRST_LAYER: ['Bid Leader', 'Project Leader'],
       SECOND_LAYER: [
         'Construction Leader',

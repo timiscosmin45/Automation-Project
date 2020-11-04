@@ -29,11 +29,11 @@ Feature: Validate Projects Overview timeline screen
     Given user sees "Project Overview Timeline" screen
     Then user sees a legend with <status> status, its respective icon and the number of projects
     Examples:
-      | status             |
-      | "Early Engagement" |
-      | "Bid"              |
-      | "PCSA"             |
-      | "Live Projects"    |
+      | status          |
+      | "Opportunity"   |
+      | "Bid"           |
+      | "PCSA"          |
+      | "Live Projects" |
 
   Scenario Outline: Validate projects list from Projects Overview timeline screen
     Given user sees "Project Overview Timeline" screen

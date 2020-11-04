@@ -16,7 +16,7 @@ Feature: Validate Projects Overview map screen
     And user sees a search input with "Search projects using key words" text as placeholder on Project Overview "Map" screen
     And user sees a list of LOR Projects on the Project Overview "Map" screen
     And user sees "All active projects" text as the list heading on Project Overview "Map" screen
- 
+
   Scenario Outline: Validate projects list from Projects Overview map screen
     Given user sees "Project Overview Map" screen
     Then user sees <projectData> for each project on Projects Overview map screen
@@ -37,11 +37,11 @@ Feature: Validate Projects Overview map screen
     Given user sees "Project Overview Map" screen
     Then user sees a legend with <status> status, its respective icon and the number of projects
     Examples:
-      | status             |
-      | "Early Engagement" |
-      | "Bid"              |
-      | "PCSA"             |
-      | "Live Projects"    |
+      | status          |
+      | "Opportunity"   |
+      | "Bid"           |
+      | "PCSA"          |
+      | "Live Projects" |
 
   Scenario: Validate pie chart from Projects Overview map screen
     Given user sees "Project Overview Map" screen

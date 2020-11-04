@@ -91,29 +91,29 @@ Then(/^user sees "([^"]*)" card containing the status icon, name and key dates$/
   let stageName;
   let stageDates;
   switch (stage) {
-    case 'Early Engagement':
-      stageCard = getSelector.projectDetails.projectStage.earlyEngCard();
-      stageIcon = getSelector.projectDetails.projectStage.earlyEngIcon();
-      stageName = getSelector.projectDetails.projectStage.earlyEngName();
-      stageDates = getSelector.projectDetails.projectStage.earlyEngDates();
+    case 'Opportunity':
+      stageCard = getSelector.projectDetails.projectStage.opportunityCard();
+      stageIcon = getSelector.projectDetails.projectStage.opportunityIcon();
+      stageName = getSelector.projectDetails.projectStage.opportunityName();
+      stageDates = getSelector.projectDetails.projectStage.opportunityDates();
       break;
     case 'Bid':
-      stageCard = getSelector.projectDetails.projectStage.earlyEngCard();
-      stageIcon = getSelector.projectDetails.projectStage.earlyEngIcon();
-      stageName = getSelector.projectDetails.projectStage.earlyEngName();
-      stageDates = getSelector.projectDetails.projectStage.earlyEngDates();
+      stageCard = getSelector.projectDetails.projectStage.bidCard();
+      stageIcon = getSelector.projectDetails.projectStage.bidIcon();
+      stageName = getSelector.projectDetails.projectStage.bidName();
+      stageDates = getSelector.projectDetails.projectStage.bidDates();
       break;
     case 'PCSA':
-      stageCard = getSelector.projectDetails.projectStage.earlyEngCard();
-      stageIcon = getSelector.projectDetails.projectStage.earlyEngIcon();
-      stageName = getSelector.projectDetails.projectStage.earlyEngName();
-      stageDates = getSelector.projectDetails.projectStage.earlyEngDates();
+      stageCard = getSelector.projectDetails.projectStage.pcsaCard();
+      stageIcon = getSelector.projectDetails.projectStage.pcsaIcon();
+      stageName = getSelector.projectDetails.projectStage.pcsaName();
+      stageDates = getSelector.projectDetails.projectStage.pcsaDates();
       break;
     case 'Live':
-      stageCard = getSelector.projectDetails.projectStage.earlyEngCard();
-      stageIcon = getSelector.projectDetails.projectStage.earlyEngIcon();
-      stageName = getSelector.projectDetails.projectStage.earlyEngName();
-      stageDates = getSelector.projectDetails.projectStage.earlyEngDates();
+      stageCard = getSelector.projectDetails.projectStage.liveCard();
+      stageIcon = getSelector.projectDetails.projectStage.liveIcon();
+      stageName = getSelector.projectDetails.projectStage.liveName();
+      stageDates = getSelector.projectDetails.projectStage.liveDates();
       break;
     default:
       throw new Error('Incorrect case inputted!');
@@ -130,11 +130,11 @@ Then(/^user sees the Project team roles for "([^"]*)" stage$/, async (stage) => 
   const { firstLayer, secondLayer, thiredLayer, fourthLayer } = getSelector.projectDetails.hierarchy;
   let teamRoles;
   switch (stage) {
-    case 'Early Engagement':
-      teamRoles = constants.HIERARCHY.BID_AND_EARLY_ENG;
+    case 'Opportunity':
+      teamRoles = constants.HIERARCHY.BID_AND_OPPORTUNITY;
       break;
     case 'Bid':
-      teamRoles = constants.HIERARCHY.BID_AND_EARLY_ENG;
+      teamRoles = constants.HIERARCHY.BID_AND_OPPORTUNITY;
       break;
     case 'PCSA':
       teamRoles = constants.HIERARCHY.PCSA;
@@ -162,17 +162,17 @@ Then(/^user sees "([^"]*)" card highlighted$/, async (stage) => {
   let stageCard;
   const { HIGHLIGHTED_CARD } = constants.DESIGN_COLORS.CARDS;
   switch (stage) {
-    case 'Early Engagement':
-      stageCard = getSelector.projectDetails.projectStage.earlyEngCard();
+    case 'Opportunity':
+      stageCard = getSelector.projectDetails.projectStage.opportunityCard();
       break;
     case 'Bid':
-      stageCard = getSelector.projectDetails.projectStage.earlyEngCard();
+      stageCard = getSelector.projectDetails.projectStage.bidCard();
       break;
     case 'PCSA':
-      stageCard = getSelector.projectDetails.projectStage.earlyEngCard();
+      stageCard = getSelector.projectDetails.projectStage.pcsaCard();
       break;
     case 'Live':
-      stageCard = getSelector.projectDetails.projectStage.earlyEngCard();
+      stageCard = getSelector.projectDetails.projectStage.liveCard();
       break;
     default:
       throw new Error('Incorrect case inputted!');
