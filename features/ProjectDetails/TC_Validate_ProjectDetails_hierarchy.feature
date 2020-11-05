@@ -6,11 +6,11 @@ Feature: Validate Project Details hierarchy
     Then user sees "Project Overview Timeline" screen
     And user sees "PROJECTS OVERVIEW" as the screen title
 
-  Scenario: Validate Early Engagement projects team roles
-    When user clicks the first "Early Engagement" stage project card
+  Scenario: Validate Opportunity projects team roles
+    When user clicks the first "Opportunity" stage project card
     Then user sees "Project Details" screen
     And user sees "PROJECT DETAILS" as the screen title
-    And user sees the Project team roles for "Early Engagement" stage
+    And user sees the Project team roles for "Opportunity" stage
 
   Scenario: Validate Bid projects team roles
     When user "clicks" "Project Overview" breadcrumb

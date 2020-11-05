@@ -16,11 +16,11 @@ Feature: Validate Project List
     Then user sees the <status> icon
     And user sees <status> color
     Examples:
-      | status             |
-      | "Early Engagement" |
-      | "Bid"              |
-      | "PCSA"             |
-      | "Live Projects"    |
+      | status          |
+      | "Opportunity"   |
+      | "Bid"           |
+      | "PCSA"          |
+      | "Live Projects" |
 
   Scenario Outline: Validate the order of the projects
     Given user opens LOR RSAR application

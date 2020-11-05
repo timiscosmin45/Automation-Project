@@ -5,7 +5,7 @@ Feature: Validate Projects Overview filter
     Given user opens LOR RSAR application
     Then user sees "Project Overview Timeline" screen
     And user sees "PROJECTS OVERVIEW" as the screen title
- 
+
   Scenario: Validate Projects Overview filter modal layout
     When user clicks filter button on Project Overview "Timeline" screen
     Then user "sees" a filter modal on Project Overview screen
@@ -19,12 +19,12 @@ Feature: Validate Projects Overview filter
   Scenario: Validate status filters checkboxes
     When user clicks filter button on Project Overview "Timeline" screen
     Then user "sees" a filter modal on Project Overview screen
-    And user sees "Early Engagement" checkbox as "unchecked" on the filter modal
+    And user sees "Opportunity" checkbox as "unchecked" on the filter modal
     And user sees "Bid" checkbox as "unchecked" on the filter modal
     And user sees "PCSA" checkbox as "unchecked" on the filter modal
     And user sees "Live" checkbox as "unchecked" on the filter modal
-    When user clicks "Early Engagement" checkbox on the filter modal
-    Then user sees "Early Engagement" checkbox as "checked" on the filter modal
+    When user clicks "Opportunity" checkbox on the filter modal
+    Then user sees "Opportunity" checkbox as "checked" on the filter modal
     When user clicks "Bid" checkbox on the filter modal
     Then user sees "Bid" checkbox as "checked" on the filter modal
     When user clicks "PCSA" checkbox on the filter modal
@@ -37,7 +37,7 @@ Feature: Validate Projects Overview filter
   Scenario: Validate status filters checkboxes persistency
     When user clicks filter button on Project Overview "Timeline" screen
     Then user "sees" a filter modal on Project Overview screen
-    And user sees "Early Engagement" checkbox as "checked" on the filter modal
+    And user sees "Opportunity" checkbox as "checked" on the filter modal
     And user sees "Bid" checkbox as "checked" on the filter modal
     And user sees "PCSA" checkbox as "checked" on the filter modal
     And user sees "Live" checkbox as "checked" on the filter modal
@@ -54,11 +54,11 @@ Feature: Validate Projects Overview filter
     Then user "does not see" a filter modal on Project Overview screen
     And user sees <status> option displayed on filter preview section
     Examples:
-      | status             |
-      | "Early Engagement" |
-      | "Bid"              |
-      | "PCSA"             |
-      | "Live"             |
+      | status        |
+      | "Opportunity" |
+      | "Bid"         |
+      | "PCSA"        |
+      | "Live"        |
 
   Scenario: Validate multiple status filters applyed on the Project list
     When user clicks filter button on Project Overview "Timeline" screen

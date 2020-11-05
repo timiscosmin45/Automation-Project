@@ -297,8 +297,8 @@ Then(/^user "(sees|clicks)" "(Close|Apply|Clear)" button on the filter modal$/, 
 When(/^user clicks "([^"]*)" checkbox on the filter modal$/, async (option) => {
   let selector;
   switch (option) {
-    case 'Early Engagement':
-      selector = getSelector.projectOverview.filterModal.earlyEngCheckbox();
+    case 'Opportunity':
+      selector = getSelector.projectOverview.filterModal.opportunityCheckbox();
       break;
     case 'Bid':
       selector = getSelector.projectOverview.filterModal.bidCheckbox();
@@ -318,8 +318,8 @@ When(/^user clicks "([^"]*)" checkbox on the filter modal$/, async (option) => {
 Then(/^user sees "([^"]*)" checkbox as "(checked|unchecked)" on the filter modal$/, async (checkbox, state) => {
   let selector;
   switch (checkbox) {
-    case 'Early Engagement':
-      selector = getSelector.projectOverview.filterModal.earlyEngCheckbox();
+    case 'Opportunity':
+      selector = getSelector.projectOverview.filterModal.opportunityCheckbox();
       break;
     case 'Bid':
       selector = getSelector.projectOverview.filterModal.bidCheckbox();
@@ -491,8 +491,8 @@ When(
 When(/^user clicks the first "([^"]*)" stage project card$/, async (stage) => {
   let selector;
   switch (stage) {
-    case 'Early Engagement':
-      selector = getSelector.projectOverview.earlyEngStage();
+    case 'Opportunity':
+      selector = getSelector.projectOverview.opportunityStage();
       break;
     case 'Bid':
       selector = getSelector.projectOverview.bidStage();
