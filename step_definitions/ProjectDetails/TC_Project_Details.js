@@ -192,3 +192,7 @@ Then(/^user sees "([^"]*)" status name on ORG Chart$/, async (statusName) => {
   const foundElements = await getDomData.textFromElements(selector);
   expect(foundElements).to.include(statusName);
 });
+
+When (/^user click the first "(Confirmed|Awaiting)" role card$/,async (status)=>{
+const {}=getSelector.projectDetails
+})
