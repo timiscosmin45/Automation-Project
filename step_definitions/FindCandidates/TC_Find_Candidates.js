@@ -1,7 +1,10 @@
 const { client } = require('nightwatch-api');
-const { Then } = require('cucumber');
+const { Then, Given, When } = require('cucumber');
 const { constants, getSelector, getDomData } = require('../../helpers');
 const { assert } = require('chai');
+
+//Global vars
+let candName;
 
 Then(/^user sees the "([^"]*)" title$/, async (title) => {
   const selector = getSelector.findCandidates.candidatesListTitle();
@@ -28,16 +31,16 @@ Then(/^user sees candidate's "([^"]*)" for each candidate on Find Candidates scr
   let elementSelector;
   switch (candidateData) {
     case 'name':
-      elementSelector = getSelector.findCandidates.candidateName();
+      elementSelector = getSelector.findCandidates.candidateList.candidateName();
       break;
     case 'job title':
-      elementSelector = getSelector.findCandidates.candidateJobTitle();
+      elementSelector = getSelector.findCandidates.candidateList.candidateJobTitle();
       break;
     case 'grade':
-      elementSelector = getSelector.findCandidates.candidateGrade();
+      elementSelector = getSelector.findCandidates.candidateList.candidateGrade();
       break;
     case 'home postcode':
-      elementSelector = getSelector.findCandidates.candidateHomePostcode();
+      elementSelector = getSelector.findCandidates.candidateList.candidateHomePostcode();
       break;
     default:
       throw new Error('Incorrect case inputted!');
@@ -66,7 +69,7 @@ Then(/^user sees the "([^"]*)" displayed as "([^"]*)" on Find Candidates screen$
       elementSelector = getSelector.findCandidates.shortlist.title();
       break;
     case 'date and label':
-      elementSelector = getSelector.findCandidates.shortlist.dateAndLabel();
+      elementSelector = getSelector.findCandidates.shortlist.labelAndDate();
       break;
     case 'explainer text':
       elementSelector = getSelector.findCandidates.shortlist.explainerText();
@@ -85,17 +88,17 @@ Then(
   async (action, button, list) => {
     let buttonSelector;
     let candidateSelector;
-    if (list === 'suitable candidates') candidateSelector = getSelector.findCandidates.candidate();
-    else candidateSelector = getSelector.findCandidates.shortlist.shortlistCandidate();
+    if (list === 'suitable candidates') candidateSelector = getSelector.findCandidates.candidateList.candidate();
+    else candidateSelector = getSelector.findCandidates.shortlist.candidate();
     switch (button) {
       case 'Add to options list':
-        buttonSelector = getSelector.findCandidates.candidateFooter.addToOptionListBtn();
+        buttonSelector = getSelector.findCandidates.candidateList.addToOptionBtn();
         break;
       case 'See more details':
-        buttonSelector = getSelector.findCandidates.candidateFooter.seeDetailsBtn();
+        buttonSelector = getSelector.findCandidates.candidateList.seeDetailsBtn();
         break;
       case 'Remove from shortlist':
-        buttonSelector = getSelector.findCandidates.shortlist.removeBtn();
+        buttonSelector = getSelector.findCandidates.shortlist.removeFromListBtn();
         break;
       case 'Suggest Candidate':
         buttonSelector = getSelector.findCandidates.shortlist.suggestCandidateBtn();
@@ -120,9 +123,9 @@ Then(
 Then(
   /^user sees the selected candidate added to the "(first|second|third|fourth)" space in the shortlist$/,
   async (slotNumber) => {
-    const candidateSelector = getSelector.findCandidates.shortlist.shortlistCandidate();
-    const candidateName = getSelector.findCandidates.candidateName();
-    const candidateIcon = getSelector.findCandidates.candidateIcon();
+    const candidateSelector = getSelector.findCandidates.shortlist.candidate();
+    const candidateName = getSelector.findCandidates.candidateList.candidateName();
+    const candidateIcon = getSelector.findCandidates.candidateList.candidateIcon();
     const foundElements = await getDomData.idsFromElements(candidateSelector);
     const shortListLength = foundElements.length;
     let desirableShortlistLength;
@@ -185,7 +188,7 @@ Then(/^user sees Reorder list buttons from the first card of the shortlist "(ena
 });
 
 Then(/^user sees the shortlist populated, but not full$/, async () => {
-  const candidateSelector = getSelector.findCandidates.shortlist.shortlistCandidate();
+  const candidateSelector = getSelector.findCandidates.shortlist.candidate();
   const foundElements = await getDomData.idsFromElements(candidateSelector);
   const shortListLength = foundElements.length;
   await client.assert
@@ -194,9 +197,9 @@ Then(/^user sees the shortlist populated, but not full$/, async () => {
 });
 
 Then(/^user does not see the candidate on candidates list$/, async () => {
-  const candidatesList = getSelector.findCandidates.candidate();
-  const shortlist = getSelector.findCandidates.shortlist.shortlistCandidate();
-  const candidateNameSelector = getSelector.findCandidates.candidateName();
+  const candidatesList = getSelector.findCandidates.candidateList.candidate();
+  const shortlist = getSelector.findCandidates.shortlist.candidate();
+  const candidateNameSelector = getSelector.findCandidates.candidateList.candidateName();
   const foundCandListElements = await getDomData.idsFromElements(candidatesList);
   const foundShortlistElements = await getDomData.idsFromElements(shortlist);
   const shortListLength = foundShortlistElements.length;
@@ -224,12 +227,12 @@ Then(/^user does not see the candidate on candidates list$/, async () => {
 });
 
 Then(/^user adds canddidates until shortlist is full$/, async () => {
-  const candidatesList = getSelector.findCandidates.candidate();
-  const shortlist = getSelector.findCandidates.shortlist.shortlistCandidate();
+  const candidatesList = getSelector.findCandidates.candidateList.candidate();
+  const shortlist = getSelector.findCandidates.shortlist.candidate();
   const foundCandListElements = await getDomData.idsFromElements(candidatesList);
   const foundShortlistElements = await getDomData.idsFromElements(shortlist);
   const nedeedCandidatesNumber = 4 - foundShortlistElements.length;
-  const addOptionBtn = getSelector.findCandidates.candidateFooter.addToOptionListBtn();
+  const addOptionBtn = getSelector.findCandidates.candidateList.addToOptionBtn();
   for (let i = 0; i < nedeedCandidatesNumber; i++) {
     let found;
     let elementId;
@@ -245,9 +248,9 @@ Then(/^user adds canddidates until shortlist is full$/, async () => {
 });
 
 Then(/^user sees all Add to options list buttons disabled on candidates list$/, async () => {
-  const candidatesList = getSelector.findCandidates.candidate();
+  const candidatesList = getSelector.findCandidates.candidateList.candidate();
   const foundCandListElements = await getDomData.idsFromElements(candidatesList);
-  const addOptionBtn = getSelector.findCandidates.candidateFooter.addToOptionListBtn();
+  const addOptionBtn = getSelector.findCandidates.candidateList.addToOptionBtnn();
   let elementId;
   for (let element in foundCandListElements) {
     await client.elementIdElement(element, 'css selector', addOptionBtn, ({ value }) => {
@@ -257,4 +260,66 @@ Then(/^user sees all Add to options list buttons disabled on candidates list$/, 
       assert.isFalse(value, 'Add to options list buttons are not disabled!');
     });
   }
+});
+
+Given(/^user sees at least one candidate in the shortlist$/, async () => {
+  const optionsCandidates = getSelector.findCandidates.shortList.candidate();
+  const addBtn = getSelector.findCandidates.candidateList.addToOptionBtn();
+
+  const foundCandidates = await getDomData.idsFromElements(optionsCandidates);
+  const foundButtons = await getDomData.idsFromElements(addBtn);
+
+  if (foundCandidates.length === 0) await client.elementIdClick(foundButtons[0]);
+});
+
+When(
+  /^user clicks the "(Suggest candidate|Remove from shortlist)" button from the first candidate card$/,
+  async (button) => {
+    const { suggestCandidateBtn, removeFromListBtn } = getSelector.findCandidates.shortList;
+    const candidateName = getSelector.findCandidates.candidateList.candidateName();
+    const selector = button === 'Suggest candidate' ? suggestCandidateBtn() : removeFromListBtn();
+
+    const foundElements = await getDomData.idsFromElements(selector);
+    let elementId;
+    await client.elementIdElement(foundElements[0], 'css selector', candidateName, ({ value }) => {
+      elementId = value.ELEMENT;
+    });
+
+    await client.elementIdText(elementId, ({ value }) => {
+      candName = value.ELEMENT;
+    });
+
+    await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).elementIdClick(foundElements[0]);
+  },
+);
+
+Then(/^user sees Toast present with the following success message "([^"]*)"$/, async (message) => {
+  const selector = getSelector.findCandidates.toast();
+  await client.waitForElementPresent(selector, constants.MEDIUM_TIMEOUT).assert.containsText(selector, message);
+});
+
+Then(/^user sees the suggested candidate with the status Awaiting confirmation$/, async () => {
+  const { candidateCard, candidateName, awaitingRole } = getSelector.projectDetails.hierarchy;
+
+  const foundElements = await getDomData.idsFromElements(candidateCard());
+
+  let elementId;
+  let found = false;
+  for (const element of foundElements) {
+    await client.elementIdElement(element, 'css selector', candidateName(), ({ value }) => {
+      elementId = value.ELEMENT;
+    });
+
+    await client.elementIdText(elementId, ({ value }) => {
+      if (value === candName) found = true;
+    });
+
+    if (found) break;
+  }
+  if (!found) throw new Error(`Candidate with the name:"${candName}" not found in the hierarchy!`);
+
+  await client.elementIdElement(elementId, 'css selector', awaitingRole(), ({ value }) => {
+    const elementId = value.ELEMENT;
+    assert.isDefined(elementId, 'The suggested candidate has not Awaiting confirmation status!');
+  });
 });
