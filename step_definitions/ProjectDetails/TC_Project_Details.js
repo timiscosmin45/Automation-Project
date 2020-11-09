@@ -219,7 +219,7 @@ When(/^user clicks the first "(Confirmed|Awaiting)" role card$/, async (roleStat
   }
   console.log(candName);
   if (!elementId) throw new Error(`"${roleStatus}" role cards not found!`);
-  await client.elementIdClick(elementId)
+  await client.moveTo(elementId, 1, 1).mouseButtonClick('left');
 });
 
 Then(/^user "(sees|does not see)" Remove from the role button$/, async (action) => {

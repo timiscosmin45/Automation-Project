@@ -14,7 +14,8 @@ Feature: Validate Project Details remove person from role
     Then user "sees" Remove from the role button
 
   Scenario: Validate candidate card deselection
-    When user clicks the first "Confirmed" role card
+    When user clicks off the candidate card
+    And user clicks the first "Confirmed" role card
     Then user "sees" Remove from the role button
     When user clicks off the candidate card
     Then user "does not see" Remove from the role button
