@@ -12,5 +12,5 @@ Feature: Validate Project Details remove person from role
     And user sees "PROJECT DETAILS" as the screen title
     When user click the first "Confirmed" role card
     And user clicks Remove from the role button
-    Then user sees the person is removed from the role
+    Then user sees the person is removed from role
 

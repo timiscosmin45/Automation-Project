@@ -227,7 +227,7 @@ When(/^user clicks Remove from the role button$/, async () => {
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
 });
 
-Then(/^user sees the person is removed from the role$/, async () => {
+Then(/^user sees the person is removed from role$/, async () => {
   if (!candName) throw new Error('No person found to search for!');
   const { candidateCard, candidateName } = getSelector.projectDetails.hierarchy;
   const foundCards = await getDomData.idsFromElements(candidateCard());
