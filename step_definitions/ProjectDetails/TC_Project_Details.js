@@ -1,7 +1,10 @@
 const { client } = require('nightwatch-api');
-const { Then } = require('cucumber');
+const { When, Then } = require('cucumber');
 const { assert, expect } = require('chai');
 const { constants, getSelector, styleCheck, getDomData } = require('../../helpers');
+
+//Global vars
+let candName;
 
 Then(/^user sees "([^"]*)" as the project name$/, async (projectName) => {
   const selector = getSelector.projectDetails.projectName();
@@ -193,6 +196,49 @@ Then(/^user sees "([^"]*)" status name on ORG Chart$/, async (statusName) => {
   expect(foundElements).to.include(statusName);
 });
 
-When (/^user click the first "(Confirmed|Awaiting)" role card$/,async (status)=>{
-const {}=getSelector.projectDetails
-})
+When(/^user click the first "(Confirmed|Awaiting)" role card$/, async (roleStatus) => {
+  const { candidateCard, confirmedRole, awaitingRole, candidateName } = getSelector.projectDetails.hierarchy;
+  const status = roleStatus === 'Confirmed' ? confirmedRole() : awaitingRole();
+  const foundCards = await getDomData.idsFromElements(candidateCard());
+
+  let elementId;
+  for (const cardId of foundCards) {
+    await client.elementIdElement(cardId, 'css selector', status, ({ value }) => {
+      elementId = value.ELEMENT;
+    });
+    if (elementId) {
+      let nameId;
+      await client.elementIdElement(cardId, 'css selector', candidateName(), ({ value }) => {
+        nameId = value.ELEMENT;
+      });
+      await client.elementIdText(nameId, ({ value }) => {
+        candName = value;
+      });
+    }
+    if (elementId) break;
+  }
+  console.log(candName);
+  if (!elementId) throw new Error(`"${roleStatus}" role cards not found!`);
+  await client.elementIdClick(elementId);
+});
+
+When(/^user clicks Remove from the role button$/, async () => {
+  const selector = getSelector.projectDetails.hierarchy.removeFromRoleBtn();
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
+});
+
+Then(/^user sees the person is removed from the role$/, async () => {
+  if (!candName) throw new Error('No person found to search for!');
+  const { candidateCard, candidateName } = getSelector.projectDetails.hierarchy;
+  const foundCards = await getDomData.idsFromElements(candidateCard());
+
+  for (const cardId of foundCards) {
+    let nameId;
+    await client.elementIdElement(cardId, 'css selector', candidateName(), ({ value }) => {
+      nameId = value.ELEMENT;
+    });
+    await client.elementIdText(nameId, ({ value }) => {
+      assert.notEqual(value, candName, 'The removed person still found in the hierarchy!');
+    });
+  }
+});
