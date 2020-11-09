@@ -196,7 +196,7 @@ Then(/^user sees "([^"]*)" status name on ORG Chart$/, async (statusName) => {
   expect(foundElements).to.include(statusName);
 });
 
-When(/^user click the first "(Confirmed|Awaiting)" role card$/, async (roleStatus) => {
+When(/^user clicks the first "(Confirmed|Awaiting)" role card$/, async (roleStatus) => {
   const { candidateCard, confirmedRole, awaitingRole, candidateName } = getSelector.projectDetails.hierarchy;
   const status = roleStatus === 'Confirmed' ? confirmedRole() : awaitingRole();
   const foundCards = await getDomData.idsFromElements(candidateCard());
@@ -219,7 +219,13 @@ When(/^user click the first "(Confirmed|Awaiting)" role card$/, async (roleStatu
   }
   console.log(candName);
   if (!elementId) throw new Error(`"${roleStatus}" role cards not found!`);
-  await client.elementIdClick(elementId);
+  await client.elementIdClick(elementId)
+});
+
+Then(/^user "(sees|does not see)" Remove from the role button$/, async (action) => {
+  const selector = getSelector.projectDetails.hierarchy.removeFromRoleBtn();
+  if (action === 'sees') await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  else await client.waitForElementNotPresent(selector, constants.MEDIUM_TIMEOUT);
 });
 
 When(/^user clicks Remove from the role button$/, async () => {
@@ -241,4 +247,9 @@ Then(/^user sees the person is removed from role$/, async () => {
       assert.notEqual(value, candName, 'The removed person still found in the hierarchy!');
     });
   }
+});
+
+When(/^user clicks off the candidate card$/, async () => {
+  const selector = getSelector.projectDetails.title();
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
 });
