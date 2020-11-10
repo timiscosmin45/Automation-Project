@@ -1,0 +1,35 @@
+{
+    "files.autoSave": "afterDelay",
+    "window.zoomLevel": 1,
+    "workbench.iconTheme": "vscode-icons",
+    "editor.tabSize": 2,
+    "files.eol": "\r\n",
+    "cucumberautocomplete.steps": [
+    "step_definitions/**/*.js"
+    ],
+    "cucumberautocomplete.syncfeatures": "features/**/**/*.feature",
+    "cucumberautocomplete.strictGherkinCompletion": true,
+    "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "terminal.integrated.shell.windows": "C:\\Program Files\\PowerShell\\7-preview\\pwsh.exe",
+    "explorer.confirmDelete": false,
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "material-ui-snippets.showNotesOnStartup": false,
+    "editor.formatOnSave": true,
+    "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "cucumberautocomplete.customParameters": [
+    
+    ],
+    }
