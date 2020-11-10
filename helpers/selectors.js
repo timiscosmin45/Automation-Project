@@ -110,9 +110,12 @@ const selectors = {
     },
     hierarchy: {
       candidateCard: () => selectors.testId('role_card_content'),
-      candidateName: () => `${selectors.projectDetails.hierarchy.cards()} p${selectors.child(1)}`,
-      confirmedROld: () => `${selectors.projectDetails.hierarchy.cards()} ${selectors.testId('role_card_confirmed')}`,
-      awaitingRole: () => `${selectors.projectDetails.hierarchy.cards()} ${selectors.testId('role_card_unconfirmed')}`,
+      candidateName: () => `${selectors.projectDetails.hierarchy.candidateCard()} p${selectors.child(1)}`,
+      confirmedRole: () =>
+        `${selectors.projectDetails.hierarchy.candidateCard()} ${selectors.testId('role_card_confirmed')}`,
+      awaitingRole: () =>
+        `${selectors.projectDetails.hierarchy.candidateCard()} ${selectors.testId('role_card_unconfirmed')}`,
+      removeFromRoleBtn: () => selectors.testId('role_card_confirmed_remove_button'),
       firstLayer: () => selectors.testId(''),
       secondLayer: () => selectors.testId(''),
       thiredLayer: () => selectors.testId(''),
