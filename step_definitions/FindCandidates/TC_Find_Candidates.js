@@ -1,7 +1,7 @@
 const { client } = require('nightwatch-api');
 const { Then, Given, When } = require('cucumber');
 const { constants, getSelector, getDomData } = require('../../helpers');
-const { assert } = require('chai');
+const { assert, expect } = require('chai');
 
 //Global vars
 let candName;
@@ -322,4 +322,195 @@ Then(/^user sees the suggested candidate with the status Awaiting confirmation$/
     const elementId = value.ELEMENT;
     assert.isDefined(elementId, 'The suggested candidate has not Awaiting confirmation status!');
   });
+});
+
+When(/^user clicks filter button on Find Candidates screen$/, async () => {
+  const selector = getSelector.findCandidates.filterBtn();
+  await client.waitForElementPresent(selector, constants.MEDIUM_TIMEOUT).click(selector);
+});
+
+Then(/^user "(sees|does not see)" the filter modal opened on Find Candidates screen$/, async (action) => {
+  const selector = getSelector.findCandidates.filterModal.modal();
+  if (action === 'sees') await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  else await client.waitForElementNotPresent(selector, constants.MEDIUM_TIMEOUT);
+});
+
+Then(/^user sees "([^"]*)" as the title of candidate list filter modal$/, async (text) => {
+  const selector = getSelector.findCandidates.filterModal.title();
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  await client.getText(selector, ({ value }) => expect(text).to.equal(value));
+});
+
+Then(/^user "(sees|clicks)" "(Close|Apply|Clear)" button on candidate list filter modal$/, async (action, button) => {
+  let selector;
+  switch (button) {
+    case 'Apply':
+      selector = getSelector.findCandidates.filterModal.applyBtn();
+      break;
+    case 'Close':
+      selector = getSelector.findCandidates.filterModal.closeBtn();
+      break;
+    case 'Clear':
+      selector = getSelector.findCandidates.filterModal.clearBtn();
+      break;
+    default:
+      throw new Error('Incorrect case inputted!');
+  }
+  if (action === 'sees') await client.waitForElementVisible(selector);
+  else await client.waitForElementVisible(selector).click(selector);
+});
+
+Then(/^user sees "([^"]*)" label on candidate list filter modal$/, async (filterOption) => {
+  let labelSelector;
+  switch (filterOption) {
+    case 'Demobilisation date':
+      labelSelector = getSelector.findCandidates.filterModal.demobilisationDate.label();
+      break;
+    case 'Minimum grade':
+      labelSelector = getSelector.findCandidates.filterModal.minimumGrade.label();
+      break;
+    case 'Job role':
+      labelSelector = getSelector.findCandidates.filterModal.jobRole.label();
+      break;
+    case 'Location (region)':
+      labelSelector = getSelector.findCandidates.filterModal.location.label();
+      break;
+    default:
+      throw new Error('Incorrect case inputted!');
+  }
+  await client
+    .waitForElementVisible(labelSelector, constants.MEDIUM_TIMEOUT)
+    .getText(labelSelector, ({ value }) => expect(filterOption).to.equal(value));
+});
+
+When(
+  /^user selects "([^"]*)" as an option for "(Job role|Location)" on candidate list filter modal$/,
+  async (option, filter) => {
+    let selector;
+    switch (filter) {
+      case 'Job role':
+        selector = getSelector.findCandidates.filterModal.jobRole.dropdown();
+        break;
+      case 'Location':
+        selector = getSelector.findCandidates.filterModal.location.dropdown();
+        break;
+      default:
+        throw new Error('Incorrect case inputted!');
+    }
+    const filterOption = getSelector.findCandidates.filterModal.dropDownOption(option);
+    await client
+      .moveToElement(selector, 1, 1)
+      .mouseButtonDown(0)
+      .waitForElementVisible(filterOption)
+      .click(filterOption)
+      .pause(1000);
+  },
+);
+
+Then(/^user "(sees|does not see)" the filter preview section on Find Candidates screen$/, async (action) => {
+  const selector = getSelector.findCandidates.filterPreview.filterPreviewSection();
+  if (action === 'sees') await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  else await client.waitForElementNotPresent(selector, constants.MEDIUM_TIMEOUT);
+});
+
+Then(/^user sees "([^"]*)" as the title of filter preview section$/, async (text) => {
+  const selector = getSelector.findCandidates.filterPreview.title();
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  await client.getText(selector, ({ value }) => expect(text).to.equal(value));
+});
+
+Then(/^user "(sees|clicks)" "([^"]*)" button on filter preview of Find Candidates screen$/, async (action, button) => {
+  const selector = getSelector.findCandidates.filterPreview.removeFilterBtn();
+  if (action === 'sees')
+    await client.waitForElementVisible(selector).getText(selector, ({ value }) => expect(button).to.equal(value));
+  else
+    await client
+      .waitForElementVisible(selector)
+      .getText(selector, ({ value }) => expect(button).to.equal(value))
+      .click(selector);
+});
+
+Then(/^user sees "([^"]*)" set as filter option by "([^"]*)" on Find Candidates screen$/, async (option, category) => {
+  let selector;
+  switch (category) {
+    case 'Demobilisation date':
+      selector = getSelector.findCandidates.filterPreview.demobilisationDateFilter();
+      break;
+    case 'Minimum grade':
+      selector = getSelector.findCandidates.filterPreview.gradeFilter();
+      break;
+    case 'Job role':
+      selector = getSelector.findCandidates.filterPreview.jobRoleFilter();
+      break;
+    case 'Location':
+      selector = getSelector.findCandidates.filterPreview.locationFilter();
+      break;
+    default:
+      throw new Error('Incorrect case inputted!');
+  }
+  await client
+    .waitForElementVisible(selector, constants.MEDIUM_TIMEOUT)
+    .getText(selector, ({ value }) => expect(option).to.equal(value));
+});
+
+Then(
+  /^user sees "([^"]*)" as the selected option for "(Job role|Location)" on cadidate list filter modal$/,
+  async (option, filter) => {
+    let selector;
+    switch (filter) {
+      case 'Job role':
+        selector = getSelector.findCandidates.filterModal.jobRole.dropdown();
+        break;
+      case 'Location':
+        selector = getSelector.findCandidates.filterModal.location.dropdown();
+        break;
+      default:
+        throw new Error('Incorrect case inputted!');
+    }
+    const optionToCheck = option === 'Blank' ? '' : option;
+    await client.assert.value(selector, optionToCheck);
+  },
+);
+
+Then(/^user sees the minimum grade "([^"]*)" checkbox unchecked$/, async (grade) => {
+  let selector;
+  switch (grade) {
+    case '4':
+      selector = getSelector.findCandidates.filterModal.minimumGrade.fourCheckbox();
+      break;
+    case '5':
+      selector = getSelector.findCandidates.filterModal.minimumGrade.fiveCheckbox();
+      break;
+    case '6':
+      selector = getSelector.findCandidates.filterModal.minimumGrade.sixCheckbox();
+      break;
+    case '7':
+      selector = getSelector.findCandidates.filterModal.minimumGrade.sevenCheckbox();
+      break;
+    default:
+      throw new Error('Incorrect case inputted!');
+  }
+  await client.waitForElementPresent(selector, constants.MEDIUM_TIMEOUT);
+  await client.expect.element(selector).to.not.be.selected;
+});
+
+When(/^user sets minimum grade to "([^"]*)" on candidate list filter modal$/, async (grade) => {
+  let selector;
+  switch (grade) {
+    case '4':
+      selector = getSelector.findCandidates.filterModal.minimumGrade.fourCheckbox();
+      break;
+    case '5':
+      selector = getSelector.findCandidates.filterModal.minimumGrade.fiveCheckbox();
+      break;
+    case '6':
+      selector = getSelector.findCandidates.filterModal.minimumGrade.sixCheckbox();
+      break;
+    case '7':
+      selector = getSelector.findCandidates.filterModal.minimumGrade.sevenCheckbox();
+      break;
+    default:
+      throw new Error('Incorrect case inputted!');
+  }
+  await client.waitForElementPresent(selector, constants.MEDIUM_TIMEOUT).click(selector);
 });

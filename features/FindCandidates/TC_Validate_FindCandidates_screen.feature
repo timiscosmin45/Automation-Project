@@ -38,11 +38,10 @@ Feature: Validate Find Candidates screen
 
   Scenario Outline: Add candidate to empty shortlist
     Given user sees the empty shortlist with 4 slots
-    When user "clicks" "Add to options list" button from the first card of "suitable candidates" list
+    When user "clicks" the "Add to options list" button from the first card of "suitable candidates" list
     Then user sees the selected candidate added to the "first" space in the shortlist
-    And user sees Reorder list buttons from the first card of the shortlist disabled
+    And user sees Reorder list buttons from the first card of the shortlist "disabled"
     And user does not see the candidate on candidates list
-    And user <action> the <lable> button from the first card of <location> list
     And user <action> the <label> button from the first card of <location> list
     Examples:
       | action | label                   | location  |
@@ -51,8 +50,8 @@ Feature: Validate Find Candidates screen
 
   Scenario: Add candidate to populated shortlist
     Given user sees the shortlist populated, but not full
-    When user "clicks" "Add to options list" button from the first card of "suitable candidates" list
-    Then user sees the candidate added to the "second" available space in the shortlist
+    When user "clicks" the "Add to options list" button from the first card of "suitable candidates" list
+    Then user sees the selected candidate added to the "second" space in the shortlist
     And user does not see the candidate on candidates list
 
   Scenario: Full shortlist validation
