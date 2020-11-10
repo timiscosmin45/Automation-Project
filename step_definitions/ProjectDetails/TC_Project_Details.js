@@ -222,14 +222,16 @@ When(/^user clicks the first "(Confirmed|Awaiting)" role card$/, async (roleStat
   await client.moveTo(elementId, 1, 1).mouseButtonClick('left');
 });
 
-Then(/^user "(sees|does not see)" Remove from the role button$/, async (action) => {
-  const selector = getSelector.projectDetails.hierarchy.removeFromRoleBtn();
+Then(/^user "(sees|does not see)" Remove from role button on "(Awaiting|Confirmed)" card$/, async (action, card) => {
+  const option = card === 'Awaiting' ? 'unconfirmed' : 'confirmed';
+  const selector = getSelector.projectDetails.hierarchy.removeFromRoleBtn(option);
   if (action === 'sees') await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
   else await client.waitForElementNotPresent(selector, constants.MEDIUM_TIMEOUT);
 });
 
-When(/^user clicks Remove from the role button$/, async () => {
-  const selector = getSelector.projectDetails.hierarchy.removeFromRoleBtn();
+When(/^user clicks Remove from role button on "(Awaiting|Confirmed)" card$/, async (card) => {
+  const option = card === 'Awaiting' ? 'unconfirmed' : 'confirmed';
+  const selector = getSelector.projectDetails.hierarchy.removeFromRoleBtn(option);
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
 });
 
@@ -252,4 +254,46 @@ Then(/^user sees the person is removed from role$/, async () => {
 When(/^user clicks off the candidate card$/, async () => {
   const selector = getSelector.projectDetails.title();
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
+});
+
+Then(
+  /^user "(sees|does not see)" "(Confirm to role|Review Candidates)" button on Awaiting card$/,
+  async (action, button) => {
+    const { confirmToRoleBtn, reviewCandidatesBtn } = getSelector.projectDetails.hierarchy;
+    const selector = button == 'Confirm to role' ? confirmToRoleBtn() : reviewCandidatesBtn();
+    if (action === 'sees') await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+    else await client.waitForElementNotPresent(selector, constants.MEDIUM_TIMEOUT);
+  },
+);
+
+When(/^user clicks "(Confirme to role|Review Candidates)" button on Awaiting card$/, async (button) => {
+  const { confirmToRoleBtn, reviewCandidatesBtn } = getSelector.projectDetails.hierarchy;
+  const selector = button === 'Confirme to role' ? confirmToRoleBtn() : reviewCandidatesBtn();
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
+});
+
+Then(/^user sees the person is confirmed to role$/, async () => {
+  if (!candName) throw new Error('No person found to search for!');
+  const { candidateCard, candidateName, confirmedRole } = getSelector.projectDetails.hierarchy;
+  const foundCards = await getDomData.idsFromElements(candidateCard());
+
+  let nameValue;
+  for (const cardId of foundCards) {
+    let nameId;
+    await client.elementIdElement(cardId, 'css selector', candidateName(), ({ value }) => {
+      nameId = value.ELEMENT;
+    });
+
+    await client.elementIdText(nameId, ({ value }) => {
+      if (value === candName) nameValue = value;
+    });
+
+    if (nameValue) {
+      await client.elementIdElement(cardId, 'css selector', confirmedRole(), ({ value }) => {
+        assert.isDefined(value.ELEMENT, `${candName} is not confirmed to role!`);
+      });
+      break;
+    }
+  }
+  if (!nameValue) throw new Error(`${candName} not found in the hierarchy!`);
 });
