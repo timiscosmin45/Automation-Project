@@ -26,7 +26,7 @@ Feature: Validate Project Details - Confirm person to role
     And user "does not see" "Confirm to role" button on Awaiting card
     And user "does not see" "Review Candidates" button on Awaiting card
 
-  Scenario: Validate Awaiting Candidate to role
+  Scenario: Validate Confirm Awaiting Candidate to role
     When user clicks the first "Awaiting" role card
     And user clicks "Confirme to role" button on Awaiting card
     Then user sees the person is confirmed to role

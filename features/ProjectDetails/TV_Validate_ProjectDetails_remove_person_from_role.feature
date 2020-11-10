@@ -20,7 +20,7 @@ Feature: Validate Project Details - Remove person from role
     When user clicks off the candidate card
     Then user "does not see" Remove from role button on "Confirmed" card
 
-  Scenario: Validate Remove Confirmed person from role
+  Scenario: Validate Remove Confirmed candidate from role
     When user clicks the first "Confirmed" role card
     And user clicks Remove from role button on "Confirmed" card
     Then user "does not see" Remove from role button on "Confirmed" card
