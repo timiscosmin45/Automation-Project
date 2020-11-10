@@ -147,11 +147,13 @@ const selectors = {
     candidateList: {
       list: () => selectors.testId(''),
       candidate: () => selectors.testId(''),
+      candidateIcon: () => selectors.testId(''),
       candidateName: () => selectors.testId(''),
       candidateJobTitle: () => selectors.testId(''),
       candidateGrade: () => selectors.testId(''),
       candidateHomePostcode: () => selectors.testId(''),
       addToOptionBtn: () => selectors.testId(''),
+      seeDetailsBtn: () => selectors.testId(''),
     },
     shortList: {
       slot: () => selectors.testId(''),
@@ -161,6 +163,11 @@ const selectors = {
       candidate: () => selectors.testId(''),
       suggestCandidateBtn: () => selectors.testId(''),
       removeFromListBtn: () => selectors.testId(''),
+      reorderList: {
+        moveUpBtn: () => selectors.testId(''),
+        moveDownBtn: () => selectors.testId(''),
+        label: () => selectors.testId(''),
+      },
     },
   },
   unassignedPeople: {
