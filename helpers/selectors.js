@@ -115,7 +115,9 @@ const selectors = {
         `${selectors.projectDetails.hierarchy.candidateCard()} ${selectors.testId('role_card_confirmed')}`,
       awaitingRole: () =>
         `${selectors.projectDetails.hierarchy.candidateCard()} ${selectors.testId('role_card_unconfirmed')}`,
-      removeFromRoleBtn: () => selectors.testId('role_card_confirmed_remove_button'),
+      removeFromRoleBtn: (option) => selectors.testId(`role_card_${option}_remove_button`),
+      confirmToRoleBtn: () => selectors.testId('role_card_unconfirmed_confirm_button'),
+      reviewCandidatesBtn: () => selectors.testId('role_card_review_candidates_button'),
       firstLayer: () => selectors.testId(''),
       secondLayer: () => selectors.testId(''),
       thiredLayer: () => selectors.testId(''),
