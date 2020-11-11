@@ -189,6 +189,7 @@ const selectors = {
       gradeFilter: () => selectors.testId(''),
       jobRoleFilter: () => selectors.testId(''),
       locationFilter: () => selectors.testId(''),
+      noCandidatesMatchMsg: () => selectors.testId(''),
     },
     candidateList: {
       list: () => selectors.testId(''),
