@@ -513,21 +513,23 @@ When(/^user clicks the first "([^"]*)" stage project card$/, async (stage) => {
 });
 
 When(/^user selects the first project that has an unassigned role from Timeline view$/, async () => {
-  const selector = getSelector.projectOverview.timelineView.projects();
-  const findCandidateBtn = getSelector.projectDetails.findCandidatesBtn();
-  const findCandidatePageTitle = getSelector.findCandidates.title();
-  const projectOverviewBreadcrumb = getSelector.projectDetails.projectOverviewBreadcrumb();
-  const foundElements = await getDomData.idsFromElements(selector);
-  let stop = false;
+  const projects = getSelector.projectOverview.timelineView.projects();
+  const pageTitle = getSelector.projectDetails.title();
+  const unassignedRole = getSelector.projectDetails.hierarchy.unassignedRole();
+  const foundProjects = await getDomData.idsFromElements(projects);
 
-  for (const element of foundElements) {
+  let found = false;
+  for (const projectId of foundProjects) {
     await client
-      .elementIdClick(element.ELEMENT)
-      .waitForElementVisible(findCandidatePageTitle, constants.MEDIUM_TIMEOUT)
-      .isVisible(findCandidateBtn, (res) => {
-        if (res.value === true) stop = true;
+      .moveTo(projectId)
+      .mouseButtonDown('left')
+      .mouseButtonUp('left')
+      .waitForElementVisible(pageTitle, constants.MEDIUM_TIMEOUT)
+      .isVisible(unassignedRole, ({ value }) => {
+        found = value;
       });
-    if (stop) break;
-    else await client.click(projectOverviewBreadcrumb);
+    if (found) break;
+    else await client.back();
   }
+  if (!found) throw new Error('Projects with unassigned roles not found!');
 });
