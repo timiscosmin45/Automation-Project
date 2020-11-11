@@ -36,12 +36,20 @@ Feature: Validate Find Candidates screen
       | "date and label" | "Phase starts: 19 September 2019"                                                                 |
       | "explainer text" | "Add suitable candidates to the option list in order. Place most suitable candidates at the top." |
 
+  Scenario: Remove candidate from shortlist
+    When user "clicks" the "Add to options list" button from the first card of "suitable candidates" list
+    Then user sees the selected candidate added to the "first" space in the shortlist
+    And user sees Reorder list buttons from the first card of the shortlist "disabled"
+    And user "does not see" the candidate on candidates list
+    When user "clicks" the "Remove from shortlist" button from the first card of "options" list
+    Then user "sees" the candidate on candidates list
+
   Scenario Outline: Add candidate to empty shortlist
     Given user sees the empty shortlist with 4 slots
     When user "clicks" the "Add to options list" button from the first card of "suitable candidates" list
     Then user sees the selected candidate added to the "first" space in the shortlist
     And user sees Reorder list buttons from the first card of the shortlist "disabled"
-    And user does not see the candidate on candidates list
+    And user "does not see" the candidate on candidates list
     And user <action> the <label> button from the first card of <location> list
     Examples:
       | action | label                   | location  |
@@ -52,7 +60,7 @@ Feature: Validate Find Candidates screen
     Given user sees the shortlist populated, but not full
     When user "clicks" the "Add to options list" button from the first card of "suitable candidates" list
     Then user sees the selected candidate added to the "second" space in the shortlist
-    And user does not see the candidate on candidates list
+    And user "does not see" the candidate on candidates list
 
   Scenario: Full shortlist validation
     When user adds canddidates until shortlist is full
