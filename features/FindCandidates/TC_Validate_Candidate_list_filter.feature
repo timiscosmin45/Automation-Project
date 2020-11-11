@@ -46,17 +46,13 @@ Feature: Validate Candidate list filter
     Then user "sees" the filter preview section on Find Candidates screen
     And user sees "Filtered Candidates" as the title of filter preview section
     And user "sees" "Remove filter" button on filter preview of Find Candidates screen
-    And user sees the same number of candidates in the list as shown in filter preview section
+    And user sees the number of filter results matching the number shown in filter preview section title
     And user sees <filterOption> set as filter option by <filterCategory> on Find Candidates screen
     Examples:
       | filterOption         | filterCategory  |
       | "Principle Engineer" | "Job role"      |
       | "Grade 5 or above"   | "Minimum grade" |
       | "London"             | "Location"      |
-
-  Scenario Outline: Validate the list of filtered candidates
-    Then user sees the same number of candidates in the list as shown in filter preview section
-    And 
 
   Scenario: Validate Candidate filter Clear all button
     When user clicks filter button on Find Candidates screen
