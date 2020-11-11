@@ -196,7 +196,7 @@ Then(/^user sees the shortlist populated, but not full$/, async () => {
     .isBelow(shortListLength, 4, 'Shortlist is full');
 });
 
-Then(/^user does not see the candidate on candidates list$/, async () => {
+Then(/^user "(does not see|sees)" the candidate on candidates list$/, async (state) => {
   const candidatesList = getSelector.findCandidates.candidateList.candidate();
   const shortlist = getSelector.findCandidates.shortlist.candidate();
   const candidateNameSelector = getSelector.findCandidates.candidateList.candidateName();
@@ -221,7 +221,9 @@ Then(/^user does not see the candidate on candidates list$/, async () => {
       elementId = value.ELEMENT;
     });
     await client.elementIdText(elementId, ({ value }) => {
-      assert.notEqual(value, candidateName, 'The candidate is still present on candidates list!');
+      if (state === 'sees') {
+        assert.equal(value, candidateName, 'The candidate is not present on candidates list!');
+      } else assert.notEqual(value, candidateName, 'The candidate is still present on candidates list!');
     });
   }
 });
