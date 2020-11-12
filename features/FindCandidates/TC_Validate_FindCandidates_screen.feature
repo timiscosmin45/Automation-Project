@@ -15,6 +15,18 @@ Feature: Validate Find Candidates screen
     And user sees "FIND CANDIDATES" as the screen title
     And user sees the side menu bar present
 
+  Scenario Outline: Validate Project Details section
+    Given user sees "Project Details" screen
+    Then user sees <projectData> on Projects Details section
+    Examples:
+      | projectData    |
+      | "project name" |
+      | "client name"  |
+      | "status"       |
+      | "sector"       |
+      | "value"        |
+      | "location"     |
+
   Scenario Outline: Validate view list title
     Then user sees the "Suitable Candidates" title
     And user sees "Planning & Project Controls Leader" as the name of the selected role

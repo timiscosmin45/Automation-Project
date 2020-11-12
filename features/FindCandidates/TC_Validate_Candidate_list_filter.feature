@@ -46,6 +46,7 @@ Feature: Validate Candidate list filter
     Then user "sees" the filter preview section on Find Candidates screen
     And user sees "Filtered Candidates" as the title of filter preview section
     And user "sees" "Remove filter" button on filter preview of Find Candidates screen
+    And user sees the number of filter results matching the number shown in filter preview section title
     And user sees <filterOption> set as filter option by <filterCategory> on Find Candidates screen
     Examples:
       | filterOption         | filterCategory  |
@@ -68,3 +69,4 @@ Feature: Validate Candidate list filter
   Scenario: Validate Candidate filter Close button
     When user "clicks" "Close" button on candidate list filter modal
     Then user "does not see" the filter modal opened on Find Candidates screen
+

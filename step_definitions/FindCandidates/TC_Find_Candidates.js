@@ -503,7 +503,7 @@ Then(/^user "(sees|does not see)" the filter preview section on Find Candidates 
 Then(/^user sees "([^"]*)" as the title of filter preview section$/, async (text) => {
   const selector = getSelector.findCandidates.filterPreview.title();
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
-  await client.getText(selector, ({ value }) => expect(text).to.equal(value));
+  await client.assert.containsText(selector, text);
 });
 
 Then(/^user "(sees|clicks)" "([^"]*)" button on filter preview of Find Candidates screen$/, async (action, button) => {
@@ -515,6 +515,29 @@ Then(/^user "(sees|clicks)" "([^"]*)" button on filter preview of Find Candidate
       .waitForElementVisible(selector)
       .getText(selector, ({ value }) => expect(button).to.equal(value))
       .click(selector);
+});
+
+Then(/^user sees the number of filter results matching the number shown in filter preview section title$/, async () => {
+  const selector = getSelector.findCandidates.filterPreview.title();
+  let matchingCandidates;
+  //extract the number of filter results from the filter preview title
+  await client.getText(selector, (value) => {
+    matchingCandidates = value.match(/\d/g);
+  });
+  if (matchingCandidates[0] === '0') {
+    const messageSelector = getSelector.findCandidates.filterPreview.noCandidatesMatchMsg();
+    await client
+      .waitForElementVisible(messageSelector)
+      .assert.containsText(
+        messageSelector,
+        'There are no matching results for this search. Consider refining your filter options.',
+      );
+  } else {
+    const candidateCard = getSelector.findCandidates.candidateList.candidate();
+    const foundElements = getDomData.idsFromElements(candidateCard);
+    const foundElementsNumber = foundElements.length;
+    await client.assert.equal(foundElementsNumber, matchingCandidates[0]);
+  }
 });
 
 Then(/^user sees "([^"]*)" set as filter option by "([^"]*)" on Find Candidates screen$/, async (option, category) => {
