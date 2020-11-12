@@ -60,7 +60,15 @@ Feature: Validate Find Candidates screen
     Given user sees the shortlist populated, but not full
     When user "clicks" the "Add to options list" button from the first card of "suitable candidates" list
     Then user sees the selected candidate added to the "second" space in the shortlist
+    And user sees Reorder list buttons from the first card of the shortlist "enabled"
     And user "does not see" the candidate on candidates list
+
+  Scenario Outline: Reprioritise candidates on shortlist
+    Given user sees at least "2" candidates added in the shortlist
+    Then user sees Reorder list "up" button disabled on the "first" card
+    And user sees Reorder list "down" button disabled on the "last" card
+    When user clicks on "down" reprioritise button on the "first" candidate card
+    Then user sees the candidate card moved one position "down" in shortlist
 
   Scenario: Full shortlist validation
     When user adds canddidates until shortlist is full
