@@ -62,7 +62,7 @@ Feature: Validate Project Details screen
 
   Scenario Outline: Validate Project Details info
     Given user sees "Project Details" screen
-    Then user sees <projectData> on Projects Details screen
+    Then user sees <projectData> on Projects Details section
     Examples:
       | projectData    |
       | "project name" |

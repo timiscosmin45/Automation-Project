@@ -28,7 +28,8 @@ Then(/^user sees "([^"]*)" screen$/, async (screen) => {
       expectedEndpoint = '/projectDetails';
       break;
     case 'Find Candidates':
-      // to be added later
+      selector = getSelector.findCandidates.title();
+      expectedEndpoint = '/findCandidates';
       break;
     default:
       throw new Error('Incorrect case inputted!');
@@ -64,4 +65,31 @@ Then(/^user sees "([^"]*)" as the screen title$/, async (title) => {
 
 When(/^user waits "([1-9][0-9]*)" seconds$/, async (seconds) => {
   await new Promise((resolve) => setTimeout(resolve, parseInt(seconds) * 1000), 10);
+});
+
+Then(/^user sees "([^"]*)" on Projects Details section$/, async (projectData) => {
+  let selector;
+  switch (projectData) {
+    case 'project name':
+      selector = getSelector.sharedComponents.projectDetails.projectName();
+      break;
+    case 'client name':
+      selector = getSelector.sharedComponents.projectDetails.clientName();
+      break;
+    case 'status':
+      selector = getSelector.sharedComponents.projectDetails.status();
+      break;
+    case 'sector':
+      selector = getSelector.sharedComponents.projectDetails.sector();
+      break;
+    case 'value':
+      selector = getSelector.sharedComponents.projectDetails.value();
+      break;
+    case 'location':
+      selector = getSelector.projectDetails.location();
+      break;
+    default:
+      throw new Error('Incorrect case inputted!');
+  }
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
 });

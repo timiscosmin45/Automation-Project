@@ -7,7 +7,7 @@ const { constants, getSelector, styleCheck, getDomData } = require('../../helper
 let candName;
 
 Then(/^user sees "([^"]*)" as the project name$/, async (projectName) => {
-  const selector = getSelector.projectDetails.projectName();
+  const selector = getSelector.sharedComponents.projctDetails.projectName();
   await client
     .waitForElementVisible(selector, constants.MEDIUM_TIMEOUT)
     .getText(selector, ({ value }) => assert.equal(projectName, value));
@@ -44,33 +44,6 @@ Then(/^user sees the Project Details breadcrumb highlighted$/, async () => {
 
 Then(/^user clicks browser back button$/, async () => {
   await client.back();
-});
-
-Then(/^user sees "([^"]*)" on Projects Details screen$/, async (projectData) => {
-  let selector;
-  switch (projectData) {
-    case 'project name':
-      selector = getSelector.projectDetails.projectName();
-      break;
-    case 'client name':
-      selector = getSelector.projectDetails.clientName();
-      break;
-    case 'status':
-      selector = getSelector.projectDetails.status();
-      break;
-    case 'sector':
-      selector = getSelector.projectDetails.sector();
-      break;
-    case 'value':
-      selector = getSelector.projectDetails.value();
-      break;
-    case 'location':
-      selector = getSelector.projectDetails.location();
-      break;
-    default:
-      throw new Error('Incorrect case inputted!');
-  }
-  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
 });
 
 Then(/^user clicks Find Candidates button on Project Details screen$/, async () => {

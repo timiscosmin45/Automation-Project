@@ -96,17 +96,11 @@ const selectors = {
   projectDetails: {
     title: () => 'div > h1',
     page: () => selectors.testId(''),
-    projectName: () => selectors.testId(''),
-    clientName: () => selectors.testId(''),
-    status: () => selectors.testId(''),
-    sector: () => selectors.testId(''),
-    value: () => selectors.testId(''),
-    location: () => selectors.testId(''),
     orgChartLegend: () => selectors.testId(''),
     orgChartLegendStatusName: () => `${selectors.projectDetails.projectDetails.orgChartLegend()} to be completed...`,
     breadcrumb: {
-      projectOverview: () => selectors.testId(''),
-      projectDetails: () => selectors.testId(''),
+      projectOverview: () => `main button${selectors.child(1)}`,
+      projectDetails: () => `main button${selectors.child(2)}`,
     },
     hierarchy: {
       candidateCard: () => selectors.testId('role_card_content'),
@@ -115,9 +109,12 @@ const selectors = {
         `${selectors.projectDetails.hierarchy.candidateCard()} ${selectors.testId('role_card_confirmed')}`,
       awaitingRole: () =>
         `${selectors.projectDetails.hierarchy.candidateCard()} ${selectors.testId('role_card_unconfirmed')}`,
+      unassignedRole: () =>
+        `${selectors.projectDetails.hierarchy.candidateCard()} ${selectors.testId('role_card_unassigned')}`,
       removeFromRoleBtn: (option) => selectors.testId(`role_card_${option}_remove_button`),
       confirmToRoleBtn: () => selectors.testId('role_card_unconfirmed_confirm_button'),
       reviewCandidatesBtn: () => selectors.testId('role_card_review_candidates_button'),
+      findCandidatesBtn: () => selectors.testId(''),
       firstLayer: () => selectors.testId(''),
       secondLayer: () => selectors.testId(''),
       thiredLayer: () => selectors.testId(''),
@@ -142,10 +139,9 @@ const selectors = {
       liveIcon: () => selectors.testId(''),
       liveDates: () => selectors.testId(''),
     },
-    findCandidatesBtn: () => selectors.testId(''),
   },
   findCandidates: {
-    title: () => selectors.testId(''),
+    title: () => selectors.testId('fc_page_title'),
     candidatesListTitle: () => selectors.testId(''),
     selectedRoleName: () => selectors.testId(''),
     toast: () => selectors.testId(''),
@@ -227,6 +223,16 @@ const selectors = {
     uassignedPeopleText: () => `${selectors.sideMenu.unassignedPeople()} p`,
     unassignedRolesText: () => `${selectors.sideMenu.unassignedRolesText()} p`,
     sideMenuBar: () => selectors.testId('side-menu'),
+  },
+  sharedComponents: {
+    projectDetails: {
+      projectName: () => selectors.testId(''),
+      clientName: () => selectors.testId(''),
+      status: () => selectors.testId(''),
+      sector: () => selectors.testId(''),
+      value: () => selectors.testId(''),
+      location: () => selectors.testId(''),
+    },
   },
 };
 
