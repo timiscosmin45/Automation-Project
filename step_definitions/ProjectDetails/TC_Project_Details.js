@@ -47,7 +47,7 @@ Then(/^user clicks browser back button$/, async () => {
 });
 
 Then(/^user clicks Find Candidates button on Project Details screen$/, async () => {
-  const selector = getSelector.projectDetails.findCandidatesBtn();
+  const selector = getSelector.projectDetails.hierarchy.findCandidatesBtn();
   await client
     .waitForElementVisible(selector, constants.MEDIUM_TIMEOUT)
     .assert.containsText(selector, 'Find candidates')

@@ -9,14 +9,14 @@ Feature: Validate Find Candidates screen
   Scenario: Validate navigation to Find Candidates screen
     When user selects the first project that has an unassigned role from Timeline view
     Then user sees "Project Details" screen
-    And user sees "PROJECTS DETAILS" as the screen title
+    And user sees "PROJECT DETAILS" as the screen title
     When user clicks Find Candidates button on Project Details screen
     Then user sees "Find Candidates" screen
     And user sees "FIND CANDIDATES" as the screen title
     And user sees the side menu bar present
 
   Scenario Outline: Validate Project Details section
-    Given user sees "Project Details" screen
+    Given user sees "Find Candidates" screen
     Then user sees <projectData> on Projects Details section
     Examples:
       | projectData    |
@@ -27,17 +27,25 @@ Feature: Validate Find Candidates screen
       | "value"        |
       | "location"     |
 
-  Scenario Outline: Validate view list title
+  Scenario: Validate Candidate list title
+    Given user sees "Find Candidates" screen
     Then user sees the "Suitable Candidates" title
     And user sees "Planning & Project Controls Leader" as the name of the selected role
     And user sees the list of candidates on Find Candidates screen
+
+  Scenario Outline: Validate Candidate list
+    Given user sees "Find Candidates" screen
     And user sees candidate's <data> for each candidate on Find Candidates screen
     Examples:
-      | data            |
-      | "name"          |
-      | "job title"     |
-      | "grade"         |
-      | "home postcode" |
+      | data                  |
+      | "name"                |
+      | "job title"           |
+      | "grade"               |
+      | "home postcode"       |
+      | "business unit"       |
+      | "talent programme"    |
+      | "key project"         |
+      | "demobilisation date" |
 
   Scenario Outline: Validate empty shortlist
     Then user sees the empty shortlist with 4 slots
