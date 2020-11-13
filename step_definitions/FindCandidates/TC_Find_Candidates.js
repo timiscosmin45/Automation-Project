@@ -5,6 +5,7 @@ const { assert, expect } = require('chai');
 
 //Global vars
 let candName;
+let shortlistPosition;
 
 Then(/^user sees the "([^"]*)" title$/, async (title) => {
   const selector = getSelector.findCandidates.candidatesListTitle();
@@ -334,6 +335,90 @@ Then(/^user sees the suggested candidate with the status Awaiting confirmation$/
     const elementId = value.ELEMENT;
     assert.isDefined(elementId, 'The suggested candidate has not Awaiting confirmation status!');
   });
+});
+
+When(
+  /^user clicks on "(up|down)" reprioritise button on the "([^"]*)" candidate card$/,
+  async (direction, cardNumber) => {
+    const { moveDownBtn, moveUpBtn } = getSelector.findCandidates.shortList.reorderList;
+    const candidateName = getSelector.findCandidates.candidateList.candidateName();
+    const selector = direction === 'down' ? moveDownBtn() : moveUpBtn();
+    const foundElements = await getDomData.idsFromElements(selector);
+    let elementId;
+    switch (cardNumber) {
+      case 'first':
+        shortlistPosition = 0;
+        break;
+      case 'second':
+        shortlistPosition = 1;
+        break;
+      case 'third':
+        shortlistPosition = 2;
+        break;
+      case 'fourth':
+        shortlistPosition = 3;
+        break;
+      default:
+        throw new Error('Incorrect case inputted!');
+    }
+    await client.elementIdElement(foundElements[shortlistPosition], 'css selector', candidateName, ({ value }) => {
+      elementId = value.ELEMENT;
+    });
+    await client.elementIdText(elementId, ({ value }) => {
+      candName = value.ELEMENT;
+    });
+
+    await client
+      .waitForElementVisible(selector, constants.MEDIUM_TIMEOUT)
+      .elementIdClick(foundElements[shortlistPosition]);
+  },
+);
+
+Then(/^user sees the candidate card moved one position "(down|up)" in shortlist$/, async (direction) => {
+  const selector = getSelector.findCandidates.candidateList.candidate();
+  const candidateName = getSelector.findCandidates.candidateList.candidateName();
+  const foundElements = await getDomData.idsFromElements(selector);
+  let elementId;
+  if (direction === 'down') {
+    await client.elementIdElement(foundElements[shortlistPosition + 1], 'css selector', candidateName, ({ value }) => {
+      elementId = value.ELEMENT;
+    });
+  } else {
+    await client.elementIdElement(foundElements[shortlistPosition - 1], 'css selector', candidateName, ({ value }) => {
+      elementId = value.ELEMENT;
+    });
+  }
+  await client.elementIdText(elementId, ({ value }) => {
+    assert.equal(candName, value.ELEMENT);
+  });
+});
+
+Given(/^user sees at least "([^"]*)" candidates added in the shortlist$/, async (number) => {
+  const candidateCard = getSelector.findCandidates.shortList.candidate();
+  const foundElements = await getDomData.idsFromElements(candidateCard);
+  const cardsNumber = foundElements.length;
+  await client.assert.isAtLeast(cardsNumber, number, `There are less than ${number} candidates in shortlist!`);
+});
+
+Then(/^user sees Reorder list "(down|up)" button disabled on the "(first|last)" card$/, async (direction, position) => {
+  const { moveDownBtn, moveUpBtn } = getSelector.findCandidates.shortList.reorderList;
+  const selector = direction === 'down' ? moveDownBtn() : moveUpBtn();
+  const foundElements = await getDomData.idsFromElements(selector);
+  const foundElementsNumber = foundElements.length;
+  const cardPosition = position === 'first' ? 0 : foundElementsNumber - 1;
+  let elementId;
+  await client.elementIdElement(foundElements[cardPosition], 'css selector', selector, ({ value }) => {
+    elementId = value.ELEMENT;
+  });
+  await client.elementIdEnabled(elementId, ({ value }) => {
+    assert.equal(value, false, `Reorder list ${direction} button is not disabled!`);
+  });
+});
+
+Then(/^user "(sees|does not see)" the filter modal opened on Find Candidates screen$/, async (action) => {
+  const selector = getSelector.findCandidates.filterModal.modal();
+  if (action === 'sees') await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  else await client.waitForElementNotPresent(selector, constants.MEDIUM_TIMEOUT);
 });
 
 When(/^user clicks filter button on Find Candidates screen$/, async () => {
