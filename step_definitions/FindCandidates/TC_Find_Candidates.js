@@ -27,8 +27,7 @@ Then(/^user sees the list of candidates on Find Candidates screen$/, async () =>
 });
 
 Then(/^user sees candidate's "([^"]*)" for each candidate on Find Candidates screen$/, async (candidateData) => {
-  const selector = getSelector.findCandidates.candidate();
-  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  const selector = getSelector.findCandidates.candidateList.candidate();
   let elementSelector;
   switch (candidateData) {
     case 'name':
@@ -43,6 +42,18 @@ Then(/^user sees candidate's "([^"]*)" for each candidate on Find Candidates scr
     case 'home postcode':
       elementSelector = getSelector.findCandidates.candidateList.candidateHomePostcode();
       break;
+    case 'business unit':
+      elementSelector = getSelector.findCandidates.candidateList.businessUnit();
+      break;
+    case 'talent programme':
+      elementSelector = getSelector.findCandidates.candidateList.talentProgramme();
+      break;
+    case 'key project':
+      elementSelector = getSelector.findCandidates.candidateList.keyProject();
+      break;
+    case 'demobilisation date':
+      elementSelector = getSelector.findCandidates.candidateList.demobilisationDate();
+      break;
     default:
       throw new Error('Incorrect case inputted!');
   }
@@ -56,24 +67,23 @@ Then(/^user sees candidate's "([^"]*)" for each candidate on Find Candidates scr
 });
 
 Then(/^user sees the empty shortlist with 4 slots$/, async () => {
-  const selector = getSelector.findCandidates.shortlist.slot();
-  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  const selector = getSelector.findCandidates.shortList.slot();
   const foundElements = await getDomData.idsFromElements(selector);
   const slotsNumber = foundElements.length;
-  await client.assert.strictEqual(slotsNumber, 4, '4 empty shortlist slots were not found!');
+  await assert.strictEqual(slotsNumber, 4, '4 empty shortlist slots were not found!');
 });
 
 Then(/^user sees the "([^"]*)" displayed as "([^"]*)" on Find Candidates screen$/, async (pageElement, data) => {
   let elementSelector;
   switch (pageElement) {
     case 'title':
-      elementSelector = getSelector.findCandidates.shortlist.title();
+      elementSelector = getSelector.findCandidates.shortList.title();
       break;
     case 'date and label':
-      elementSelector = getSelector.findCandidates.shortlist.labelAndDate();
+      elementSelector = getSelector.findCandidates.shortList.labelAndDate();
       break;
     case 'explainer text':
-      elementSelector = getSelector.findCandidates.shortlist.explainerText();
+      elementSelector = getSelector.findCandidates.shortList.explainerText();
       break;
     default:
       throw new Error('Incorrect case inputted!');
