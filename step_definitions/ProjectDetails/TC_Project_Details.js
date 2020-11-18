@@ -62,44 +62,34 @@ Then(/^user sees Project Stage section title on Project Details screen$/, async 
 });
 
 Then(/^user sees "([^"]*)" card containing the status icon, name and key dates$/, async (stage) => {
-  let stageIcon;
-  let stageCard;
-  let stageName;
-  let stageDates;
-  switch (stage) {
-    case 'Opportunity':
-      stageCard = getSelector.projectDetails.projectStage.opportunityCard();
-      stageIcon = getSelector.projectDetails.projectStage.opportunityIcon();
-      stageName = getSelector.projectDetails.projectStage.opportunityName();
-      stageDates = getSelector.projectDetails.projectStage.opportunityDates();
-      break;
-    case 'Bid':
-      stageCard = getSelector.projectDetails.projectStage.bidCard();
-      stageIcon = getSelector.projectDetails.projectStage.bidIcon();
-      stageName = getSelector.projectDetails.projectStage.bidName();
-      stageDates = getSelector.projectDetails.projectStage.bidDates();
-      break;
-    case 'PCSA':
-      stageCard = getSelector.projectDetails.projectStage.pcsaCard();
-      stageIcon = getSelector.projectDetails.projectStage.pcsaIcon();
-      stageName = getSelector.projectDetails.projectStage.pcsaName();
-      stageDates = getSelector.projectDetails.projectStage.pcsaDates();
-      break;
-    case 'Live':
-      stageCard = getSelector.projectDetails.projectStage.liveCard();
-      stageIcon = getSelector.projectDetails.projectStage.liveIcon();
-      stageName = getSelector.projectDetails.projectStage.liveName();
-      stageDates = getSelector.projectDetails.projectStage.liveDates();
-      break;
-    default:
-      throw new Error('Incorrect case inputted!');
+  const stageIcon = getSelector.sharedComponents.projectStage.stageIcon();
+  const stageCard = getSelector.sharedComponents.projectStage.defaultCard();
+  const stageName = getSelector.sharedComponents.projectStage.stageName();
+  const stageDates = getSelector.sharedComponents.projectStage.stageDates();
+  const foundCards = await getDomData.idsFromElements(stageCard);
+  let cardId;
+  let elementId;
+  for (const card of foundCards) {
+    await client.elementIdElement(card, 'css selector', stageName, ({ value }) => {
+      elementId = value.ELEMENT;
+    });
+    await client.elementIdText(elementId, ({ value }) => {
+      if (value === stage) cardId = elementId;
+    });
   }
-  await client
-    .waitForElementVisible(stageCard, constants.SHORT_TIMEOUT)
-    .waitForElementVisible(stageIcon, constants.SHORT_TIMEOUT)
-    .waitForElementVisible(stageName, constants.SHORT_TIMEOUT)
-    .getText(stageName, ({ value }) => assert.equal(value, stage))
-    .waitForElementVisible(stageDates, constants.SHORT_TIMEOUT);
+  if (!cardId) throw new Error(`${stage} card not found!`);
+  await client.elementIdElement(cardId, 'css selector', stageIcon, ({ value }) => {
+    elementId = value.ELEMENT;
+  });
+  await client.elementIdDisplayed(elementId, ({ value }) => {
+    assert.ok(value, `${stage} icon is not displayed!`);
+  });
+  await client.elementIdElement(cardId, 'css selector', stageDates, ({ value }) => {
+    elementId = value.ELEMENT;
+  });
+  await client.elementIdDisplayed(elementId, ({ value }) => {
+    assert.ok(value, `${stage} dates are not displayed!`);
+  });
 });
 
 Then(/^user sees the Project team roles for "([^"]*)" stage$/, async (stage) => {
@@ -135,24 +125,31 @@ Then(/^user sees the Project team roles for "([^"]*)" stage$/, async (stage) => 
 });
 
 Then(/^user sees "([^"]*)" card highlighted$/, async (stage) => {
-  let stageCard;
+  const stageCard = getSelector.sharedComponents.projectStage.activeCard();
+  const stageIcon = getSelector.sharedComponents.projectStage.stageIcon();
+  const stageName = getSelector.sharedComponents.projectStage.stageName();
+  const stageDates = getSelector.sharedComponents.projectStage.stageDates();
   const { HIGHLIGHTED_CARD } = constants.DESIGN_COLORS.CARDS;
-  switch (stage) {
-    case 'Opportunity':
-      stageCard = getSelector.projectDetails.projectStage.opportunityCard();
-      break;
-    case 'Bid':
-      stageCard = getSelector.projectDetails.projectStage.bidCard();
-      break;
-    case 'PCSA':
-      stageCard = getSelector.projectDetails.projectStage.pcsaCard();
-      break;
-    case 'Live':
-      stageCard = getSelector.projectDetails.projectStage.liveCard();
-      break;
-    default:
-      throw new Error('Incorrect case inputted!');
-  }
+  const cardElement = getDomData.idFromElement(stageCard);
+  let elementId;
+  await client.elementIdElement(cardElement, 'css selector', stageName, ({ value }) => {
+    elementId = value.ELEMENT;
+  });
+  await client.elementIdText(elementId, ({ value }) => {
+    assert.equal(value, stage);
+  });
+  await client.elementIdElement(cardElement, 'css selector', stageIcon, ({ value }) => {
+    elementId = value.ELEMENT;
+  });
+  await client.elementIdDisplayed(elementId, ({ value }) => {
+    assert.ok(value, `${stage} icon is not displayed!`);
+  });
+  await client.elementIdElement(cardElement, 'css selector', stageDates, ({ value }) => {
+    elementId = value.ELEMENT;
+  });
+  await client.elementIdDisplayed(elementId, ({ value }) => {
+    assert.ok(value, `${stage} dates are not displayed!`);
+  });
   await client
     .waitForElementVisible(stageCard, constants.SHORT_TIMEOUT)
     .assert.cssProperty(stageCard, 'background-color', HIGHLIGHTED_CARD);

@@ -86,7 +86,7 @@ Then(/^user sees "([^"]*)" on Projects Details section$/, async (projectData) =>
       selector = getSelector.sharedComponents.projectDetails.value();
       break;
     case 'location':
-      selector = getSelector.projectDetails.location();
+      selector = getSelector.sharedComponents.projectDetails.location();
       break;
     default:
       throw new Error('Incorrect case inputted!');
