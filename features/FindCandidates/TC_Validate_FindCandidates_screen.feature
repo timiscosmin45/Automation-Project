@@ -30,7 +30,7 @@ Feature: Validate Find Candidates screen
   Scenario: Validate Candidate list title
     Given user sees "Find Candidates" screen
     Then user sees the "Suitable Candidates" title
-    And user sees "Planning & Project Controls Leader" as the name of the selected role
+    And user sees "Project Leader" as the name of the selected role
     And user sees the list of candidates on Find Candidates screen
 
   Scenario Outline: Validate Candidate list
@@ -53,11 +53,11 @@ Feature: Validate Find Candidates screen
     Examples:
       | pageElement      | data                                                                                              |
       | "title"          | "Options"                                                                                         |
-      | "date and label" | "Phase starts: 19 September 2019"                                                                 |
+      | "date and label" | "Phase Starts: 19 September 2019"                                                                 |
       | "explainer text" | "Add suitable candidates to the option list in order. Place most suitable candidates at the top." |
 
   Scenario: Remove candidate from shortlist
-    When user "clicks" the "Add to options list" button from the first card of "suitable candidates" list
+    When user "clicks" the "Add to option list" button from the first card of "suitable candidates" list
     Then user sees the selected candidate added to the "first" space in the shortlist
     And user sees Reorder list buttons from the first card of the shortlist "disabled"
     And user "does not see" the candidate on candidates list
@@ -66,7 +66,7 @@ Feature: Validate Find Candidates screen
 
   Scenario Outline: Add candidate to empty shortlist
     Given user sees the empty shortlist with 4 slots
-    When user "clicks" the "Add to options list" button from the first card of "suitable candidates" list
+    When user "clicks" the "Add to option list" button from the first card of "suitable candidates" list
     Then user sees the selected candidate added to the "first" space in the shortlist
     And user sees Reorder list buttons from the first card of the shortlist "disabled"
     And user "does not see" the candidate on candidates list
@@ -78,7 +78,7 @@ Feature: Validate Find Candidates screen
 
   Scenario: Add candidate to populated shortlist
     Given user sees the shortlist populated, but not full
-    When user "clicks" the "Add to options list" button from the first card of "suitable candidates" list
+    When user "clicks" the "Add to option list" button from the first card of "suitable candidates" list
     Then user sees the selected candidate added to the "second" space in the shortlist
     And user sees Reorder list buttons from the first card of the shortlist "enabled"
     And user "does not see" the candidate on candidates list

@@ -22,7 +22,7 @@ Then(/^user sees "([^"]*)" as the name of the selected role$/, async (roleName) 
 });
 
 Then(/^user sees the list of candidates on Find Candidates screen$/, async () => {
-  const selector = getSelector.findCandidates.candidatesList();
+  const selector = getSelector.findCandidates.candidateList.list();
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
 });
 
@@ -100,19 +100,19 @@ Then(
     let buttonSelector;
     let candidateSelector;
     if (list === 'suitable candidates') candidateSelector = getSelector.findCandidates.candidateList.candidate();
-    else candidateSelector = getSelector.findCandidates.shortlist.candidate();
+    else candidateSelector = getSelector.findCandidates.shortList.candidate();
     switch (button) {
-      case 'Add to options list':
+      case 'Add to option list':
         buttonSelector = getSelector.findCandidates.candidateList.addToOptionBtn();
         break;
       case 'See more details':
         buttonSelector = getSelector.findCandidates.candidateList.seeDetailsBtn();
         break;
       case 'Remove from shortlist':
-        buttonSelector = getSelector.findCandidates.shortlist.removeFromListBtn();
+        buttonSelector = getSelector.findCandidates.shortList.removeFromListBtn();
         break;
       case 'Suggest Candidate':
-        buttonSelector = getSelector.findCandidates.shortlist.suggestCandidateBtn();
+        buttonSelector = getSelector.findCandidates.shortList.suggestCandidateBtn();
         break;
       default:
         throw new Error('Incorrect case inputted!');
@@ -134,7 +134,7 @@ Then(
 Then(
   /^user sees the selected candidate added to the "(first|second|third|fourth)" space in the shortlist$/,
   async (slotNumber) => {
-    const candidateSelector = getSelector.findCandidates.shortlist.candidate();
+    const candidateSelector = getSelector.findCandidates.shortList.candidate();
     const candidateName = getSelector.findCandidates.candidateList.candidateName();
     const candidateIcon = getSelector.findCandidates.candidateList.candidateIcon();
     const foundElements = await getDomData.idsFromElements(candidateSelector);
@@ -415,12 +415,6 @@ Then(/^user sees Reorder list "(down|up)" button disabled on the "(first|last)" 
   });
 });
 
-Then(/^user "(sees|does not see)" the filter modal opened on Find Candidates screen$/, async (action) => {
-  const selector = getSelector.findCandidates.filterModal.modal();
-  if (action === 'sees') await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
-  else await client.waitForElementNotPresent(selector, constants.MEDIUM_TIMEOUT);
-});
-
 When(/^user clicks filter button on Find Candidates screen$/, async () => {
   const selector = getSelector.findCandidates.filterBtn();
   await client.waitForElementPresent(selector, constants.MEDIUM_TIMEOUT).click(selector);
@@ -458,26 +452,28 @@ Then(/^user "(sees|clicks)" "(Close|Apply|Clear)" button on candidate list filte
 });
 
 Then(/^user sees "([^"]*)" label on candidate list filter modal$/, async (filterOption) => {
-  let labelSelector;
+  const labelSelector = getSelector.findCandidates.filterModal.label();
+  let position;
   switch (filterOption) {
     case 'Demobilisation date':
-      labelSelector = getSelector.findCandidates.filterModal.demobilisationDate.label();
+      position = 0;
       break;
     case 'Minimum grade':
-      labelSelector = getSelector.findCandidates.filterModal.minimumGrade.label();
+      position = 1;
       break;
     case 'Job role':
-      labelSelector = getSelector.findCandidates.filterModal.jobRole.label();
+      position = 2;
       break;
     case 'Location (region)':
-      labelSelector = getSelector.findCandidates.filterModal.location.label();
+      position = 3;
       break;
     default:
       throw new Error('Incorrect case inputted!');
   }
-  await client
-    .waitForElementVisible(labelSelector, constants.MEDIUM_TIMEOUT)
-    .getText(labelSelector, ({ value }) => expect(filterOption).to.equal(value));
+  const foundElements = await getDomData.idsFromElements(labelSelector);
+  await client.elementIdText(foundElements[position], ({ value }) => {
+    assert.equal(filterOption, value);
+  });
 });
 
 When(
@@ -486,10 +482,10 @@ When(
     let selector;
     switch (filter) {
       case 'Job role':
-        selector = getSelector.findCandidates.filterModal.jobRole.dropdown();
+        selector = getSelector.findCandidates.filterModal.jobRole();
         break;
       case 'Location':
-        selector = getSelector.findCandidates.filterModal.location.dropdown();
+        selector = getSelector.findCandidates.filterModal.location();
         break;
       default:
         throw new Error('Incorrect case inputted!');
@@ -579,10 +575,10 @@ Then(
     let selector;
     switch (filter) {
       case 'Job role':
-        selector = getSelector.findCandidates.filterModal.jobRole.dropdown();
+        selector = getSelector.findCandidates.filterModal.jobRole();
         break;
       case 'Location':
-        selector = getSelector.findCandidates.filterModal.location.dropdown();
+        selector = getSelector.findCandidates.filterModal.location();
         break;
       default:
         throw new Error('Incorrect case inputted!');
