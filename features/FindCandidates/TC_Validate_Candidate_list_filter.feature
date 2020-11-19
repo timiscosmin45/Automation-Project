@@ -1,7 +1,7 @@
 @REGRESSION
 Feature: Validate Candidate list filter
 
-  Scenario: Open LOR RSAR application and navigate to Find candidates page
+  Scenario: Open LOR RSAR application
     Given user opens LOR RSAR application
     Then user sees "Project Overview Timeline" screen
     And user sees "PROJECTS OVERVIEW" as the screen title
