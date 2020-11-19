@@ -114,7 +114,7 @@ const selectors = {
       removeFromRoleBtn: (option) => selectors.testId(`role_card_${option}_remove_button`),
       confirmToRoleBtn: () => selectors.testId('role_card_unconfirmed_confirm_button'),
       reviewCandidatesBtn: () => selectors.testId('role_card_review_candidates_button'),
-      findCandidatesBtn: () => selectors.testId(''),
+      findCandidatesBtn: () => selectors.testId('role_card_find_candidates_button'),
       firstLayer: () => selectors.testId(''),
       secondLayer: () => selectors.testId(''),
       thiredLayer: () => selectors.testId(''),
@@ -216,6 +216,9 @@ const selectors = {
         moveDownBtn: () => selectors.testId(''),
         label: () => selectors.testId(''),
       },
+    },
+    detailsModal: {
+      modal: () => selectors.testId(''),
     },
   },
   unassignedPeople: {

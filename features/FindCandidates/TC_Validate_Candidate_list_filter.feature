@@ -10,7 +10,10 @@ Feature: Validate Candidate list filter
     When user selects the first project that has an unassigned role from Timeline view
     Then user sees "Project Details" screen
     And user sees "PROJECTS DETAILS" as the screen title
-    And user clicks Find Candidates button on Project Details screen
+    When user clicks Find candidates button from the first unassigned role card
+    Then user sees "Find Candidates" screen
+    And user sees "FIND CANDIDATES" as the screen title
+    And user sees the side menu bar present
 
   Scenario Outline: Validate Candidates filter modal layout
     Given user sees "Find Candidates" screen

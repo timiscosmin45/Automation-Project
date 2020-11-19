@@ -6,6 +6,7 @@ const { assert, expect } = require('chai');
 //Global vars
 let candName;
 let shortlistPosition;
+let cardData;
 
 Then(/^user sees the "([^"]*)" title$/, async (title) => {
   const selector = getSelector.findCandidates.candidatesListTitle();
@@ -22,7 +23,8 @@ Then(/^user sees "([^"]*)" as the name of the selected role$/, async (roleName) 
 });
 
 Then(/^user sees the list of candidates on Find Candidates screen$/, async () => {
-  const selector = getSelector.findCandidates.candidatesList();
+  const { list, candidate } = getSelector.findCandidates.candidateList;
+  const selector = `${list()} ${candidate()}`;
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
 });
 
@@ -634,3 +636,12 @@ When(/^user sets minimum grade to "([^"]*)" on candidate list filter modal$/, as
   }
   await client.waitForElementPresent(selector, constants.MEDIUM_TIMEOUT).click(selector);
 });
+
+Then(/^user sees the candidate details modal$/, async () => {
+  const selector = getSelector.findCandidates.detailsModal.modal();
+  await client.waitForElementNotPresent(selector, constants.MEDIUM_TIMEOUT);
+});
+
+Then (/^user sees "([^"]*)" on more details modal$/,async(element)=>{
+  
+})
