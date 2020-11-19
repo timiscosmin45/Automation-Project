@@ -146,6 +146,9 @@ const selectors = {
     selectedRoleName: () => selectors.testId(''),
     toast: () => selectors.testId(''),
     filterBtn: () => selectors.testId(''),
+    searchInput: () => 'input[type="text"]',
+    searchIcon: () => selectors.testId(''),
+    noCandidatesMatchMsg: () => selectors.testId(''),
     filterModal: {
       modal: () => selectors.testId(''),
       title: () => selectors.testId(''),
@@ -185,7 +188,6 @@ const selectors = {
       gradeFilter: () => selectors.testId(''),
       jobRoleFilter: () => selectors.testId(''),
       locationFilter: () => selectors.testId(''),
-      noCandidatesMatchMsg: () => selectors.testId(''),
     },
     candidateList: {
       list: () => selectors.testId('fc_middle_wrapper'),

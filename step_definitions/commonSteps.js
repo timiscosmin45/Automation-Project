@@ -93,3 +93,7 @@ Then(/^user sees "([^"]*)" on Projects Details section$/, async (projectData) =>
   }
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
 });
+
+When(/^user presses "([^"]*)" key$/, async (key) => {
+  await client.keys(client.Keys[key]);
+});
