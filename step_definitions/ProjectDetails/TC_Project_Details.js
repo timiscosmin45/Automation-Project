@@ -10,17 +10,17 @@ Then(/^user sees "([^"]*)" as the project name$/, async (projectName) => {
   const selector = getSelector.sharedComponents.projectDetails.projectName();
   await client
     .waitForElementVisible(selector, constants.MEDIUM_TIMEOUT)
-    .getText(selector, ({ value }) => assert.equal(projectName, value));
+    .getText(selector, ({ value }) => assert.equal(projectName, value.toUpperCase()));
 });
 
 Then(/^user "(sees|clicks)" "(Project Overview|Project Details)" breadcrumb$/, async (action, button) => {
   let selector;
   switch (button) {
     case 'Project Overview':
-      selector = getSelector.projectDetails.projectOverviewBreadcrumb();
+      selector = getSelector.projectDetails.breadcrumb.projectOverview();
       break;
     case 'Project Details':
-      selector = getSelector.projectDetails.projectDetailsBreadcrumb();
+      selector = getSelector.projectDetails.breadcrumb.projectDetails();
       break;
     default:
       throw new Error('Incorrect case inputted!');
@@ -36,10 +36,9 @@ Then(/^user "(sees|clicks)" "(Project Overview|Project Details)" breadcrumb$/, a
 });
 
 Then(/^user sees the Project Details breadcrumb highlighted$/, async () => {
-  const breadcrumbSelector = getSelector.projectDetails.projectDetailsBreadcrumb();
+  const selector = getSelector.projectDetails.breadcrumb.projectDetails();
   const { HIGHLIGHTED_BUTTON } = constants.DESIGN_COLORS.BUTTONS;
-
-  await client.assert.cssProperty(breadcrumbSelector, 'background-color', HIGHLIGHTED_BUTTON);
+  await client.assert.cssProperty(selector, 'background-color', HIGHLIGHTED_BUTTON);
 });
 
 Then(/^user clicks browser back button$/, async () => {
@@ -55,45 +54,42 @@ Then(/^user clicks Find candidates button from the first unassigned role card$/,
 });
 
 Then(/^user sees Project Stage section title on Project Details screen$/, async () => {
-  const selector = getSelector.projectDetails.projectStageTitle();
+  const selector = getSelector.sharedComponents.projectStage.projectStageTitle();
   await client
     .waitForElementVisible(selector, constants.MEDIUM_TIMEOUT)
     .getText(selector, ({ value }) => assert.equal(value, 'Project Stage'));
 });
 
-Then(/^user sees "([^"]*)" card containing the status icon, name and key dates$/, async (stage) => {
-  const stageIcon = getSelector.sharedComponents.projectStage.stageIcon();
-  const stageCard = getSelector.sharedComponents.projectStage.defaultCard();
-  const stageName = getSelector.sharedComponents.projectStage.stageName();
-  const stageDates = getSelector.sharedComponents.projectStage.stageDates();
-  const foundCards = await getDomData.idsFromElements(stageCard);
+Then(/^user sees "([^"]*)" card containing the stage icon, name and key dates$/, async (stage) => {
+  const { defaultCard, stageIcon, stageName, stageDate } = getSelector.sharedComponents.projectStage;
+  const foundElements = await getDomData.idsFromElements(defaultCard());
+
   let cardId;
-  let elementId;
-  for (const card of foundCards) {
-    await client.elementIdElement(card, 'css selector', stageName, ({ value }) => {
+  for (const element of foundElements) {
+    let elementId;
+    await client.elementIdElement(element, 'css selector', stageName(), ({ value }) => {
       elementId = value.ELEMENT;
     });
     await client.elementIdText(elementId, ({ value }) => {
-      if (value === stage) cardId = elementId;
+      if (value === stage) cardId = element;
     });
+    if (cardId) break;
   }
   if (!cardId) throw new Error(`${stage} card not found!`);
-  await client.elementIdElement(cardId, 'css selector', stageIcon, ({ value }) => {
+
+  await client.elementIdElement(cardId, 'css selector', stageIcon(), ({ value }) => {
     elementId = value.ELEMENT;
+    assert.isDefined(elementId, `Stage icon not found for ${stage}!`);
   });
-  await client.elementIdDisplayed(elementId, ({ value }) => {
-    assert.ok(value, `${stage} icon is not displayed!`);
-  });
-  await client.elementIdElement(cardId, 'css selector', stageDates, ({ value }) => {
+
+  await client.elementIdElement(cardId, 'css selector', stageDate(), ({ value }) => {
     elementId = value.ELEMENT;
-  });
-  await client.elementIdDisplayed(elementId, ({ value }) => {
-    assert.ok(value, `${stage} dates are not displayed!`);
+    assert.isDefined(elementId, `Stage date not found for ${stage}!`);
   });
 });
 
 Then(/^user sees the Project team roles for "([^"]*)" stage$/, async (stage) => {
-  const { firstLayer, secondLayer, thiredLayer, fourthLayer } = getSelector.projectDetails.hierarchy;
+  const { candidateCard, firstLayer, secondLayer, thirdLayer, fourthLayer } = getSelector.projectDetails.hierarchy;
   let teamRoles;
   switch (stage) {
     case 'Opportunity':
@@ -114,45 +110,27 @@ Then(/^user sees the Project team roles for "([^"]*)" stage$/, async (stage) => 
 
   const errMsg = `Project team roles for ${stage} stage are not shown correctly!`;
   const promises = [
-    styleCheck.checkNestedTextMatching(firstLayer(), teamRoles.FIRST_LAYER, errMsg),
-    styleCheck.checkNestedTextMatching(secondLayer(), teamRoles.SECOND_LAYER, errMsg),
-    styleCheck.checkNestedTextMatching(thiredLayer(), teamRoles.THIRD_LAYER, errMsg),
+    styleCheck.checkNestedTextMatching(`${firstLayer()} ${candidateCard()}`, teamRoles.FIRST_LAYER, errMsg),
+    styleCheck.checkNestedTextMatching(`${secondLayer()} ${candidateCard()}`, teamRoles.SECOND_LAYER, errMsg),
+    styleCheck.checkNestedTextMatching(`${thirdLayer()} ${candidateCard()}`, teamRoles.THIRD_LAYER, errMsg),
   ];
-  if (stage === 'Live Projects') {
-    promises.push(styleCheck.checkNestedTextMatching(fourthLayer(), teamRoles.FOURTH_LAYER, errMsg));
+  if (stage === 'PCSA') {
+    promises.push(
+      styleCheck.checkNestedTextMatching(`${fourthLayer()} ${candidateCard()}`, teamRoles.FOURTH_LAYER, errMsg),
+    );
   }
   await Promise.all(promises);
 });
 
 Then(/^user sees "([^"]*)" card highlighted$/, async (stage) => {
-  const stageCard = getSelector.sharedComponents.projectStage.activeCard();
-  const stageIcon = getSelector.sharedComponents.projectStage.stageIcon();
-  const stageName = getSelector.sharedComponents.projectStage.stageName();
-  const stageDates = getSelector.sharedComponents.projectStage.stageDates();
+  const { activeStage, stageName } = getSelector.sharedComponents.projectStage;
+  const activeStageValue = `${activeStage()} ${stageName()}`;
   const { HIGHLIGHTED_CARD } = constants.DESIGN_COLORS.CARDS;
-  const cardElement = getDomData.idFromElement(stageCard);
-  let elementId;
-  await client.elementIdElement(cardElement, 'css selector', stageName, ({ value }) => {
-    elementId = value.ELEMENT;
-  });
-  await client.elementIdText(elementId, ({ value }) => {
-    assert.equal(value, stage);
-  });
-  await client.elementIdElement(cardElement, 'css selector', stageIcon, ({ value }) => {
-    elementId = value.ELEMENT;
-  });
-  await client.elementIdDisplayed(elementId, ({ value }) => {
-    assert.ok(value, `${stage} icon is not displayed!`);
-  });
-  await client.elementIdElement(cardElement, 'css selector', stageDates, ({ value }) => {
-    elementId = value.ELEMENT;
-  });
-  await client.elementIdDisplayed(elementId, ({ value }) => {
-    assert.ok(value, `${stage} dates are not displayed!`);
-  });
+
   await client
-    .waitForElementVisible(stageCard, constants.SHORT_TIMEOUT)
-    .assert.cssProperty(stageCard, 'background-color', HIGHLIGHTED_CARD);
+    .waitForElementVisible(activeStage(), constants.SHORT_TIMEOUT)
+    .assert.cssProperty(activeStage(), 'background-color', HIGHLIGHTED_CARD)
+    .getText(activeStageValue, ({ value }) => expect(value).to.equal(stage));
 });
 
 Then(/^user sees ORG Chart legend on Project Details screen$/, async () => {
@@ -187,7 +165,6 @@ When(/^user clicks the first "(Confirmed|Awaiting)" role card$/, async (roleStat
     }
     if (elementId) break;
   }
-  console.log(candName);
   if (!elementId) throw new Error(`"${roleStatus}" role cards not found!`);
   await client.moveTo(elementId, 1, 1).mouseButtonClick('left');
 });
@@ -266,4 +243,23 @@ Then(/^user sees the person is confirmed to role$/, async () => {
     }
   }
   if (!nameValue) throw new Error(`${candName} not found in the hierarchy!`);
+});
+
+When(/^user selects "([^"]*)" project stage$/, async () => {
+  const { defaultCard, stageName } = getSelector.sharedComponents.projectStage;
+  const foundElements = await getDomData.idsFromElements(defaultCard());
+
+  let cardId;
+  for (const element of foundElements) {
+    let elementId;
+    await client.elementIdElement(element, 'css selector', stageName(), ({ value }) => {
+      elementId = value.ELEMENT;
+    });
+    await client.elementIdText(elementId, ({ value }) => {
+      if (value === stage) cardId = element;
+    });
+    if (cardId) break;
+  }
+  if (!cardId) throw new Error(`${stage} card not found!`);
+  await client.elementIdClick(cardId);
 });

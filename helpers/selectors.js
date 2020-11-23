@@ -96,8 +96,8 @@ const selectors = {
   projectDetails: {
     title: () => 'div > h1',
     page: () => selectors.testId(''),
-    orgChartLegend: () => selectors.testId(''),
-    orgChartLegendStatusName: () => `${selectors.projectDetails.projectDetails.orgChartLegend()} to be completed...`,
+    orgChartLegend: () => 'div.jss208', //workaround for missing test-id
+    orgChartLegendStatusName: () => `${selectors.projectDetails.projectDetails.orgChartLegend()} p`,
     breadcrumb: {
       projectOverview: () => `main button${selectors.child(1)}`,
       projectDetails: () => `main button${selectors.child(2)}`,
@@ -115,9 +115,9 @@ const selectors = {
       confirmToRoleBtn: () => selectors.testId('role_card_unconfirmed_confirm_button'),
       reviewCandidatesBtn: () => selectors.testId('role_card_review_candidates_button'),
       findCandidatesBtn: () => selectors.testId('role_card_find_candidates_button'),
-      firstLayer: () => selectors.testId(''),
-      secondLayer: () => selectors.testId(''),
-      thiredLayer: () => selectors.testId(''),
+      firstLayer: () => selectors.testId('diagram_first_layer'),
+      secondLayer: () => selectors.testId('diagram_second_layer'),
+      thirdLayer: () => selectors.testId('diagram_third_layer'),
       fourthLayer: () => selectors.testId(''),
     },
   },
@@ -226,12 +226,12 @@ const selectors = {
       location: () => selectors.testId('project_info_card_location_value'),
     },
     projectStage: {
-      projectStageTitle: () => selectors.testId(''),
+      projectStageTitle: () => '.MuiTypography-root.jss790.MuiTypography-body1',
       defaultCard: () => selectors.testId('project_stage_default'),
-      activeCard: () => selectors.testId('project_stage_active'),
+      activeStage: () => `${selectors.testId('project_stage_active')} > div${selectors.child(1)}`,
       stageName: () => selectors.testId('project_stage_value'),
-      stageDates: () => selectors.testId('project_stage_date'),
-      stageIcon: () => selectors.testId(''),
+      stageDate: () => selectors.testId('project_stage_date'),
+      stageIcon: () => `${selectors.sharedComponents.projectStage.defaultCard()} svg`,
     },
   },
 };
