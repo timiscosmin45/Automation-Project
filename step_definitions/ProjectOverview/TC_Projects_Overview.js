@@ -245,10 +245,6 @@ Then(
   },
 );
 
-When(/^user presses "([^"]*)" key$/, async (key) => {
-  await client.keys(client.Keys[key]);
-});
-
 When(/^user clicks Search icon on Project Overview "(Map|Timeline)" screen$/, async (text, screen) => {
   const view = screen === 'Timeline' ? 'timeline_header_leftside' : 'mapview_leftside_header';
   const selector = getSelector.projectOverview.searchIcon(view);

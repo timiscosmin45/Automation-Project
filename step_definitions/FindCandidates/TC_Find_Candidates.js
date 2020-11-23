@@ -682,3 +682,60 @@ When(/^user clicks the "(close|go to project detail)" button on Details modal$/,
   const selector = button === 'close' ? closeBtn() : goToProjectBtn();
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
 });
+
+Then(/^user sees the candidate list search field with "([^"]*)" placeholder text$/, async (text) => {
+  const selector = getSelector.findCandidates.searchInput();
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  await client.assert.domPropertyEquals(selector, 'placeholder', text);
+});
+
+Then(/^user "(sees|clicks)" the candidate list search icon$/, async (action) => {
+  const selector = getSelector.findCandidates.searchIcon();
+  if (action === 'sees') await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  else await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
+});
+
+Then(/^user "(types|sees)" "([^"]*)" in the candidate list search input$/, async (action, text) => {
+  const selector = getSelector.findCandidates.searchInput();
+  if (action === 'types')
+    await client
+      .waitForElementVisible(selector, constants.MEDIUM_TIMEOUT)
+      .setValue(selector, ['', [client.Keys.CONTROL, 'a']])
+      .keys(client.Keys.BACK_SPACE)
+      .setValue(selector, text);
+  else
+    await client
+      .waitForElementVisible(selector, constants.MEDIUM_TIMEOUT)
+      .getValue(selector, ({ value }) => expect(text).to.equal(value));
+});
+
+Then(/user sees only candidates with name matching "([^"]*)"$/, async (candidateName) => {
+  const cardSelector = getSelector.findCandidates.candidateList.candidate();
+  const candidateNameSelector = getSelector.findCandidates.candidateList.candidateName();
+  const foundElements = await getDomData.idsFromElements(cardSelector);
+  if (foundElements.length === 0) throw new Error('No candidate cards found!');
+  const text = candidateName.toUpperCase();
+  for (const element of foundElements) {
+    let elementId;
+    await client.elementIdElement(element, 'css selector', candidateNameSelector, ({ value }) => {
+      elementId = value.ELEMENT;
+    });
+    await client.elementIdText(elementId, ({ value }) => {
+      const foundName = value.toUpperCase();
+      assert.include(foundName, text, 'Name do not match search criteria!');
+    });
+  }
+});
+
+Then(/user does not see any candidates displayed on Find Candidates screen$/, async () => {
+  const cardSelector = getSelector.findCandidates.candidateList.candidate();
+  const foundElements = await getDomData.idsFromElements(cardSelector);
+  await client.assert.isUndefined(foundElements, 'Candidates are displayed!');
+});
+
+Then(/user "([^"]*)" message on Find Candidates screen$/, async (message) => {
+  const selector = getSelector.findCandidates.noCandidatesMatchMsg();
+  await client
+    .waitForElementVisible(selector, constants.MEDIUM_TIMEOUT)
+    .getValue(selector, ({ value }) => expect(message).to.equal(value));
+});
