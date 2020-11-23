@@ -127,6 +127,9 @@ const selectors = {
     selectedRoleName: () => selectors.testId('fc_middle_subheader_text'),
     toast: () => selectors.testId(''),
     filterBtn: () => selectors.testId('candidates_filter_icon_button'),
+    searchInput: () => 'input[type="text"]',
+    searchIcon: () => selectors.testId(''),
+    noCandidatesMatchMsg: () => selectors.testId(''),
     filterModal: {
       modal: () => '[role="dialog"]',
       title: () => selectors.testId('candidate_filter_dialog_title'),
@@ -153,7 +156,6 @@ const selectors = {
       gradeFilter: () => selectors.testId('filter_card_jobgrades'),
       jobRoleFilter: () => selectors.testId('filter_card_jobrole'),
       locationFilter: () => selectors.testId('filter_card_region'),
-      noCandidatesMatchMsg: () => selectors.testId(''),
     },
     candidateList: {
       list: () => selectors.testId('fc_middle_wrapper'),
