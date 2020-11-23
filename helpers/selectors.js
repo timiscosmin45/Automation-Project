@@ -118,7 +118,7 @@ const selectors = {
       firstLayer: () => selectors.testId('diagram_first_layer'),
       secondLayer: () => selectors.testId('diagram_second_layer'),
       thirdLayer: () => selectors.testId('diagram_third_layer'),
-      fourthLayer: () => selectors.testId(''),
+      fourthLayer: () => selectors.testId('diagram_last_layer'),
     },
   },
   findCandidates: {
