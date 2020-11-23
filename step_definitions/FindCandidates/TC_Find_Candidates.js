@@ -22,7 +22,8 @@ Then(/^user sees "([^"]*)" as the name of the selected role$/, async (roleName) 
 });
 
 Then(/^user sees the list of candidates on Find Candidates screen$/, async () => {
-  const selector = getSelector.findCandidates.candidateList.list();
+  const { list, candidate } = getSelector.findCandidates.candidateList;
+  const selector = `${list()} ${candidate()}`;
   await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
 });
 
@@ -629,6 +630,57 @@ When(/^user sets minimum grade to "([^"]*)" on candidate list filter modal$/, as
       throw new Error('Incorrect case inputted!');
   }
   await client.waitForElementPresent(selector, constants.MEDIUM_TIMEOUT).click(selector);
+});
+
+Then(/^user "(sees|does not see)" the candidate details modal$/, async (action) => {
+  const selector = getSelector.findCandidates.detailsModal.modal();
+  if (action === 'sees') await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+  else await client.waitForElementNotPresent(selector, constants.MEDIUM_TIMEOUT);
+});
+
+Then(/^user sees "([^"]*)" on more details modal$/, async (element) => {
+  let selector;
+  switch (element) {
+    case 'Candidate Photo':
+      selector = getSelector.findCandidates.detailsModal.candidatePhoto();
+      break;
+    case 'Candidate Name':
+      selector = getSelector.findCandidates.detailsModal.candidateName();
+      break;
+    case 'Job Title':
+      selector = getSelector.findCandidates.detailsModal.jobTitle();
+      break;
+    case 'Grade':
+      selector = getSelector.findCandidates.detailsModal.grade();
+      break;
+    case 'Mobility':
+      selector = getSelector.findCandidates.detailsModal.mobility();
+      break;
+    case 'Location':
+      selector = getSelector.findCandidates.detailsModal.location();
+      break;
+    case 'Department':
+      selector = getSelector.findCandidates.detailsModal.department();
+      break;
+    case 'Business Unit':
+      selector = getSelector.findCandidates.detailsModal.businessUnit();
+      break;
+    case 'Unassigned Date':
+      selector = getSelector.findCandidates.detailsModal.unnassignedDate();
+      break;
+    case 'Close Button':
+      selector = getSelector.findCandidates.detailsModal.closeBtn();
+      break;
+    default:
+      throw new Error('Incorrect case inputted!');
+  }
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT);
+});
+
+When(/^user clicks the "(close|go to project detail)" button on Details modal$/, async (button) => {
+  const { closeBtn, goToProjectBtn } = getSelector.findCandidates.detailsModal;
+  const selector = button === 'close' ? closeBtn() : goToProjectBtn();
+  await client.waitForElementVisible(selector, constants.MEDIUM_TIMEOUT).click(selector);
 });
 
 Then(/^user sees the candidate list search field with "([^"]*)" placeholder text$/, async (text) => {

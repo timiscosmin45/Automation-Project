@@ -7,7 +7,7 @@ const { constants, getSelector, styleCheck, getDomData } = require('../../helper
 let candName;
 
 Then(/^user sees "([^"]*)" as the project name$/, async (projectName) => {
-  const selector = getSelector.sharedComponents.projctDetails.projectName();
+  const selector = getSelector.sharedComponents.projectDetails.projectName();
   await client
     .waitForElementVisible(selector, constants.MEDIUM_TIMEOUT)
     .getText(selector, ({ value }) => assert.equal(projectName, value));
@@ -46,12 +46,12 @@ Then(/^user clicks browser back button$/, async () => {
   await client.back();
 });
 
-Then(/^user clicks Find Candidates button on Project Details screen$/, async () => {
-  const selector = getSelector.projectDetails.hierarchy.findCandidatesBtn();
-  await client
-    .waitForElementVisible(selector, constants.MEDIUM_TIMEOUT)
-    .assert.containsText(selector, 'Find candidates')
-    .click(selector);
+Then(/^user clicks Find candidates button from the first unassigned role card$/, async () => {
+  const { findCandidatesBtn } = getSelector.projectDetails.hierarchy;
+  const foundElements = await getDomData.idsFromElements(findCandidatesBtn());
+
+  if (foundElements.length !== 0) await client.elementIdClick(foundElements[0]);
+  else throw new Error('Unnasigned role cards not found!');
 });
 
 Then(/^user sees Project Stage section title on Project Details screen$/, async () => {
