@@ -10,7 +10,7 @@ Feature: Validate Candidate list search
     When user selects the first project that has an unassigned role from Timeline view
     Then user sees "Project Details" screen
     And user sees "PROJECTS DETAILS" as the screen title
-    When user clicks Find Candidates button on Project Details screen
+    When user clicks Find candidates button from the first unassigned role card
     Then user sees "Find Candidates" screen
 
   Scenario: Validate search field layout
