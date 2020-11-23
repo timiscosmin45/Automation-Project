@@ -78,12 +78,12 @@ Then(/^user sees "([^"]*)" card containing the stage icon, name and key dates$/,
   if (!cardId) throw new Error(`${stage} card not found!`);
 
   await client.elementIdElement(cardId, 'css selector', stageIcon(), ({ value }) => {
-    elementId = value.ELEMENT;
+    const elementId = value.ELEMENT;
     assert.isDefined(elementId, `Stage icon not found for ${stage}!`);
   });
 
   await client.elementIdElement(cardId, 'css selector', stageDate(), ({ value }) => {
-    elementId = value.ELEMENT;
+    const elementId = value.ELEMENT;
     assert.isDefined(elementId, `Stage date not found for ${stage}!`);
   });
 });
@@ -245,7 +245,7 @@ Then(/^user sees the person is confirmed to role$/, async () => {
   if (!nameValue) throw new Error(`${candName} not found in the hierarchy!`);
 });
 
-When(/^user selects "([^"]*)" project stage$/, async () => {
+When(/^user selects "([^"]*)" project stage$/, async (stage) => {
   const { defaultCard, stageName } = getSelector.sharedComponents.projectStage;
   const foundElements = await getDomData.idsFromElements(defaultCard());
 
