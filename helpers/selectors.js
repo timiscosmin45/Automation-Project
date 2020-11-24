@@ -57,7 +57,9 @@ const selectors = {
         )} > div > div${selectors.child(2)} h5`;
       },
       dateLabel: () => {
-        return `${selectors.projectOverview.mapView.projects()} > div${selectors.child(2)} p${selectors.child(2)}`;
+        return `${selectors.projectOverview.mapView.projects()} > div > div${selectors.child(2)} p${selectors.child(
+          2,
+        )}`;
       },
       locationMarkers: () => selectors.testId('mapview_map_pins'),
       pieChart: () => `${selectors.testId('mapview_piechart_wrapper')} svg`,
