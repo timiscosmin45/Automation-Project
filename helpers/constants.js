@@ -50,7 +50,7 @@ const CONSTANTS = {
       SECOND_LAYER: [
         'Construction Leader',
         'Commercial Leader',
-        'Estimating Leader',
+        'Procurement Leader',
         'Planning Leader',
         'Technical Leader',
       ],
