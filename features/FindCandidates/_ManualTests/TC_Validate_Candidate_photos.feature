@@ -5,7 +5,7 @@ Feature: Validate Candidate Photos - Find Candidates screen
     When I am viewing the Find Candidate screen
     Then I see a photo for each candidate
 
-  Scenario: Validate non-existent candidate photos
+  Scenario: Validate inexistent candidate photos
     Given I am a LOR resourcing team member
     When I am viewing the Find Candidate screen
     Then I view a candidate that doesn't have a photo
