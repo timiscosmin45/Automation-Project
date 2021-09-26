@@ -1,9 +1,21 @@
-pipeline{
+pipeline {
     agent any
 
-    stages{
-        stage{
-            
+    stages {
+        stage('build') {
+            steps{
+                echo 'building the app'
+            }
+        }
+        stage('test') {
+            steps{
+                echo 'testing the app'
+            }
+        }
+        stage('clear') {
+            steps{
+                echo 'cleaning the app'
+            }
         }
     }
 }
