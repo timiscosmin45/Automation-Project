@@ -1,4 +1,3 @@
-@TEST
 Feature: Validate Posts endpoint from jsonplaceholder
 
   Scenario: Check that retrieve Posts endpoint from jsonplaceholder is working correctly

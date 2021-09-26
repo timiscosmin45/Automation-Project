@@ -1,4 +1,4 @@
-const { client } = require('nightwatch');
+const { client } = require('nightwatch-api');
 const { assert } = require('chai');
 
 const idsFromElements = async (cssSelector) => {

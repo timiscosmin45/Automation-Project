@@ -1,7 +1,7 @@
 {
   "name": "automation-tests",
   "version": "1.0.0",
-  "description": "Nightwatch.js Automation tests",
+  "description": "Personal Automation Framework",
   "main": "index.js",
   "scripts": {
     "e2e-test": "cucumber-js --require ./conf/cucumber.conf.js --require step_definitions --format json:reports/cucumber_report.json --format node_modules/cucumber-pretty --tags @TEST",
@@ -26,8 +26,8 @@
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-prettier": "^3.1.2",
     "geckodriver": "^1.16.2",
-    "nightwatch": "^1.4.2",
-    "nightwatch-api": "^3.0.1",
+    "nightwatch": "^1.7.10",
+    "nightwatch-api": "latest",
     "prettier": "^1.19.1",
     "supertest": "^6.1.3"
   },

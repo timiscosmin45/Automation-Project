@@ -1,4 +1,3 @@
-@TEST
 Feature: Validate GREENKART Place Order
 
   Background:

@@ -20,7 +20,7 @@ const checkoutPage = {
     const countries = await getDomData.idsFromElements(selectOptions);
 
     let elementId;
-    for (element of countries) {
+    for (const element of countries) {
       let bFlag;
       await client.elementIdText(element, ({ value }) => {
         bFlag = value === country;
