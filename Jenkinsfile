@@ -1,5 +1,5 @@
 pipeline {
-    agent { docker { image 'node:14-alpine' } }
+    agent { docker { image 'selenium/standalone-chrome' } }
 
     stages {
         stage('build') {
