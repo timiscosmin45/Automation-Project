@@ -12,7 +12,7 @@ pipeline {
         stage('test') {
             steps{
                 echo 'testing the app'
-                sh 'npm run e2e-all'
+                sh 'npm run e2e-test'
             }
         }
         
