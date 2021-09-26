@@ -1,13 +1,13 @@
 const chromedriver = require('chromedriver');
 const geckodriver = require('geckodriver');
-
+console.log(chromedriver.path,'CALEA');
 module.exports = {
   test_settings: {
     default: {
       disable_error_log: true,
       webdriver: {
         start_process: true,
-        server_path: chromedriver.path,
+        server_path: './node_modules/chromedriver/lib/chromedriver/chromedriver.exe',
         port: 4444,
         log_path: './webdriver.log',
         cli_args: ['--port=4444'],

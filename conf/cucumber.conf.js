@@ -6,7 +6,7 @@ setDefaultTimeout(60000);
 
 BeforeAll(async () => {
   await startWebDriver({
-    env: 'chrome',
+    env: 'default',
     configFile: 'conf/nightwatch.conf.js',
     silent: false,
   });
