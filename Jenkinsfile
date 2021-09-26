@@ -1,5 +1,5 @@
 pipeline {
-    agent { docker { image 'selenium/standalone-chrome-debug' } }
+    agent { docker { image 'thompsnm/nodejs-chrome:latest' } }
 
     stages {
         stage('build') {
