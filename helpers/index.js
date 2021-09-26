@@ -1,13 +1,19 @@
-const getSelector = require('./selectors');
+const cssLib = require('./cssLib');
 const getDomData = require('./getDomData');
-const constants = require('./constants');
-const styleCheck = require('./styleCheck');
-const getDate = require('./getDate');
+const commonVars = require('./commonVars');
+const formatter = require('./formatter');
+const apiRequests = require('./apiRequests');
+const apiEndpoints = require('./apiEndpoints');
+const basicActions = require('./basicActions');
+const storeProducts = require('./storeProducts');
 
 module.exports = {
-  getSelector,
+  cssLib,
   getDomData,
-  constants,
-  styleCheck,
-  getDate,
+  commonVars,
+  formatter,
+  apiRequests,
+  apiEndpoints,
+  basicActions,
+  storeProducts,
 };

@@ -1,5 +1,4 @@
-// retrieve information from the DOM with asynchronous calls
-const { client } = require('nightwatch-api');
+const { client } = require('nightwatch');
 const { assert } = require('chai');
 
 const idsFromElements = async (cssSelector) => {
@@ -22,6 +21,15 @@ const textFromElements = async (cssSelector) => {
   return texts;
 };
 
+const textFromElement = async (cssSelector) => {
+  let text;
+  const elementId = await idFromElement(cssSelector);
+  await client.elementIdText(elementId, ({ value }) => {
+    text = value;
+  });
+  return text;
+};
+
 const idFromElement = async (cssSelector) => {
   let element;
   await client.element('css selector', cssSelector, ({ value }) => {
@@ -34,6 +42,7 @@ const idFromElement = async (cssSelector) => {
 const getDomData = {
   idFromElement: (cssSelector) => idFromElement(cssSelector),
   idsFromElements: (cssSelector) => idsFromElements(cssSelector),
+  textFromElement: (cssSelector) => textFromElement(cssSelector),
   textFromElements: (cssSelector) => textFromElements(cssSelector),
 };
 

@@ -1,7 +1,7 @@
 const reporter = require('cucumber-html-reporter');
 
 const options = {
-  name: 'EVOLVE',
+  name: 'GREENKART',
   theme: 'bootstrap',
   jsonDir: 'reports',
   output: 'reports/cucumber_report.html',
@@ -9,7 +9,7 @@ const options = {
   launchReport: false,
   ignoreBadJsonFile: true,
   storeScreenShots: false,
-  brandTitle: 'SP Evolve',
+  brandTitle: 'GREENKART',
   metadata: {
     'App Version': '0.9.0',
     Browser: 'Chrome',

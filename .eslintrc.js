@@ -1,28 +1,32 @@
 module.exports = {
+  extends: ['airbnb-base', 'prettier', 'prettier/standard', 'plugin:chai-friendly/recommended'],
+  parser: 'babel-eslint',
+  plugins: ['prettier', 'chai-friendly'],
   env: {
-    es6: true,
-    node: true,
     browser: true,
+    node: true,
+    jest: true,
   },
-  plugins: ['prettier'],
-  extends: ['eslint:recommended', 'prettier'],
-  parserOptions: {
-    ecmaVersion: 2018,
-    sourceType: 'module',
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: ['', '.json', '.js', '.jsx'],
+        moduleDirectory: ['src', 'node_modules'],
+      },
+    },
   },
+  ignorePatterns: ['*conf.js'],
   rules: {
+    'no-use-before-define': 'off',
+    'no-await-in-loop': 'off',
     'no-underscore-dangle': 'off',
     'global-require': 'off',
     'arrow-parens': ['error', 'always'],
     'class-methods-use-this': 'off',
+    'valid-jsdoc': [2, { requireReturn: false }],
     'object-curly-newline': ['error', { multiline: true, consistent: true }],
     'import/no-extraneous-dependencies': 'off',
     'import/extensions': 'off',
-    indent: ['error', 2, { SwitchCase: 1 }],
-    'linebreak-style': ['error', 'windows'],
-    quotes: ['error', 'single'],
-    semi: ['error', 'always'],
     'prettier/prettier': 'error',
-    'prefer-template': 'error',
   },
 };
